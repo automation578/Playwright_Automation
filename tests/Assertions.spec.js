@@ -1,7 +1,10 @@
-import { test, expect } from '@playwright/test';
+const { test, expect } = require('@playwright/test');
+const { AssertionsPage } = require('../pages/AssertionsPage');
+
 test('Assertions', async ({ page }) => {
-    await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
-    await expect(page).toHaveURL('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login');
+    const assertionsPage = new AssertionsPage(page);
+    await assertionsPage.navigate();
+    await expect(page).toHaveURL(assertionsPage.url);
     const url = page.url();
     console.log("URL: " + url);
 })
