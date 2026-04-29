@@ -1,19 +1,15 @@
-const {test, expect}=require('@playwright/test')
+const { test, expect } = require('@playwright/test');
+const { InputboxPage } = require('../pages/InputboxPage');
 
-test('handle inputbox',async ({page})=>{
+test('Inputbox', async ({ page }) => {
+    const inputboxPage = new InputboxPage(page);
+    await inputboxPage.navigate();
+    await expect(page).toHaveURL(inputboxPage.url);
 
-    await page.goto('https://demoqa.com/automation-practice-form');
+    await expect(inputboxPage.firstNameInput).toBeVisible();
+    await expect(inputboxPage.firstNameInput).toBeEmpty();
+    await expect(inputboxPage.firstNameInput).toBeEditable();
+    await expect(inputboxPage.firstNameInput).toBeEnabled();
 
-    //Inputbox - firstname
-   await expect(await page.locator("//input[@id='firstName']")).toBeVisible();
-   await expect(await page.locator("//input[@id='firstName']")).toBeEmpty();
-   await expect(await page.locator("//input[@id='firstName']")).toBeEditable();
-   await expect(await page.locator("//input[@id='firstName']")).toBeEnabled();
-     
-    
-   //await page.locator("//input[@id='name']").fill("John")
-    await page.fill("//input[@id='firstName']",'John');
-
-    await page.waitForTimeout(5000); //pausing code
-
+    await inputboxPage.fillFirstName('John');
 })

@@ -5,13 +5,18 @@ class InputboxPage {
     constructor(page) {
         this.page = page;
         this.url = 'https://demoqa.com/automation-practice-form';
+        this.firstNameInput = page.locator("//input[@id='firstName']");
+    }
+
+    async navigate() {
+        await this.page.goto(this.url);
     }
 
     /**
      * @param {string} firstName
      */
     async fillFirstName(firstName) {
-        await this.page.fill("//input[@id='firstName']", firstName);
+        await this.firstNameInput.fill(firstName);
     }
 }
 module.exports = { InputboxPage };
