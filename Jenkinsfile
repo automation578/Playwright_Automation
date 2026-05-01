@@ -5,9 +5,8 @@ pipeline {
         nodejs 'NodeJS'
     }
 
-    // Nightly schedule — runs every day at 11 PM
-    // GitHub push trigger is configured in the Jenkins job UI
     triggers {
+        githubPush()
         cron('0 23 * * *')
     }
 
