@@ -72,25 +72,8 @@ triggers {
 
     post {
         always {
-            // Playwright HTML report
-            publishHTML(target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : 'playwright-report',
-                reportFiles          : 'index.html',
-                reportName           : 'Playwright Report'
-            ])
-
-            // 4. ALLURE REPORT — publish in Jenkins sidebar
-            allure([
-                reportBuildPolicy: 'ALWAYS',
-                results: [[path: 'allure-results']]
-            ])
-
-            // Archive screenshots, videos, traces on failure
             archiveArtifacts(
-                artifacts: 'test-results/**,allure-results/**',
+                artifacts: 'playwright-report/**,test-results/**,allure-results/**,allure-report/**',
                 allowEmptyArchive: true
             )
         }
