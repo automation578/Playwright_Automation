@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Playwright Interview Q&A — Basics</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; color: #1a1a1a; background: #fff; }
+
+  /* COVER */
+  .cover {
+    page-break-after: always;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    min-height: 100vh; background: linear-gradient(135deg, #1a237e, #283593, #1565c0);
+    color: #fff; text-align: center; padding: 40px;
+  }
+  .cover h1 { font-size: 40px; font-weight: 800; margin-bottom: 10px; letter-spacing: 1px; }
+  .cover h2 { font-size: 19px; font-weight: 400; margin-bottom: 28px; opacity: 0.85; }
+  .cover .badge { background: #e040fb; color: #fff; padding: 8px 26px; border-radius: 20px; font-size: 14px; font-weight: 700; margin-bottom: 18px; letter-spacing: 0.5px; }
+  .cover p.desc { opacity: 0.8; font-size: 13px; max-width: 520px; line-height: 1.7; margin-top: 8px; }
+  .cover .meta { font-size: 11.5px; opacity: 0.6; margin-top: 36px; }
+
+  /* TOC */
+  .toc { page-break-after: always; padding: 40px 54px; }
+  .toc h2 { font-size: 22px; color: #1a237e; border-bottom: 3px solid #1565c0; padding-bottom: 8px; margin-bottom: 22px; }
+  .toc ol { margin-left: 22px; line-height: 2.5; }
+  .toc a { color: #1565c0; text-decoration: none; font-size: 13px; }
+  .toc a:hover { text-decoration: underline; }
+
+  /* SECTION */
+  .section { padding: 36px 54px; }
+  .section-header { background: linear-gradient(90deg, #1a237e, #1565c0); color: #fff; padding: 13px 20px; border-radius: 6px; margin-bottom: 22px; }
+  .section-header h2 { font-size: 17px; font-weight: 700; }
+  .section-header .sub { font-size: 11px; opacity: 0.85; margin-top: 3px; }
+
+  h3 { font-size: 14px; color: #1a237e; margin: 22px 0 8px; border-left: 4px solid #1565c0; padding-left: 10px; }
+  p  { line-height: 1.78; margin-bottom: 10px; color: #333; }
+  ul, ol { margin: 8px 0 12px 22px; }
+  li { line-height: 1.9; color: #333; }
+
+  /* CODE */
+  pre {
+    background: #0d1117; color: #e6edf3;
+    padding: 14px 17px; border-radius: 7px;
+    font-family: 'Consolas', 'Fira Code', monospace; font-size: 11.5px;
+    line-height: 1.65; overflow-x: auto; margin: 10px 0 14px;
+    white-space: pre-wrap; word-break: break-word;
+    border-left: 3px solid #1565c0;
+  }
+  .cm  { color: #8b949e; }   /* comment  */
+  .kw  { color: #ff7b72; }   /* keyword  */
+  .st  { color: #a5d6ff; }   /* string   */
+  .fn  { color: #d2a8ff; }   /* function */
+  .nm  { color: #79c0ff; }   /* name     */
+  .tp  { color: #ffa657; }   /* type     */
+
+  /* Q&A BLOCK */
+  .qa { background: #f0f4ff; border: 1px solid #c5cae9; border-radius: 7px; padding: 16px 18px; margin: 14px 0; }
+  .qa .q { font-weight: 700; color: #1a237e; margin-bottom: 9px; font-size: 13.5px; display: flex; align-items: flex-start; gap: 8px; }
+  .qa .a { color: #333; line-height: 1.8; }
+  .qa .a ul { margin-top: 6px; }
+
+  /* BADGES */
+  .qn { display: inline-flex; align-items: center; justify-content: center;
+        background: #1565c0; color: #fff; min-width: 24px; height: 24px;
+        border-radius: 50%; font-size: 11px; font-weight: 700; flex-shrink: 0; padding: 0 5px; }
+
+  /* CALLOUTS */
+  .tip  { background: #fff8e1; border-left: 4px solid #f9a825; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .tip strong { color: #e65100; }
+  .warn { background: #fbe9e7; border-left: 4px solid #d84315; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .warn strong { color: #bf360c; }
+  .note { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .note strong { color: #1b5e20; }
+  .info { background: #e3f2fd; border-left: 4px solid #1565c0; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .info strong { color: #0d47a1; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+  th { background: #1a237e; color: #fff; padding: 9px 12px; text-align: left; }
+  td { padding: 8px 12px; border-bottom: 1px solid #c5cae9; vertical-align: top; }
+  tr:nth-child(even) td { background: #f0f4ff; }
+
+  /* GRID */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .card  { background: #f0f4ff; border: 1px solid #c5cae9; border-radius: 6px; padding: 12px 14px; }
+  .card h4 { color: #1a237e; margin: 0 0 7px; font-size: 12.5px; }
+
+  .page-break { page-break-after: always; }
+
+  /* FOOTER */
+  .footer { background: #1a237e; color: #fff; border-radius: 8px; text-align: center; padding: 22px; margin-top: 40px; }
+  .footer p { color: #fff; margin: 4px 0; }
+
+  @media print {
+    .cover, .section-header, th, pre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════ COVER ══════════════════════════════ -->
+<div class="cover">
+  <div class="badge">Fresher to Mid-Level</div>
+  <h1>Playwright<br>Interview Q&amp;A</h1>
+  <h2>Basics — JavaScript / TypeScript Edition</h2>
+  <p class="desc">60+ questions with clear answers and code examples covering Playwright fundamentals, locators, actions, assertions, waits, POM, API testing, and common interview scenarios.</p>
+  <div class="meta">Prepared: April 2026 &nbsp;|&nbsp; 10 Sections &nbsp;|&nbsp; 60+ Q&amp;A</div>
+</div>
+
+<!-- ══════════════════════════════ TOC ══════════════════════════════ -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#s1">Playwright Introduction &amp; Setup</a></li>
+    <li><a href="#s2">Locators — Finding Elements</a></li>
+    <li><a href="#s3">Actions — Interacting with Elements</a></li>
+    <li><a href="#s4">Assertions</a></li>
+    <li><a href="#s5">Waits &amp; Auto-Waiting</a></li>
+    <li><a href="#s6">Handling Web Scenarios (Dialogs, Frames, Windows, File Upload)</a></li>
+    <li><a href="#s7">Page Object Model (POM) in Playwright</a></li>
+    <li><a href="#s8">Playwright Configuration &amp; Test Runner</a></li>
+    <li><a href="#s9">API Testing with Playwright</a></li>
+    <li><a href="#s10">Common Interview Scenario Questions</a></li>
+  </ol>
+</div>
+
+<!-- ══════════════════════════════ SECTION 1 ══════════════════════════════ -->
+<div class="section page-break" id="s1">
+  <div class="section-header">
+    <h2>1. Playwright Introduction &amp; Setup</h2>
+    <div class="sub">Core concepts — the most common opener questions</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">1</span> What is Playwright? How is it different from Selenium?</div>
+    <div class="a">
+      Playwright is an open-source end-to-end testing framework by <strong>Microsoft</strong> that supports automation of Chromium, Firefox, and WebKit browsers. It was built from the ground up for modern web apps.<br><br>
+      <table>
+        <tr><th>Feature</th><th>Playwright</th><th>Selenium</th></tr>
+        <tr><td>Creator</td><td>Microsoft</td><td>Open-source community</td></tr>
+        <tr><td>Auto-waiting</td><td>Built-in — waits for element to be ready automatically</td><td>Manual — you write waits explicitly</td></tr>
+        <tr><td>Browser engines</td><td>Chromium, Firefox, WebKit (Safari)</td><td>Chrome, Firefox, Safari, Edge, IE</td></tr>
+        <tr><td>Language support</td><td>JS/TS, Python, Java, C#</td><td>Java, Python, C#, JS, Ruby</td></tr>
+        <tr><td>Network interception</td><td>Native, built-in</td><td>Requires third-party (BrowserMob)</td></tr>
+        <tr><td>Parallel execution</td><td>Built-in (workers)</td><td>Requires Grid + ThreadLocal setup</td></tr>
+        <tr><td>Screenshots / Video</td><td>Built-in</td><td>Manual setup required</td></tr>
+        <tr><td>iFrame handling</td><td>Native <code>frameLocator()</code></td><td>Manual <code>switchTo().frame()</code></td></tr>
+        <tr><td>Speed</td><td>Faster (communicates via WebSocket CDP)</td><td>Slower (HTTP JSON Wire Protocol)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">2</span> How do you install and set up Playwright?</div>
+    <div class="a">
+<pre><span class="cm"># Initialize a new Playwright project</span>
+npm init playwright@latest
+
+<span class="cm"># This installs:</span>
+<span class="cm">#  - @playwright/test package</span>
+<span class="cm">#  - Chromium, Firefox, WebKit browser binaries</span>
+<span class="cm">#  - playwright.config.ts (configuration file)</span>
+<span class="cm">#  - example tests in tests/ folder</span>
+
+<span class="cm"># Install browsers separately (if needed)</span>
+npx playwright install
+
+<span class="cm"># Install a specific browser only</span>
+npx playwright install chromium
+
+<span class="cm"># Run all tests</span>
+npx playwright test
+
+<span class="cm"># Run with UI (headed mode)</span>
+npx playwright test --headed
+
+<span class="cm"># Run specific file</span>
+npx playwright test tests/login.spec.ts
+
+<span class="cm"># Open Playwright's interactive UI mode</span>
+npx playwright test --ui</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">3</span> What browsers does Playwright support?</div>
+    <div class="a">
+      Playwright supports three browser engines — each covers multiple real browsers:
+      <ul>
+        <li><strong>Chromium</strong> — covers Google Chrome and Microsoft Edge (both are Chromium-based)</li>
+        <li><strong>Firefox</strong> — covers Mozilla Firefox</li>
+        <li><strong>WebKit</strong> — covers Apple Safari (and iOS Safari behavior)</li>
+      </ul>
+      You can run the same test across all three browsers simultaneously using <code>projects</code> in <code>playwright.config.ts</code>.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">4</span> What is the structure of a basic Playwright test?</div>
+    <div class="a">
+<pre><span class="cm">// tests/login.spec.ts</span>
+<span class="kw">import</span> { <span class="nm">test</span>, <span class="nm">expect</span> } <span class="kw">from</span> <span class="st">'@playwright/test'</span>;
+
+<span class="fn">test</span>(<span class="st">'user can log in successfully'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => {
+  <span class="cm">// Navigate to the app</span>
+  <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="st">'https://example.com/login'</span>);
+
+  <span class="cm">// Fill in the form</span>
+  <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="st">'#username'</span>, <span class="st">'admin'</span>);
+  <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="st">'#password'</span>, <span class="st">'Admin@123'</span>);
+
+  <span class="cm">// Click login button</span>
+  <span class="kw">await</span> page.<span class="fn">click</span>(<span class="st">'button[type="submit"]'</span>);
+
+  <span class="cm">// Assert — verify landing page</span>
+  <span class="kw">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveURL</span>(<span class="st">/dashboard/</span>);
+  <span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'h1'</span>)).<span class="fn">toHaveText</span>(<span class="st">'Welcome, Admin'</span>);
+});</pre>
+      <strong>Key concepts:</strong>
+      <ul>
+        <li><code>test()</code> — declares a test case</li>
+        <li><code>{ page }</code> — fixture injected by Playwright (represents a browser tab)</li>
+        <li><code>async/await</code> — all Playwright calls are asynchronous</li>
+        <li><code>expect()</code> — used for assertions with built-in auto-waiting</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">5</span> What is a Playwright Fixture? What fixtures are available by default?</div>
+    <div class="a">
+      Fixtures are the objects injected into your test function via destructuring. They handle setup and teardown automatically.
+      <table>
+        <tr><th>Fixture</th><th>Type</th><th>Description</th></tr>
+        <tr><td><code>page</code></td><td>Page</td><td>A single browser tab — the most used fixture</td></tr>
+        <tr><td><code>browser</code></td><td>Browser</td><td>Browser instance (Chrome, Firefox, WebKit)</td></tr>
+        <tr><td><code>context</code></td><td>BrowserContext</td><td>Isolated session (cookies, localStorage) — like an incognito window</td></tr>
+        <tr><td><code>browserName</code></td><td>string</td><td>Name of the current browser ('chromium', 'firefox', 'webkit')</td></tr>
+        <tr><td><code>request</code></td><td>APIRequestContext</td><td>For making HTTP requests in API tests</td></tr>
+      </table>
+      You can also create <strong>custom fixtures</strong> using <code>test.extend()</code> to share setup logic across tests (e.g., a logged-in page fixture).
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">6</span> What is the difference between Page, BrowserContext, and Browser?</div>
+    <div class="a">
+      Think of it as a hierarchy:
+      <ul>
+        <li><strong>Browser</strong> — The browser instance (e.g., Chrome). Created once, expensive to start.</li>
+        <li><strong>BrowserContext</strong> — An isolated browsing session within the browser. Has its own cookies, localStorage, and session state. Like a fresh incognito window. Multiple contexts can run in parallel.</li>
+        <li><strong>Page</strong> — A single browser tab within a context. One context can have multiple pages (tabs).</li>
+      </ul>
+<pre><span class="cm">// Hierarchy example</span>
+<span class="kw">const</span> browser = <span class="kw">await</span> chromium.<span class="fn">launch</span>();
+<span class="kw">const</span> context = <span class="kw">await</span> browser.<span class="fn">newContext</span>();   <span class="cm">// isolated session</span>
+<span class="kw">const</span> page    = <span class="kw">await</span> context.<span class="fn">newPage</span>();      <span class="cm">// a tab in that session</span></pre>
+      <div class="tip"><strong>In Playwright Test runner:</strong> Each test gets its own fresh <code>BrowserContext</code> automatically — so tests are isolated by default. You don't need to manage this manually.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SECTION 2 ══════════════════════════════ -->
+<div class="section page-break" id="s2">
+  <div class="section-header">
+    <h2>2. Locators — Finding Elements</h2>
+    <div class="sub">The primary way Playwright finds elements on the page</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">7</span> What are Locators in Playwright? Why are they better than Selenium locators?</div>
+    <div class="a">
+      A <strong>Locator</strong> in Playwright is a lazy representation of an element (or set of elements). It doesn't look up the element immediately — it re-queries the DOM every time an action is performed on it.<br><br>
+      <strong>Advantages over Selenium's WebElement:</strong>
+      <ul>
+        <li><strong>Auto-waiting:</strong> Every action on a locator automatically waits for the element to be visible, enabled, and stable before acting</li>
+        <li><strong>Auto-retrying:</strong> If an action fails (e.g., element not yet rendered), Playwright retries within the timeout</li>
+        <li><strong>No StaleElementReferenceException:</strong> Because locators re-query the DOM on each use</li>
+        <li><strong>Strict mode:</strong> If a locator matches multiple elements, Playwright throws an error, preventing silent bugs</li>
+      </ul>
+<pre><span class="kw">const</span> btn = page.<span class="fn">locator</span>(<span class="st">'button#submit'</span>);
+<span class="cm">// 'btn' doesn't find the element yet</span>
+
+<span class="kw">await</span> btn.<span class="fn">click</span>();
+<span class="cm">// NOW it finds the element, waits for it to be ready, and clicks</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">8</span> What are the different ways to create locators in Playwright?</div>
+    <div class="a">
+<pre><span class="cm">// 1. CSS Selector (most common)</span>
+page.<span class="fn">locator</span>(<span class="st">'button.btn-primary'</span>)
+page.<span class="fn">locator</span>(<span class="st">'input[type="email"]'</span>)
+page.<span class="fn">locator</span>(<span class="st">'#username'</span>)
+
+<span class="cm">// 2. XPath</span>
+page.<span class="fn">locator</span>(<span class="st">'xpath=//button[text()="Login"]'</span>)
+page.<span class="fn">locator</span>(<span class="st">'//input[@placeholder="Email"]'</span>)  <span class="cm">// auto-detected as XPath</span>
+
+<span class="cm">// 3. Role — preferred for accessibility and resilience</span>
+page.<span class="fn">getByRole</span>(<span class="st">'button'</span>, { name: <span class="st">'Submit'</span> })
+page.<span class="fn">getByRole</span>(<span class="st">'textbox'</span>, { name: <span class="st">'Email'</span> })
+page.<span class="fn">getByRole</span>(<span class="st">'checkbox'</span>, { name: <span class="st">'Remember me'</span> })
+
+<span class="cm">// 4. Text content</span>
+page.<span class="fn">getByText</span>(<span class="st">'Welcome back'</span>)
+page.<span class="fn">getByText</span>(<span class="st">'Submit'</span>, { exact: <span class="kw">true</span> })
+
+<span class="cm">// 5. Label — finds input associated with a label</span>
+page.<span class="fn">getByLabel</span>(<span class="st">'Email address'</span>)
+page.<span class="fn">getByLabel</span>(<span class="st">'Password'</span>)
+
+<span class="cm">// 6. Placeholder</span>
+page.<span class="fn">getByPlaceholder</span>(<span class="st">'Enter your email'</span>)
+
+<span class="cm">// 7. Alt text — for images</span>
+page.<span class="fn">getByAltText</span>(<span class="st">'Company Logo'</span>)
+
+<span class="cm">// 8. Test ID — data-testid attribute (most stable)</span>
+page.<span class="fn">getByTestId</span>(<span class="st">'submit-button'</span>)
+<span class="cm">// Matches: &lt;button data-testid="submit-button"&gt;</span>
+
+<span class="cm">// 9. Title attribute</span>
+page.<span class="fn">getByTitle</span>(<span class="st">'Close dialog'</span>)</pre>
+      <div class="tip"><strong>Playwright recommends this priority:</strong> getByRole → getByLabel → getByPlaceholder → getByText → getByTestId → CSS/XPath. Role-based locators are most resilient to UI changes.</div>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">9</span> How do you filter, chain, and narrow down locators?</div>
+    <div class="a">
+<pre><span class="cm">// Scope locator within a parent element</span>
+<span class="kw">const</span> form = page.<span class="fn">locator</span>(<span class="st">'form#login'</span>);
+<span class="kw">const</span> emailField = form.<span class="fn">locator</span>(<span class="st">'input[type="email"]'</span>); <span class="cm">// scoped to form</span>
+
+<span class="cm">// Filter by text</span>
+page.<span class="fn">locator</span>(<span class="st">'li'</span>).<span class="fn">filter</span>({ hasText: <span class="st">'Playwright'</span> })
+
+<span class="cm">// Filter by child element</span>
+page.<span class="fn">locator</span>(<span class="st">'tr'</span>).<span class="fn">filter</span>({ has: page.<span class="fn">locator</span>(<span class="st">'td:has-text("John")'</span>) })
+
+<span class="cm">// nth() — get specific element by index (0-based)</span>
+page.<span class="fn">locator</span>(<span class="st">'ul li'</span>).<span class="fn">nth</span>(0)    <span class="cm">// first item</span>
+page.<span class="fn">locator</span>(<span class="st">'ul li'</span>).<span class="fn">last</span>()    <span class="cm">// last item</span>
+page.<span class="fn">locator</span>(<span class="st">'ul li'</span>).<span class="fn">first</span>()   <span class="cm">// first item</span>
+
+<span class="cm">// and() — combine locators</span>
+page.<span class="fn">locator</span>(<span class="st">'button'</span>).<span class="fn">and</span>(page.<span class="fn">getByText</span>(<span class="st">'Submit'</span>))
+
+<span class="cm">// or() — element matching either condition</span>
+page.<span class="fn">getByRole</span>(<span class="st">'button'</span>).<span class="fn">or</span>(page.<span class="fn">getByRole</span>(<span class="st">'link'</span>))</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">10</span> What is the difference between page.locator() and page.$() / page.$()?</div>
+    <div class="a">
+      <ul>
+        <li><strong>page.locator()</strong> — Modern, recommended. Returns a <strong>Locator</strong> object with auto-waiting, auto-retrying, and strict mode. Re-queries DOM on each action.</li>
+        <li><strong>page.$()</strong> — Legacy API. Returns an <code>ElementHandle</code> (like Selenium's WebElement) — a snapshot reference that can go stale. Does NOT auto-wait. Avoid in new code.</li>
+        <li><strong>page.$$()</strong> — Legacy API. Returns <code>ElementHandle[]</code>. Same limitations as <code>page.$()</code>.</li>
+      </ul>
+      <div class="warn"><strong>Avoid page.$() and page.$$()</strong> in new Playwright code. Always prefer <code>page.locator()</code> and its family (<code>getByRole</code>, <code>getByText</code>, etc.).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SECTION 3 ══════════════════════════════ -->
+<div class="section page-break" id="s3">
+  <div class="section-header">
+    <h2>3. Actions — Interacting with Elements</h2>
+    <div class="sub">Click, fill, type, select, drag — every common interaction</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">11</span> What are the most common Playwright actions?</div>
+    <div class="a">
+<pre><span class="cm">// NAVIGATION</span>
+<span class="kw">await</span> page.<span class="fn">goto</span>(<span class="st">'https://example.com'</span>);
+<span class="kw">await</span> page.<span class="fn">goBack</span>();
+<span class="kw">await</span> page.<span class="fn">goForward</span>();
+<span class="kw">await</span> page.<span class="fn">reload</span>();
+
+<span class="cm">// CLICK</span>
+<span class="kw">await</span> page.<span class="fn">click</span>(<span class="st">'#submit'</span>);
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'button'</span>).<span class="fn">click</span>();
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'button'</span>).<span class="fn">dblclick</span>();          <span class="cm">// double-click</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'div'</span>).<span class="fn">click</span>({ button: <span class="st">'right'</span> }); <span class="cm">// right-click</span>
+
+<span class="cm">// FILL / TYPE (for text inputs)</span>
+<span class="kw">await</span> page.<span class="fn">fill</span>(<span class="st">'#email'</span>, <span class="st">'test@example.com'</span>);    <span class="cm">// clears and fills instantly</span>
+<span class="kw">await</span> page.<span class="fn">type</span>(<span class="st">'#email'</span>, <span class="st">'test@example.com'</span>);    <span class="cm">// types character by character</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'#search'</span>).<span class="fn">clear</span>();             <span class="cm">// clear input</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'#search'</span>).<span class="fn">fill</span>(<span class="st">'Playwright'</span>);
+
+<span class="cm">// KEYBOARD</span>
+<span class="kw">await</span> page.<span class="fn">press</span>(<span class="st">'#input'</span>, <span class="st">'Enter'</span>);
+<span class="kw">await</span> page.<span class="fn">keyboard</span>.<span class="fn">press</span>(<span class="st">'Tab'</span>);
+<span class="kw">await</span> page.<span class="fn">keyboard</span>.<span class="fn">type</span>(<span class="st">'Hello World'</span>);
+<span class="kw">await</span> page.<span class="fn">keyboard</span>.<span class="fn">down</span>(<span class="st">'Shift'</span>);
+<span class="kw">await</span> page.<span class="fn">keyboard</span>.<span class="fn">up</span>(<span class="st">'Shift'</span>);
+
+<span class="cm">// SELECT DROPDOWN</span>
+<span class="kw">await</span> page.<span class="fn">selectOption</span>(<span class="st">'#country'</span>, <span class="st">'US'</span>);              <span class="cm">// by value</span>
+<span class="kw">await</span> page.<span class="fn">selectOption</span>(<span class="st">'#country'</span>, { label: <span class="st">'United States'</span> }); <span class="cm">// by label</span>
+<span class="kw">await</span> page.<span class="fn">selectOption</span>(<span class="st">'#country'</span>, { index: 2 });       <span class="cm">// by index</span>
+
+<span class="cm">// CHECKBOX / RADIO</span>
+<span class="kw">await</span> page.<span class="fn">check</span>(<span class="st">'input[name="agree"]'</span>);
+<span class="kw">await</span> page.<span class="fn">uncheck</span>(<span class="st">'input[name="agree"]'</span>);
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'#terms'</span>).<span class="fn">setChecked</span>(<span class="kw">true</span>);   <span class="cm">// explicit true/false</span>
+
+<span class="cm">// HOVER</span>
+<span class="kw">await</span> page.<span class="fn">hover</span>(<span class="st">'.menu-item'</span>);
+
+<span class="cm">// DRAG AND DROP</span>
+<span class="kw">await</span> page.<span class="fn">dragAndDrop</span>(<span class="st">'#source'</span>, <span class="st">'#target'</span>);
+
+<span class="cm">// SCROLL</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'#element'</span>).<span class="fn">scrollIntoViewIfNeeded</span>();
+<span class="kw">await</span> page.<span class="fn">mouse</span>.<span class="fn">wheel</span>(0, 300); <span class="cm">// scroll down 300px</span>
+
+<span class="cm">// READ DATA</span>
+<span class="kw">const</span> text  = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'h1'</span>).<span class="fn">textContent</span>();
+<span class="kw">const</span> inner = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'div'</span>).<span class="fn">innerText</span>();
+<span class="kw">const</span> value = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'input'</span>).<span class="fn">inputValue</span>();
+<span class="kw">const</span> attr  = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'a'</span>).<span class="fn">getAttribute</span>(<span class="st">'href'</span>);</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">12</span> What is the difference between fill() and type()?</div>
+    <div class="a">
+      <ul>
+        <li><strong>fill(selector, value)</strong> — Clears the field and sets the value <em>instantly</em> (no simulated keystrokes). Faster and preferred for most tests.</li>
+        <li><strong>type(selector, value)</strong> — Simulates pressing each key one by one, including triggering <code>keydown</code>, <code>keypress</code>, <code>keyup</code>, and <code>input</code> events per character. Use this when the app has autocomplete/typeahead or character-by-character event listeners.</li>
+      </ul>
+<pre><span class="cm">// Use fill() — fast, standard</span>
+<span class="kw">await</span> page.<span class="fn">fill</span>(<span class="st">'#search'</span>, <span class="st">'Playwright testing'</span>);
+
+<span class="cm">// Use type() — when app needs real keystroke events</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'#autocomplete'</span>).<span class="fn">type</span>(<span class="st">'New Y'</span>);
+<span class="cm">// wait for dropdown to appear, then click option</span>
+<span class="kw">await</span> page.<span class="fn">getByText</span>(<span class="st">'New York'</span>).<span class="fn">click</span>();</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">13</span> How do you take a screenshot and record a video in Playwright?</div>
+    <div class="a">
+<pre><span class="cm">// Full page screenshot</span>
+<span class="kw">await</span> page.<span class="fn">screenshot</span>({ path: <span class="st">'screenshots/home.png'</span>, fullPage: <span class="kw">true</span> });
+
+<span class="cm">// Element screenshot</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'#chart'</span>).<span class="fn">screenshot</span>({ path: <span class="st">'screenshots/chart.png'</span> });
+
+<span class="cm">// Screenshot on failure — configure in playwright.config.ts</span></pre>
+<pre><span class="cm">// playwright.config.ts — auto screenshot and video</span>
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  use: {
+    screenshot: <span class="st">'only-on-failure'</span>,  <span class="cm">// 'on', 'off', 'only-on-failure'</span>
+    video: <span class="st">'retain-on-failure'</span>,      <span class="cm">// 'on', 'off', 'retain-on-failure'</span>
+    trace: <span class="st">'on-first-retry'</span>,          <span class="cm">// captures trace for debugging</span>
+  }
+});</pre>
+      <div class="tip"><strong>Trace Viewer:</strong> Playwright's trace captures a full timeline of your test — screenshots at each step, network requests, console logs. View it with <code>npx playwright show-trace trace.zip</code>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SECTION 4 ══════════════════════════════ -->
+<div class="section page-break" id="s4">
+  <div class="section-header">
+    <h2>4. Assertions</h2>
+    <div class="sub">expect() — Playwright's built-in assertion library with auto-waiting</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">14</span> What types of assertions does Playwright provide?</div>
+    <div class="a">
+      Playwright has two types of assertions — <strong>web-first</strong> (preferred) and <strong>generic</strong>.
+<pre><span class="cm">// ── WEB-FIRST ASSERTIONS (auto-wait until condition is true) ──</span>
+
+<span class="cm">// Page-level</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveURL</span>(<span class="st">'https://example.com/dashboard'</span>);
+<span class="kw">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveURL</span>(<span class="st">/dashboard/</span>);       <span class="cm">// regex match</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveTitle</span>(<span class="st">'Dashboard'</span>);
+<span class="kw">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveTitle</span>(<span class="st">/Dashboard/</span>);
+
+<span class="cm">// Locator-level</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'h1'</span>)).<span class="fn">toHaveText</span>(<span class="st">'Welcome'</span>);
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'h1'</span>)).<span class="fn">toContainText</span>(<span class="st">'Welc'</span>);
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'#error'</span>)).<span class="fn">toBeVisible</span>();
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'#spinner'</span>)).<span class="fn">toBeHidden</span>();
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'button'</span>)).<span class="fn">toBeEnabled</span>();
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'button'</span>)).<span class="fn">toBeDisabled</span>();
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'#agree'</span>)).<span class="fn">toBeChecked</span>();
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'input'</span>)).<span class="fn">toHaveValue</span>(<span class="st">'admin@test.com'</span>);
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'div'</span>)).<span class="fn">toHaveAttribute</span>(<span class="st">'class'</span>, <span class="st">'active'</span>);
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'li'</span>)).<span class="fn">toHaveCount</span>(5);
+
+<span class="cm">// Negative assertions — prefix with .not</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'#error'</span>)).<span class="fn">not</span>.<span class="fn">toBeVisible</span>();
+<span class="kw">await</span> <span class="fn">expect</span>(page).<span class="fn">not</span>.<span class="fn">toHaveURL</span>(<span class="st">/login/</span>);
+
+<span class="cm">// ── GENERIC (value / boolean assertions, no auto-wait) ──</span>
+<span class="fn">expect</span>(count).<span class="fn">toBe</span>(5);
+<span class="fn">expect</span>(title).<span class="fn">toContain</span>(<span class="st">'Dashboard'</span>);
+<span class="fn">expect</span>(items).<span class="fn">toHaveLength</span>(3);
+<span class="fn">expect</span>(obj).<span class="fn">toBeTruthy</span>();
+<span class="fn">expect</span>(obj).<span class="fn">toBeNull</span>();</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">15</span> What is the difference between toHaveText() and toContainText()?</div>
+    <div class="a">
+      <ul>
+        <li><strong>toHaveText('Welcome, Admin')</strong> — The element's text must <em>exactly match</em> the given string (after normalization of whitespace).</li>
+        <li><strong>toContainText('Welcome')</strong> — The element's text must <em>contain</em> the given substring. More flexible.</li>
+      </ul>
+<pre><span class="cm">// Element: &lt;h1&gt;Welcome, Admin&lt;/h1&gt;</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'h1'</span>)).<span class="fn">toHaveText</span>(<span class="st">'Welcome, Admin'</span>);  <span class="cm">// ✓ passes</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'h1'</span>)).<span class="fn">toHaveText</span>(<span class="st">'Welcome'</span>);          <span class="cm">// ✗ fails</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'h1'</span>)).<span class="fn">toContainText</span>(<span class="st">'Welcome'</span>);       <span class="cm">// ✓ passes</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">16</span> What is a soft assertion in Playwright? How do you use it?</div>
+    <div class="a">
+      By default, a failed assertion stops the test immediately. Soft assertions collect all failures and report them all at the end.
+<pre><span class="kw">import</span> { <span class="nm">test</span>, <span class="nm">expect</span> } <span class="kw">from</span> <span class="st">'@playwright/test'</span>;
+
+<span class="fn">test</span>(<span class="st">'validate user profile page'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => {
+  <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="st">'/profile'</span>);
+
+  <span class="cm">// Soft assertions — test continues even if one fails</span>
+  <span class="kw">await</span> <span class="fn">expect</span>.<span class="fn">soft</span>(page.<span class="fn">locator</span>(<span class="st">'#name'</span>)).<span class="fn">toHaveText</span>(<span class="st">'John Doe'</span>);
+  <span class="kw">await</span> <span class="fn">expect</span>.<span class="fn">soft</span>(page.<span class="fn">locator</span>(<span class="st">'#email'</span>)).<span class="fn">toHaveText</span>(<span class="st">'john@test.com'</span>);
+  <span class="kw">await</span> <span class="fn">expect</span>.<span class="fn">soft</span>(page.<span class="fn">locator</span>(<span class="st">'#avatar'</span>)).<span class="fn">toBeVisible</span>();
+
+  <span class="cm">// Test is marked failed if any soft assertion above failed,</span>
+  <span class="cm">// but all assertions were still evaluated</span>
+});</pre>
+      <div class="tip"><strong>When to use:</strong> Validating multiple independent fields on a single page. When failure of one field shouldn't stop checking others (e.g., user profile validation, data table row verification).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SECTION 5 ══════════════════════════════ -->
+<div class="section page-break" id="s5">
+  <div class="section-header">
+    <h2>5. Waits &amp; Auto-Waiting</h2>
+    <div class="sub">How Playwright eliminates the need for manual waits</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">17</span> What is Auto-waiting in Playwright?</div>
+    <div class="a">
+      Playwright's biggest advantage — every action on a locator <strong>automatically waits</strong> for the element to be in an actionable state before executing. No explicit waits needed for standard interactions.<br><br>
+      Before performing an action, Playwright checks:
+      <ul>
+        <li><strong>Visible</strong> — element is in the DOM and not hidden</li>
+        <li><strong>Stable</strong> — element is not animating or moving</li>
+        <li><strong>Enabled</strong> — element is not disabled</li>
+        <li><strong>Editable</strong> — (for type/fill) element can receive input</li>
+        <li><strong>Receives events</strong> — no other element is overlaying it</li>
+      </ul>
+<pre><span class="cm">// Playwright automatically waits before each action below</span>
+<span class="kw">await</span> page.<span class="fn">click</span>(<span class="st">'#submit'</span>);      <span class="cm">// waits until visible, stable, enabled</span>
+<span class="kw">await</span> page.<span class="fn">fill</span>(<span class="st">'#email'</span>, <span class="st">'x'</span>);  <span class="cm">// waits until editable</span>
+
+<span class="cm">// You don't need this anymore (unlike Selenium):</span>
+<span class="cm">// await page.waitForSelector('#submit'); // usually not needed</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">18</span> When do you still need explicit waits in Playwright?</div>
+    <div class="a">
+      Despite auto-waiting, some scenarios need explicit waits:
+<pre><span class="cm">// 1. Wait for URL change (after navigation)</span>
+<span class="kw">await</span> page.<span class="fn">waitForURL</span>(<span class="st">'**/dashboard'</span>);
+<span class="kw">await</span> page.<span class="fn">waitForURL</span>(<span class="st">/dashboard/</span>);
+
+<span class="cm">// 2. Wait for an element to appear</span>
+<span class="kw">await</span> page.<span class="fn">waitForSelector</span>(<span class="st">'#result-table'</span>);
+
+<span class="cm">// 3. Wait for an element to disappear (e.g., loading spinner)</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'#spinner'</span>).<span class="fn">waitFor</span>({ state: <span class="st">'hidden'</span> });
+
+<span class="cm">// 4. Wait for network request to complete</span>
+<span class="kw">await</span> page.<span class="fn">waitForResponse</span>(<span class="st">'**/api/users'</span>);
+
+<span class="cm">// 5. Wait for page load state</span>
+<span class="kw">await</span> page.<span class="fn">waitForLoadState</span>(<span class="st">'networkidle'</span>); <span class="cm">// no network for 500ms</span>
+<span class="kw">await</span> page.<span class="fn">waitForLoadState</span>(<span class="st">'domcontentloaded'</span>);
+
+<span class="cm">// 6. Custom wait — wait for function to return true</span>
+<span class="kw">await</span> page.<span class="fn">waitForFunction</span>(() => document.querySelectorAll(<span class="st">'tr'</span>).length > 5);
+
+<span class="cm">// 7. Specific element state</span>
+<span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'#btn'</span>).<span class="fn">waitFor</span>({ state: <span class="st">'visible'</span> });
+<span class="cm">// States: 'attached' | 'detached' | 'visible' | 'hidden'</span></pre>
+      <div class="warn"><strong>Avoid page.waitForTimeout(2000)</strong> — this is a hardcoded sleep. Only use for debugging, never in production tests.</div>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">19</span> What is the default timeout in Playwright and how do you change it?</div>
+    <div class="a">
+      <table>
+        <tr><th>Timeout Type</th><th>Default</th><th>Applies to</th></tr>
+        <tr><td>Action timeout</td><td>0 (uses test timeout)</td><td>Individual click/fill/etc.</td></tr>
+        <tr><td>Test timeout</td><td>30,000ms (30s)</td><td>Each test function</td></tr>
+        <tr><td>Assertion timeout</td><td>5,000ms (5s)</td><td>expect() calls</td></tr>
+        <tr><td>Navigation timeout</td><td>30,000ms (30s)</td><td>goto(), waitForURL()</td></tr>
+      </table>
+<pre><span class="cm">// playwright.config.ts — global timeouts</span>
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  timeout: 60_000,          <span class="cm">// test timeout: 60 seconds</span>
+  expect: {
+    timeout: 10_000         <span class="cm">// assertion timeout: 10 seconds</span>
+  },
+  use: {
+    actionTimeout: 15_000,  <span class="cm">// per-action timeout</span>
+    navigationTimeout: 30_000
+  }
+});
+
+<span class="cm">// Per-test override</span>
+<span class="fn">test</span>(<span class="st">'slow test'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => {
+  <span class="fn">test</span>.<span class="fn">setTimeout</span>(120_000);  <span class="cm">// override for this test only</span>
+  ...
+});
+
+<span class="cm">// Per-action timeout</span>
+<span class="kw">await</span> page.<span class="fn">click</span>(<span class="st">'#btn'</span>, { timeout: 5000 });
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'#msg'</span>), { timeout: 10000 }).<span class="fn">toBeVisible</span>();</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SECTION 6 ══════════════════════════════ -->
+<div class="section page-break" id="s6">
+  <div class="section-header">
+    <h2>6. Handling Web Scenarios</h2>
+    <div class="sub">Dialogs, iFrames, multiple tabs, file upload/download</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">20</span> How do you handle JavaScript dialogs (alert, confirm, prompt)?</div>
+    <div class="a">
+<pre><span class="cm">// IMPORTANT: Register dialog handler BEFORE the action that triggers it</span>
+
+<span class="cm">// Accept an alert</span>
+page.<span class="fn">on</span>(<span class="st">'dialog'</span>, <span class="kw">async</span> dialog => {
+  console.<span class="fn">log</span>(dialog.<span class="fn">message</span>());  <span class="cm">// get alert text</span>
+  <span class="kw">await</span> dialog.<span class="fn">accept</span>();            <span class="cm">// click OK</span>
+});
+<span class="kw">await</span> page.<span class="fn">click</span>(<span class="st">'#delete-btn'</span>);   <span class="cm">// triggers alert</span>
+
+<span class="cm">// Dismiss a confirm dialog (click Cancel)</span>
+page.<span class="fn">on</span>(<span class="st">'dialog'</span>, dialog => dialog.<span class="fn">dismiss</span>());
+
+<span class="cm">// Handle a prompt (enter text then accept)</span>
+page.<span class="fn">on</span>(<span class="st">'dialog'</span>, dialog => dialog.<span class="fn">accept</span>(<span class="st">'My answer'</span>));
+
+<span class="cm">// One-time handler using page.once()</span>
+page.<span class="fn">once</span>(<span class="st">'dialog'</span>, dialog => dialog.<span class="fn">accept</span>());</pre>
+      <div class="note"><strong>Key difference from Selenium:</strong> Playwright uses an event-driven approach. You register a listener that fires when a dialog appears — no need to switch context.</div>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">21</span> How do you handle iFrames in Playwright?</div>
+    <div class="a">
+<pre><span class="cm">// Use frameLocator() — no context switching needed!</span>
+<span class="kw">const</span> frame = page.<span class="fn">frameLocator</span>(<span class="st">'iframe#payment'</span>);
+
+<span class="cm">// Interact with elements inside the iframe</span>
+<span class="kw">await</span> frame.<span class="fn">locator</span>(<span class="st">'input[name="cardNumber"]'</span>).<span class="fn">fill</span>(<span class="st">'4111111111111111'</span>);
+<span class="kw">await</span> frame.<span class="fn">getByLabel</span>(<span class="st">'Expiry'</span>).<span class="fn">fill</span>(<span class="st">'12/28'</span>);
+<span class="kw">await</span> frame.<span class="fn">getByRole</span>(<span class="st">'button'</span>, { name: <span class="st">'Pay'</span> }).<span class="fn">click</span>();
+
+<span class="cm">// Nested iframes</span>
+<span class="kw">const</span> innerFrame = page
+  .<span class="fn">frameLocator</span>(<span class="st">'iframe.outer'</span>)
+  .<span class="fn">frameLocator</span>(<span class="st">'iframe.inner'</span>);
+<span class="kw">await</span> innerFrame.<span class="fn">locator</span>(<span class="st">'button'</span>).<span class="fn">click</span>();</pre>
+      <div class="note"><strong>Much simpler than Selenium:</strong> Playwright's <code>frameLocator()</code> creates a scoped locator — no need to <code>switchTo().frame()</code> and <code>switchTo().defaultContent()</code> back and forth.</div>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">22</span> How do you handle multiple browser tabs or windows?</div>
+    <div class="a">
+<pre><span class="cm">// Listen for new page (tab/window) event</span>
+<span class="kw">const</span> [newPage] = <span class="kw">await</span> Promise.<span class="fn">all</span>([
+  context.<span class="fn">waitForEvent</span>(<span class="st">'page'</span>),           <span class="cm">// wait for new tab to open</span>
+  page.<span class="fn">click</span>(<span class="st">'a[target="_blank"]'</span>)         <span class="cm">// click that opens new tab</span>
+]);
+
+<span class="cm">// Wait for new page to load</span>
+<span class="kw">await</span> newPage.<span class="fn">waitForLoadState</span>();
+console.<span class="fn">log</span>(<span class="kw">await</span> newPage.<span class="fn">title</span>());
+
+<span class="cm">// Interact with the new tab</span>
+<span class="kw">await</span> newPage.<span class="fn">locator</span>(<span class="st">'#proceed'</span>).<span class="fn">click</span>();
+
+<span class="cm">// Close new tab and continue on original page</span>
+<span class="kw">await</span> newPage.<span class="fn">close</span>();
+<span class="cm">// 'page' still refers to the original tab</span>
+
+<span class="cm">// Open a new tab programmatically</span>
+<span class="kw">const</span> tab2 = <span class="kw">await</span> context.<span class="fn">newPage</span>();
+<span class="kw">await</span> tab2.<span class="fn">goto</span>(<span class="st">'https://example.com'</span>);</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">23</span> How do you handle file upload and download?</div>
+    <div class="a">
+<pre><span class="cm">// ── FILE UPLOAD ──</span>
+<span class="cm">// Method 1: setInputFiles — for &lt;input type="file"&gt;</span>
+<span class="kw">await</span> page.<span class="fn">setInputFiles</span>(<span class="st">'input[type="file"]'</span>, <span class="st">'./files/document.pdf'</span>);
+
+<span class="cm">// Multiple files</span>
+<span class="kw">await</span> page.<span class="fn">setInputFiles</span>(<span class="st">'input[type="file"]'</span>, [<span class="st">'file1.pdf'</span>, <span class="st">'file2.png'</span>]);
+
+<span class="cm">// Clear file input</span>
+<span class="kw">await</span> page.<span class="fn">setInputFiles</span>(<span class="st">'input[type="file"]'</span>, []);
+
+<span class="cm">// Method 2: filechooser event — for custom upload buttons</span>
+<span class="kw">const</span> [fileChooser] = <span class="kw">await</span> Promise.<span class="fn">all</span>([
+  page.<span class="fn">waitForEvent</span>(<span class="st">'filechooser'</span>),
+  page.<span class="fn">click</span>(<span class="st">'#upload-button'</span>)
+]);
+<span class="kw">await</span> fileChooser.<span class="fn">setFiles</span>(<span class="st">'./files/document.pdf'</span>);
+
+<span class="cm">// ── FILE DOWNLOAD ──</span>
+<span class="kw">const</span> [download] = <span class="kw">await</span> Promise.<span class="fn">all</span>([
+  page.<span class="fn">waitForEvent</span>(<span class="st">'download'</span>),
+  page.<span class="fn">click</span>(<span class="st">'#download-btn'</span>)
+]);
+
+<span class="cm">// Save to disk</span>
+<span class="kw">await</span> download.<span class="fn">saveAs</span>(<span class="st">'./downloads/'</span> + download.<span class="fn">suggestedFilename</span>());
+console.<span class="fn">log</span>(download.<span class="fn">suggestedFilename</span>()); <span class="cm">// get filename</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">24</span> How do you intercept and mock network requests?</div>
+    <div class="a">
+<pre><span class="cm">// Block all image requests (speed up tests)</span>
+<span class="kw">await</span> page.<span class="fn">route</span>(<span class="st">'**/*.{png,jpg,jpeg,gif,svg}'</span>, route => route.<span class="fn">abort</span>());
+
+<span class="cm">// Mock an API response</span>
+<span class="kw">await</span> page.<span class="fn">route</span>(<span class="st">'**/api/users'</span>, <span class="kw">async</span> route => {
+  <span class="kw">await</span> route.<span class="fn">fulfill</span>({
+    status: 200,
+    contentType: <span class="st">'application/json'</span>,
+    body: <span class="nm">JSON</span>.<span class="fn">stringify</span>([{ id: 1, name: <span class="st">'Mock User'</span> }])
+  });
+});
+
+<span class="cm">// Modify a real request (add header)</span>
+<span class="kw">await</span> page.<span class="fn">route</span>(<span class="st">'**/api/**'</span>, <span class="kw">async</span> route => {
+  <span class="kw">const</span> headers = { ...route.<span class="fn">request</span>().<span class="fn">headers</span>(), <span class="st">'x-custom'</span>: <span class="st">'test'</span> };
+  <span class="kw">await</span> route.<span class="fn">continue</span>({ headers });
+});
+
+<span class="cm">// Wait for a specific request to be made</span>
+<span class="kw">const</span> [response] = <span class="kw">await</span> Promise.<span class="fn">all</span>([
+  page.<span class="fn">waitForResponse</span>(<span class="st">'**/api/login'</span>),
+  page.<span class="fn">click</span>(<span class="st">'#login-btn'</span>)
+]);
+console.<span class="fn">log</span>(<span class="kw">await</span> response.<span class="fn">json</span>());</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SECTION 7 ══════════════════════════════ -->
+<div class="section page-break" id="s7">
+  <div class="section-header">
+    <h2>7. Page Object Model (POM) in Playwright</h2>
+    <div class="sub">Organizing tests with reusable page classes</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">25</span> How do you implement POM in Playwright?</div>
+    <div class="a">
+<pre><span class="cm">// pages/LoginPage.ts</span>
+<span class="kw">import</span> { <span class="tp">Page</span>, <span class="tp">Locator</span> } <span class="kw">from</span> <span class="st">'@playwright/test'</span>;
+
+<span class="kw">export class</span> <span class="tp">LoginPage</span> {
+  <span class="kw">readonly</span> page: <span class="tp">Page</span>;
+  <span class="kw">readonly</span> usernameInput: <span class="tp">Locator</span>;
+  <span class="kw">readonly</span> passwordInput: <span class="tp">Locator</span>;
+  <span class="kw">readonly</span> loginButton:   <span class="tp">Locator</span>;
+  <span class="kw">readonly</span> errorMessage:  <span class="tp">Locator</span>;
+
+  <span class="fn">constructor</span>(page: <span class="tp">Page</span>) {
+    <span class="kw">this</span>.page          = page;
+    <span class="kw">this</span>.usernameInput = page.<span class="fn">getByLabel</span>(<span class="st">'Username'</span>);
+    <span class="kw">this</span>.passwordInput = page.<span class="fn">getByLabel</span>(<span class="st">'Password'</span>);
+    <span class="kw">this</span>.loginButton   = page.<span class="fn">getByRole</span>(<span class="st">'button'</span>, { name: <span class="st">'Login'</span> });
+    <span class="kw">this</span>.errorMessage  = page.<span class="fn">locator</span>(<span class="st">'.error-message'</span>);
+  }
+
+  <span class="kw">async</span> <span class="fn">goto</span>() {
+    <span class="kw">await</span> <span class="kw">this</span>.page.<span class="fn">goto</span>(<span class="st">'/login'</span>);
+  }
+
+  <span class="kw">async</span> <span class="fn">login</span>(username: <span class="tp">string</span>, password: <span class="tp">string</span>) {
+    <span class="kw">await</span> <span class="kw">this</span>.usernameInput.<span class="fn">fill</span>(username);
+    <span class="kw">await</span> <span class="kw">this</span>.passwordInput.<span class="fn">fill</span>(password);
+    <span class="kw">await</span> <span class="kw">this</span>.loginButton.<span class="fn">click</span>();
+  }
+
+  <span class="kw">async</span> <span class="fn">getErrorMessage</span>(): <span class="tp">Promise</span>&lt;<span class="tp">string</span>&gt; {
+    <span class="kw">return</span> <span class="kw">await</span> <span class="kw">this</span>.errorMessage.<span class="fn">innerText</span>();
+  }
+}</pre>
+<pre><span class="cm">// tests/login.spec.ts — test using POM</span>
+<span class="kw">import</span> { <span class="nm">test</span>, <span class="nm">expect</span> } <span class="kw">from</span> <span class="st">'@playwright/test'</span>;
+<span class="kw">import</span> { <span class="tp">LoginPage</span> } <span class="kw">from</span> <span class="st">'../pages/LoginPage'</span>;
+
+<span class="fn">test</span>(<span class="st">'valid login redirects to dashboard'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => {
+  <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="tp">LoginPage</span>(page);
+  <span class="kw">await</span> loginPage.<span class="fn">goto</span>();
+  <span class="kw">await</span> loginPage.<span class="fn">login</span>(<span class="st">'admin'</span>, <span class="st">'Admin@123'</span>);
+  <span class="kw">await</span> <span class="fn">expect</span>(page).<span class="fn">toHaveURL</span>(<span class="st">/dashboard/</span>);
+});
+
+<span class="fn">test</span>(<span class="st">'invalid login shows error'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => {
+  <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="tp">LoginPage</span>(page);
+  <span class="kw">await</span> loginPage.<span class="fn">goto</span>();
+  <span class="kw">await</span> loginPage.<span class="fn">login</span>(<span class="st">'wrong@test.com'</span>, <span class="st">'badpass'</span>);
+  <span class="kw">await</span> <span class="fn">expect</span>(loginPage.errorMessage).<span class="fn">toBeVisible</span>();
+  <span class="kw">await</span> <span class="fn">expect</span>(loginPage.errorMessage).<span class="fn">toContainText</span>(<span class="st">'Invalid credentials'</span>);
+});</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">26</span> How do you share a logged-in state across tests using fixtures?</div>
+    <div class="a">
+<pre><span class="cm">// fixtures/auth.ts — save auth state once, reuse everywhere</span>
+<span class="kw">import</span> { <span class="nm">test</span> <span class="kw">as</span> <span class="nm">base</span>, <span class="tp">Page</span> } <span class="kw">from</span> <span class="st">'@playwright/test'</span>;
+<span class="kw">import</span> { <span class="tp">LoginPage</span> } <span class="kw">from</span> <span class="st">'../pages/LoginPage'</span>;
+
+<span class="kw">type</span> <span class="tp">Fixtures</span> = { authenticatedPage: <span class="tp">Page</span> };
+
+<span class="kw">export const</span> test = base.<span class="fn">extend</span>&lt;<span class="tp">Fixtures</span>&gt;({
+  authenticatedPage: <span class="kw">async</span> ({ page }, <span class="nm">use</span>) => {
+    <span class="cm">// Setup: login once</span>
+    <span class="kw">const</span> loginPage = <span class="kw">new</span> <span class="tp">LoginPage</span>(page);
+    <span class="kw">await</span> loginPage.<span class="fn">goto</span>();
+    <span class="kw">await</span> loginPage.<span class="fn">login</span>(<span class="st">'admin'</span>, <span class="st">'Admin@123'</span>);
+
+    <span class="cm">// Provide to test</span>
+    <span class="kw">await</span> <span class="fn">use</span>(page);
+
+    <span class="cm">// Teardown: runs after test (optional)</span>
+  }
+});
+
+<span class="cm">// Use in test:</span>
+<span class="fn">test</span>(<span class="st">'can see dashboard'</span>, <span class="kw">async</span> ({ <span class="nm">authenticatedPage</span> }) => {
+  <span class="kw">await</span> <span class="fn">expect</span>(authenticatedPage.<span class="fn">locator</span>(<span class="st">'h1'</span>)).<span class="fn">toContainText</span>(<span class="st">'Dashboard'</span>);
+});</pre>
+      <div class="tip"><strong>Even better performance:</strong> Use <code>storageState</code> in <code>playwright.config.ts</code> to save auth cookies/localStorage to a file and reuse across all tests without re-logging in.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SECTION 8 ══════════════════════════════ -->
+<div class="section page-break" id="s8">
+  <div class="section-header">
+    <h2>8. Playwright Configuration &amp; Test Runner</h2>
+    <div class="sub">playwright.config.ts — hooks, parallelism, projects, reporters</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">27</span> Explain the key sections of playwright.config.ts.</div>
+    <div class="a">
+<pre><span class="cm">// playwright.config.ts</span>
+<span class="kw">import</span> { <span class="fn">defineConfig</span>, <span class="nm">devices</span> } <span class="kw">from</span> <span class="st">'@playwright/test'</span>;
+
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  testDir: <span class="st">'./tests'</span>,              <span class="cm">// where to look for test files</span>
+  testMatch: <span class="st">'**/*.spec.ts'</span>,       <span class="cm">// file pattern</span>
+  timeout: 30_000,                  <span class="cm">// test timeout (30s)</span>
+  retries: 2,                       <span class="cm">// retry failed tests 2 times</span>
+  workers: 4,                       <span class="cm">// parallel workers (4 tests at a time)</span>
+  fullyParallel: <span class="kw">true</span>,              <span class="cm">// run tests in each file in parallel</span>
+  reporter: [
+    [<span class="st">'html'</span>],                        <span class="cm">// built-in HTML report</span>
+    [<span class="st">'list'</span>],                        <span class="cm">// console output</span>
+  ],
+
+  use: {
+    baseURL: <span class="st">'https://staging.example.com'</span>,  <span class="cm">// page.goto('/login') = baseURL+'/login'</span>
+    headless: <span class="kw">true</span>,
+    screenshot: <span class="st">'only-on-failure'</span>,
+    video:      <span class="st">'retain-on-failure'</span>,
+    trace:      <span class="st">'on-first-retry'</span>,
+    actionTimeout: 10_000,
+  },
+
+  <span class="cm">// Run same tests on multiple browsers</span>
+  projects: [
+    { name: <span class="st">'chromium'</span>, use: { ...devices[<span class="st">'Desktop Chrome'</span>]  } },
+    { name: <span class="st">'firefox'</span>,  use: { ...devices[<span class="st">'Desktop Firefox'</span>] } },
+    { name: <span class="st">'webkit'</span>,   use: { ...devices[<span class="st">'Desktop Safari'</span>]  } },
+    <span class="cm">// Mobile testing</span>
+    { name: <span class="st">'mobile-chrome'</span>, use: { ...devices[<span class="st">'Pixel 5'</span>] } },
+    { name: <span class="st">'mobile-safari'</span>, use: { ...devices[<span class="st">'iPhone 13'</span>] } },
+  ],
+});</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">28</span> What are test hooks in Playwright?</div>
+    <div class="a">
+<pre><span class="kw">import</span> { <span class="nm">test</span>, <span class="nm">expect</span> } <span class="kw">from</span> <span class="st">'@playwright/test'</span>;
+
+<span class="cm">// Runs once before ALL tests in this file</span>
+test.<span class="fn">beforeAll</span>(<span class="kw">async</span> ({ <span class="nm">browser</span> }) => {
+  console.<span class="fn">log</span>(<span class="st">'Suite starting'</span>);
+});
+
+<span class="cm">// Runs before EACH test</span>
+test.<span class="fn">beforeEach</span>(<span class="kw">async</span> ({ <span class="nm">page</span> }) => {
+  <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="st">'/home'</span>);
+});
+
+<span class="cm">// Runs after EACH test</span>
+test.<span class="fn">afterEach</span>(<span class="kw">async</span> ({ <span class="nm">page</span> }) => {
+  <span class="cm">// page is automatically closed after each test anyway</span>
+});
+
+<span class="cm">// Runs once after ALL tests</span>
+test.<span class="fn">afterAll</span>(<span class="kw">async</span> () => {
+  console.<span class="fn">log</span>(<span class="st">'Suite done'</span>);
+});
+
+<span class="cm">// Group tests with describe</span>
+test.<span class="fn">describe</span>(<span class="st">'Login feature'</span>, () => {
+  test.<span class="fn">beforeEach</span>(<span class="kw">async</span> ({ <span class="nm">page</span> }) => {
+    <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="st">'/login'</span>);
+  });
+
+  <span class="fn">test</span>(<span class="st">'valid login'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => { ... });
+  <span class="fn">test</span>(<span class="st">'invalid login'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => { ... });
+});</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">29</span> How do you skip, focus, and tag tests?</div>
+    <div class="a">
+<pre><span class="cm">// Skip a test</span>
+<span class="fn">test</span>.<span class="fn">skip</span>(<span class="st">'not implemented yet'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => { ... });
+
+<span class="cm">// Skip conditionally</span>
+<span class="fn">test</span>(<span class="st">'safari only test'</span>, <span class="kw">async</span> ({ <span class="nm">page</span>, <span class="nm">browserName</span> }) => {
+  <span class="fn">test</span>.<span class="fn">skip</span>(browserName !== <span class="st">'webkit'</span>, <span class="st">'Only for Safari'</span>);
+  ...
+});
+
+<span class="cm">// Run ONLY this test (focus mode)</span>
+<span class="fn">test</span>.<span class="fn">only</span>(<span class="st">'debug this test'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => { ... });
+
+<span class="cm">// Mark as flaky — retries but doesn't fail suite if it fails</span>
+<span class="fn">test</span>.<span class="fn">fixme</span>(<span class="st">'known issue'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => { ... });
+
+<span class="cm">// Tag tests for filtering — run with: npx playwright test --grep @smoke</span>
+<span class="fn">test</span>(<span class="st">'login test @smoke'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => { ... });
+<span class="fn">test</span>(<span class="st">'checkout test @regression'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => { ... });</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">30</span> How do you run tests and view reports?</div>
+    <div class="a">
+<pre><span class="cm"># Run all tests</span>
+npx playwright test
+
+<span class="cm"># Run a specific file</span>
+npx playwright test tests/login.spec.ts
+
+<span class="cm"># Run tests matching a title</span>
+npx playwright test -g "valid login"
+
+<span class="cm"># Run only smoke tests (grep tag)</span>
+npx playwright test --grep @smoke
+
+<span class="cm"># Run on specific browser</span>
+npx playwright test --project=chromium
+npx playwright test --project=firefox
+
+<span class="cm"># Run in headed (visible browser)</span>
+npx playwright test --headed
+
+<span class="cm"># Run in debug mode (step through)</span>
+npx playwright test --debug
+
+<span class="cm"># Open the interactive Playwright UI</span>
+npx playwright test --ui
+
+<span class="cm"># Open the HTML report after a run</span>
+npx playwright show-report
+
+<span class="cm"># View a trace file</span>
+npx playwright show-trace test-results/trace.zip</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SECTION 9 ══════════════════════════════ -->
+<div class="section page-break" id="s9">
+  <div class="section-header">
+    <h2>9. API Testing with Playwright</h2>
+    <div class="sub">Playwright can test REST APIs — no browser needed</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">31</span> How do you make API requests in Playwright?</div>
+    <div class="a">
+<pre><span class="kw">import</span> { <span class="nm">test</span>, <span class="nm">expect</span> } <span class="kw">from</span> <span class="st">'@playwright/test'</span>;
+
+<span class="cm">// GET request</span>
+<span class="fn">test</span>(<span class="st">'GET users returns 200'</span>, <span class="kw">async</span> ({ <span class="nm">request</span> }) => {
+  <span class="kw">const</span> response = <span class="kw">await</span> request.<span class="fn">get</span>(<span class="st">'https://reqres.in/api/users?page=1'</span>);
+  <span class="fn">expect</span>(response.<span class="fn">status</span>()).<span class="fn">toBe</span>(200);
+  <span class="kw">const</span> body = <span class="kw">await</span> response.<span class="fn">json</span>();
+  <span class="fn">expect</span>(body.data).<span class="fn">toHaveLength</span>(6);
+});
+
+<span class="cm">// POST request</span>
+<span class="fn">test</span>(<span class="st">'POST creates a user'</span>, <span class="kw">async</span> ({ <span class="nm">request</span> }) => {
+  <span class="kw">const</span> response = <span class="kw">await</span> request.<span class="fn">post</span>(<span class="st">'https://reqres.in/api/users'</span>, {
+    data: { name: <span class="st">'John QA'</span>, job: <span class="st">'Tester'</span> }
+  });
+  <span class="fn">expect</span>(response.<span class="fn">status</span>()).<span class="fn">toBe</span>(201);
+  <span class="kw">const</span> body = <span class="kw">await</span> response.<span class="fn">json</span>();
+  <span class="fn">expect</span>(body.name).<span class="fn">toBe</span>(<span class="st">'John QA'</span>);
+  <span class="fn">expect</span>(body.id).<span class="fn">toBeTruthy</span>();
+});
+
+<span class="cm">// PUT / PATCH / DELETE</span>
+<span class="kw">await</span> request.<span class="fn">put</span>(<span class="st">`/api/users/${id}`</span>, { data: { job: <span class="st">'Lead'</span> } });
+<span class="kw">await</span> request.<span class="fn">patch</span>(<span class="st">`/api/users/${id}`</span>, { data: { name: <span class="st">'Updated'</span> } });
+<span class="kw">await</span> request.<span class="fn">delete</span>(<span class="st">`/api/users/${id}`</span>);</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">32</span> How do you set up a base URL and headers for API tests?</div>
+    <div class="a">
+<pre><span class="cm">// playwright.config.ts</span>
+<span class="kw">export default</span> <span class="fn">defineConfig</span>({
+  use: {
+    baseURL: <span class="st">'https://api.example.com'</span>,
+    extraHTTPHeaders: {
+      <span class="st">'Authorization'</span>: <span class="st">'Bearer your-token-here'</span>,
+      <span class="st">'Accept'</span>: <span class="st">'application/json'</span>,
+    }
+  }
+});
+
+<span class="cm">// Or create a named APIRequestContext</span>
+<span class="kw">const</span> apiContext = <span class="kw">await</span> playwright.request.<span class="fn">newContext</span>({
+  baseURL: <span class="st">'https://api.example.com'</span>,
+  extraHTTPHeaders: {
+    <span class="st">'Authorization'</span>: <span class="st">`Bearer ${token}`</span>
+  }
+});
+
+<span class="kw">const</span> res = <span class="kw">await</span> apiContext.<span class="fn">get</span>(<span class="st">'/users'</span>); <span class="cm">// relative path uses baseURL</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SECTION 10 ══════════════════════════════ -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <h2>10. Common Interview Scenario Questions</h2>
+    <div class="sub">How to answer practical "how would you handle..." questions</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">33</span> How do you run Playwright tests in CI/CD (GitHub Actions / Jenkins)?</div>
+    <div class="a">
+<pre><span class="cm"># .github/workflows/playwright.yml</span>
+name: Playwright Tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Run tests
+        run: npx playwright test
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/</pre>
+      <div class="tip"><strong>Playwright runs headless by default</strong> in CI — no extra configuration needed unlike Selenium which needs Xvfb on Linux.</div>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">34</span> How do you handle a test that needs to be logged in before running?</div>
+    <div class="a">
+<pre><span class="cm">// Step 1: Create a setup script to save auth state</span>
+<span class="cm">// tests/auth.setup.ts</span>
+<span class="kw">import</span> { <span class="nm">test</span> <span class="kw">as</span> <span class="nm">setup</span> } <span class="kw">from</span> <span class="st">'@playwright/test'</span>;
+
+setup.<span class="fn">describe</span>(<span class="st">'authenticate'</span>, () => {
+  setup(<span class="st">'save user session'</span>, <span class="kw">async</span> ({ <span class="nm">page</span> }) => {
+    <span class="kw">await</span> page.<span class="fn">goto</span>(<span class="st">'/login'</span>);
+    <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="st">'#username'</span>, <span class="st">'admin'</span>);
+    <span class="kw">await</span> page.<span class="fn">fill</span>(<span class="st">'#password'</span>, <span class="st">'Admin@123'</span>);
+    <span class="kw">await</span> page.<span class="fn">click</span>(<span class="st">'#login-btn'</span>);
+    <span class="cm">// Save cookies + localStorage to file</span>
+    <span class="kw">await</span> page.context().<span class="fn">storageState</span>({ path: <span class="st">'auth/admin.json'</span> });
+  });
+});</pre>
+<pre><span class="cm">// Step 2: playwright.config.ts — run auth before tests, reuse state</span>
+projects: [
+  { name: <span class="st">'setup'</span>, testMatch: <span class="st">'**/auth.setup.ts'</span> },
+  {
+    name: <span class="st">'logged-in tests'</span>,
+    dependencies: [<span class="st">'setup'</span>],
+    use: { storageState: <span class="st">'auth/admin.json'</span> }  <span class="cm">// auto-injects saved auth</span>
+  }
+]
+
+<span class="cm">// Result: login happens ONCE; all tests in 'logged-in tests' start pre-authenticated</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">35</span> How do you read data from a table in Playwright?</div>
+    <div class="a">
+<pre><span class="cm">// Count rows</span>
+<span class="kw">const</span> rowCount = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'table tbody tr'</span>).<span class="fn">count</span>();
+console.<span class="fn">log</span>(<span class="st">`Total rows: ${rowCount}`</span>);
+
+<span class="cm">// Get all cell texts in a column</span>
+<span class="kw">const</span> names = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'table tbody tr td:first-child'</span>).<span class="fn">allTextContents</span>();
+<span class="cm">// Returns: ['Alice', 'Bob', 'Charlie']</span>
+
+<span class="cm">// Find a row containing "John" and click Edit in that row</span>
+<span class="kw">const</span> row = page.<span class="fn">locator</span>(<span class="st">'tr'</span>).<span class="fn">filter</span>({ hasText: <span class="st">'John'</span> });
+<span class="kw">await</span> row.<span class="fn">getByRole</span>(<span class="st">'button'</span>, { name: <span class="st">'Edit'</span> }).<span class="fn">click</span>();
+
+<span class="cm">// Get specific cell value</span>
+<span class="kw">const</span> price = <span class="kw">await</span> page.<span class="fn">locator</span>(<span class="st">'table tbody tr:nth-child(2) td:nth-child(3)'</span>).<span class="fn">innerText</span>();
+
+<span class="cm">// Verify all items in a list</span>
+<span class="kw">await</span> <span class="fn">expect</span>(page.<span class="fn">locator</span>(<span class="st">'table tbody tr'</span>)).<span class="fn">toHaveCount</span>(5);</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">36</span> How do you use Playwright's codegen to generate tests?</div>
+    <div class="a">
+      Playwright Codegen records your browser actions and generates test code automatically.
+<pre><span class="cm"># Open browser with code recorder</span>
+npx playwright codegen https://example.com
+
+<span class="cm"># Record with specific browser</span>
+npx playwright codegen --browser=firefox https://example.com
+
+<span class="cm"># Record and save to file</span>
+npx playwright codegen --output=tests/generated.spec.ts https://example.com
+
+<span class="cm"># Record with specific viewport</span>
+npx playwright codegen --viewport-size=1280,720 https://example.com</pre>
+      <div class="tip"><strong>Usage:</strong> Codegen is great for quickly generating locators and understanding what actions to use. Always review and refactor the generated code — it may not use the best locators (e.g., it may generate XPath when a role locator would be better).</div>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">37</span> Quick-fire: 10 short Playwright questions</div>
+    <div class="a">
+      <ol>
+        <li><strong>What language does this project use?</strong> — JavaScript and TypeScript (officially also Python, Java, C#)</li>
+        <li><strong>What is the default test file pattern?</strong> — <code>*.spec.ts</code> or <code>*.test.ts</code></li>
+        <li><strong>How do you check if an element exists without failing?</strong> — <code>await page.locator('#el').count() > 0</code> or <code>isVisible()</code></li>
+        <li><strong>How do you get the text of all matching elements?</strong> — <code>await page.locator('li').allTextContents()</code></li>
+        <li><strong>What is the Playwright Trace Viewer?</strong> — A GUI tool that shows a step-by-step timeline of a test — screenshots, DOM snapshots, network requests, console logs.</li>
+        <li><strong>What does fullyParallel: true do?</strong> — Runs tests within each file in parallel (not just across files).</li>
+        <li><strong>How do you emulate a mobile device?</strong> — Use <code>devices['iPhone 13']</code> in projects config: <code>use: { ...devices['iPhone 13'] }</code></li>
+        <li><strong>What is the difference between page.click() and locator.click()?</strong> — <code>page.click(selector)</code> is a shorthand that internally creates a locator. <code>page.locator(selector).click()</code> is equivalent and preferred for reusability.</li>
+        <li><strong>How do you check if a checkbox is checked?</strong> — <code>await expect(page.locator('#agree')).toBeChecked()</code></li>
+        <li><strong>What command opens the Playwright HTML report?</strong> — <code>npx playwright show-report</code></li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p style="font-size:15px; font-weight:700;">Playwright Interview Q&amp;A — Basics</p>
+    <p style="font-size:12px; opacity:0.85;">10 Sections &nbsp;|&nbsp; 37 Detailed Questions &nbsp;|&nbsp; Locators · Actions · Assertions · Waits · POM · API · CI/CD</p>
+    <p style="font-size:11px; opacity:0.6; margin-top:6px;">Prepared April 2026 &nbsp;|&nbsp; For Fresher to Mid-Level Playwright roles</p>
+  </div>
+</div>
+
+</body>
+</html>

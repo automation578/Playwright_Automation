@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>API Testing with Java HTTP Client — Interview Q&A</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; color: #1a1a1a; background: #fff; }
+
+  .cover {
+    page-break-after: always;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    min-height: 100vh; background: linear-gradient(135deg, #004d40, #00695c, #00796b);
+    color: #fff; text-align: center; padding: 40px;
+  }
+  .cover h1 { font-size: 36px; font-weight: 800; margin-bottom: 10px; letter-spacing: 1px; }
+  .cover h2 { font-size: 19px; font-weight: 400; margin-bottom: 28px; opacity: 0.85; }
+  .cover .badge { background: #ffca28; color: #1a1a1a; padding: 8px 26px; border-radius: 20px; font-size: 14px; font-weight: 700; margin-bottom: 18px; }
+  .cover p.desc { opacity: 0.82; font-size: 13px; max-width: 540px; line-height: 1.7; margin-top: 8px; }
+  .cover .meta { font-size: 11.5px; opacity: 0.6; margin-top: 36px; }
+
+  .toc { page-break-after: always; padding: 40px 54px; }
+  .toc h2 { font-size: 22px; color: #004d40; border-bottom: 3px solid #00796b; padding-bottom: 8px; margin-bottom: 22px; }
+  .toc ol { margin-left: 22px; line-height: 2.5; }
+  .toc a { color: #00695c; text-decoration: none; font-size: 13px; }
+
+  .section { padding: 36px 54px; }
+  .section-header { background: linear-gradient(90deg, #004d40, #00796b); color: #fff; padding: 13px 20px; border-radius: 6px; margin-bottom: 22px; }
+  .section-header h2 { font-size: 17px; font-weight: 700; }
+  .section-header .sub { font-size: 11px; opacity: 0.85; margin-top: 3px; }
+
+  h3 { font-size: 14px; color: #004d40; margin: 22px 0 8px; border-left: 4px solid #00796b; padding-left: 10px; }
+  p  { line-height: 1.78; margin-bottom: 10px; color: #333; }
+  ul, ol { margin: 8px 0 12px 22px; }
+  li { line-height: 1.9; color: #333; }
+
+  pre {
+    background: #001a12; color: #b2dfdb;
+    padding: 14px 17px; border-radius: 7px;
+    font-family: 'Consolas', monospace; font-size: 11.5px;
+    line-height: 1.65; overflow-x: auto; margin: 10px 0 14px;
+    white-space: pre-wrap; word-break: break-word;
+    border-left: 3px solid #00796b;
+  }
+  .cm { color: #546e7a; }
+  .kw { color: #80cbc4; }
+  .st { color: #ffcc80; }
+  .tp { color: #a5d6a7; }
+  .fn { color: #80deea; }
+  .nm { color: #f48fb1; }
+
+  .qa { background: #e0f2f1; border: 1px solid #b2dfdb; border-radius: 7px; padding: 16px 18px; margin: 14px 0; }
+  .qa .q { font-weight: 700; color: #004d40; margin-bottom: 9px; font-size: 13.5px; display: flex; align-items: flex-start; gap: 8px; }
+  .qa .a { color: #333; line-height: 1.8; }
+  .qa .a ul { margin-top: 6px; }
+  .qn { display: inline-flex; align-items: center; justify-content: center;
+        background: #00796b; color: #fff; min-width: 24px; height: 24px;
+        border-radius: 50%; font-size: 11px; font-weight: 700; flex-shrink: 0; padding: 0 5px; }
+
+  .tip  { background: #fff8e1; border-left: 4px solid #f9a825; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .tip strong { color: #e65100; }
+  .warn { background: #fbe9e7; border-left: 4px solid #d84315; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .warn strong { color: #bf360c; }
+  .note { background: #f3e5f5; border-left: 4px solid #7b1fa2; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .note strong { color: #4a148c; }
+  .info { background: #e8f5e9; border-left: 4px solid #2e7d32; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .info strong { color: #1b5e20; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+  th { background: #004d40; color: #fff; padding: 9px 12px; text-align: left; }
+  td { padding: 8px 12px; border-bottom: 1px solid #b2dfdb; vertical-align: top; }
+  tr:nth-child(even) td { background: #e0f2f1; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0; }
+  .card { background: #e0f2f1; border: 1px solid #b2dfdb; border-radius: 6px; padding: 12px 14px; }
+  .card h4 { color: #004d40; margin: 0 0 7px; font-size: 12.5px; }
+
+  .page-break { page-break-after: always; }
+  .footer { background: #004d40; color: #fff; border-radius: 8px; text-align: center; padding: 22px; margin-top: 40px; }
+  .footer p { color: #fff; margin: 4px 0; }
+
+  @media print {
+    .cover, .section-header, th, pre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="badge">Java HTTP Client Focus</div>
+  <h1>API Testing<br>with Java HTTP Client</h1>
+  <h2>Interview Questions &amp; Answers with Explanations</h2>
+  <p class="desc">60+ questions covering REST API fundamentals, Java 11 HttpClient, RestAssured, JSON parsing, authentication, status codes, CRUD operations, and real-world API test design scenarios.</p>
+  <div class="meta">Prepared: April 2026 &nbsp;|&nbsp; 9 Sections &nbsp;|&nbsp; 60+ Q&amp;A</div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#s1">API &amp; REST Fundamentals</a></li>
+    <li><a href="#s2">HTTP Methods, Status Codes &amp; Headers</a></li>
+    <li><a href="#s3">Java 11 HttpClient — Setup &amp; Basics</a></li>
+    <li><a href="#s4">CRUD Operations with Java HttpClient</a></li>
+    <li><a href="#s5">JSON Parsing — Jackson &amp; Gson</a></li>
+    <li><a href="#s6">Authentication — Basic, Bearer Token, API Key</a></li>
+    <li><a href="#s7">RestAssured — The QA Industry Standard</a></li>
+    <li><a href="#s8">API Test Design — Frameworks &amp; Best Practices</a></li>
+    <li><a href="#s9">Real Interview Scenario Questions</a></li>
+  </ol>
+</div>
+
+<!-- ======================== SECTION 1 ======================== -->
+<div class="section page-break" id="s1">
+  <div class="section-header">
+    <h2>1. API &amp; REST Fundamentals</h2>
+    <div class="sub">Conceptual questions always asked first</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">1</span> What is an API? What is a REST API?</div>
+    <div class="a">
+      <strong>API (Application Programming Interface)</strong> — A contract that defines how two software systems communicate. It exposes certain functions/data so external systems can use them without knowing the internal implementation.<br><br>
+      <strong>REST (Representational State Transfer)</strong> — An architectural style for designing networked APIs using HTTP. A REST API:<br>
+      <ul>
+        <li>Uses standard HTTP methods (GET, POST, PUT, DELETE)</li>
+        <li>Is stateless — each request contains all needed information; server stores no session</li>
+        <li>Uses URLs (endpoints) to represent resources</li>
+        <li>Exchanges data in JSON or XML format</li>
+        <li>Returns standard HTTP status codes</li>
+      </ul>
+      <strong>Example:</strong> <code>GET https://api.example.com/users/1</code> — fetches user with ID 1.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">2</span> What are the 6 REST constraints (principles)?</div>
+    <div class="a">
+      <ol>
+        <li><strong>Client-Server</strong> — Client and server are separate. Client handles UI; server handles data. They communicate only through the API.</li>
+        <li><strong>Stateless</strong> — Server stores no client session. Every request must be self-contained with all needed info (auth token, parameters).</li>
+        <li><strong>Cacheable</strong> — Responses should indicate whether they can be cached. Caching reduces load and improves performance.</li>
+        <li><strong>Uniform Interface</strong> — Consistent URL structure, standard HTTP methods, self-descriptive messages.</li>
+        <li><strong>Layered System</strong> — Client doesn't know if it's talking directly to the server or through proxies/load balancers.</li>
+        <li><strong>Code on Demand (optional)</strong> — Server can send executable code (JavaScript) to the client.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">3</span> What is the difference between REST and SOAP?</div>
+    <div class="a">
+      <table>
+        <tr><th>Feature</th><th>REST</th><th>SOAP</th></tr>
+        <tr><td>Protocol</td><td>Architectural style over HTTP</td><td>Protocol (has strict standards)</td></tr>
+        <tr><td>Data format</td><td>JSON (primarily), XML</td><td>XML only</td></tr>
+        <tr><td>Performance</td><td>Faster, lightweight</td><td>Heavier — XML overhead</td></tr>
+        <tr><td>Security</td><td>HTTPS + tokens</td><td>WS-Security (built-in standard)</td></tr>
+        <tr><td>WSDL</td><td>No formal contract</td><td>WSDL defines the API contract</td></tr>
+        <tr><td>State</td><td>Stateless</td><td>Can be stateful</td></tr>
+        <tr><td>Use case</td><td>Modern web/mobile APIs</td><td>Enterprise, banking, legacy systems</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">4</span> What is JSON? How is it structured?</div>
+    <div class="a">
+      JSON (JavaScript Object Notation) is a lightweight, human-readable data format used for API request/response bodies.
+<pre><span class="cm">// JSON Object — key-value pairs in { }</span>
+{
+  <span class="st">"id"</span>: 1,
+  <span class="st">"name"</span>: <span class="st">"John Doe"</span>,
+  <span class="st">"email"</span>: <span class="st">"john@example.com"</span>,
+  <span class="st">"active"</span>: <span class="kw">true</span>,
+  <span class="st">"score"</span>: 9.5,
+  <span class="st">"roles"</span>: [<span class="st">"admin"</span>, <span class="st">"user"</span>],     <span class="cm">// Array in [ ]</span>
+  <span class="st">"address"</span>: {                      <span class="cm">// Nested object</span>
+    <span class="st">"city"</span>: <span class="st">"New York"</span>,
+    <span class="st">"zip"</span>: <span class="st">"10001"</span>
+  },
+  <span class="st">"deletedAt"</span>: <span class="kw">null</span>                  <span class="cm">// null value</span>
+}
+
+<span class="cm">// JSON Array — list of objects</span>
+[
+  { <span class="st">"id"</span>: 1, <span class="st">"name"</span>: <span class="st">"Alice"</span> },
+  { <span class="st">"id"</span>: 2, <span class="st">"name"</span>: <span class="st">"Bob"</span>   }
+]</pre>
+      <strong>JSON data types:</strong> String, Number, Boolean, Array, Object, null.
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">5</span> What is the difference between URI, URL, and endpoint?</div>
+    <div class="a">
+      <ul>
+        <li><strong>URI (Uniform Resource Identifier)</strong> — General identifier for a resource. Can be a URL or URN.</li>
+        <li><strong>URL (Uniform Resource Locator)</strong> — A URI that specifies how to access the resource (protocol + location). e.g., <code>https://api.example.com/users/1</code></li>
+        <li><strong>Endpoint</strong> — In API context, the specific URL + HTTP method combination that exposes a resource. e.g., <code>GET /users/1</code> is an endpoint.</li>
+      </ul>
+      <table>
+        <tr><th>Part</th><th>Example</th><th>Description</th></tr>
+        <tr><td>Protocol</td><td>https://</td><td>Communication protocol</td></tr>
+        <tr><td>Host</td><td>api.example.com</td><td>Server domain or IP</td></tr>
+        <tr><td>Base path</td><td>/v1</td><td>API version prefix</td></tr>
+        <tr><td>Resource</td><td>/users</td><td>Resource collection</td></tr>
+        <tr><td>Path param</td><td>/123</td><td>Specific resource ID</td></tr>
+        <tr><td>Query param</td><td>?page=1&amp;size=10</td><td>Filtering/pagination</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 2 ======================== -->
+<div class="section page-break" id="s2">
+  <div class="section-header">
+    <h2>2. HTTP Methods, Status Codes &amp; Headers</h2>
+    <div class="sub">Must-know theory — asked in almost every API interview</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">6</span> Explain the HTTP methods used in REST APIs.</div>
+    <div class="a">
+      <table>
+        <tr><th>Method</th><th>CRUD Operation</th><th>Request Body?</th><th>Idempotent?</th><th>Use Case</th></tr>
+        <tr><td>GET</td><td>Read</td><td>No</td><td>Yes</td><td>Fetch resource(s)</td></tr>
+        <tr><td>POST</td><td>Create</td><td>Yes</td><td>No</td><td>Create new resource</td></tr>
+        <tr><td>PUT</td><td>Replace (full update)</td><td>Yes</td><td>Yes</td><td>Replace entire resource</td></tr>
+        <tr><td>PATCH</td><td>Partial Update</td><td>Yes</td><td>Depends</td><td>Update specific fields only</td></tr>
+        <tr><td>DELETE</td><td>Delete</td><td>No (usually)</td><td>Yes</td><td>Delete a resource</td></tr>
+        <tr><td>HEAD</td><td>Read (metadata)</td><td>No</td><td>Yes</td><td>Check if resource exists, get headers only</td></tr>
+        <tr><td>OPTIONS</td><td>-</td><td>No</td><td>Yes</td><td>Discover allowed methods (CORS pre-flight)</td></tr>
+      </table>
+      <div class="tip"><strong>Idempotent</strong> = calling the same request multiple times produces the same result. GET, PUT, DELETE are idempotent. POST is NOT — multiple POSTs create multiple resources.</div>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">7</span> What is the difference between PUT and PATCH?</div>
+    <div class="a">
+      <ul>
+        <li><strong>PUT</strong> — Replaces the <em>entire</em> resource. If you omit a field, it gets deleted or reset to default. Idempotent.</li>
+        <li><strong>PATCH</strong> — Updates <em>only the specified fields</em>. Other fields remain unchanged.</li>
+      </ul>
+<pre><span class="cm">// Existing user: { "name": "John", "email": "john@test.com", "role": "user" }</span>
+
+<span class="cm">// PUT — replaces entire resource</span>
+PUT /users/1
+{ "name": "John Updated" }
+<span class="cm">// Result: { "name": "John Updated" }  ← email and role are GONE</span>
+
+<span class="cm">// PATCH — updates only specified field</span>
+PATCH /users/1
+{ "name": "John Updated" }
+<span class="cm">// Result: { "name": "John Updated", "email": "john@test.com", "role": "user" }</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">8</span> What are the HTTP status code ranges? List important ones.</div>
+    <div class="a">
+      <table>
+        <tr><th>Range</th><th>Category</th><th>Key Codes</th></tr>
+        <tr><td>1xx</td><td>Informational</td><td>100 Continue, 101 Switching Protocols</td></tr>
+        <tr><td>2xx</td><td>Success</td><td>200 OK, 201 Created, 204 No Content</td></tr>
+        <tr><td>3xx</td><td>Redirection</td><td>301 Moved Permanently, 302 Found, 304 Not Modified</td></tr>
+        <tr><td>4xx</td><td>Client Error</td><td>400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 409 Conflict, 422 Unprocessable</td></tr>
+        <tr><td>5xx</td><td>Server Error</td><td>500 Internal Server Error, 502 Bad Gateway, 503 Service Unavailable</td></tr>
+      </table>
+      <strong>Key distinctions:</strong>
+      <ul>
+        <li><strong>200 vs 201</strong> — 200: request succeeded. 201: resource was created (POST response).</li>
+        <li><strong>204</strong> — Success but no response body (DELETE success).</li>
+        <li><strong>401 vs 403</strong> — 401: not authenticated (no/invalid token). 403: authenticated but not authorized (wrong permissions).</li>
+        <li><strong>404 vs 410</strong> — 404: resource not found (may exist later). 410 Gone: permanently deleted.</li>
+        <li><strong>500 vs 503</strong> — 500: server bug. 503: server down/overloaded (temporary).</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">9</span> What are HTTP Headers? Name common request and response headers.</div>
+    <div class="a">
+      Headers are key-value metadata sent with requests and responses.
+      <table>
+        <tr><th>Header</th><th>Type</th><th>Purpose</th><th>Example</th></tr>
+        <tr><td>Content-Type</td><td>Request/Response</td><td>Format of the body</td><td>application/json</td></tr>
+        <tr><td>Accept</td><td>Request</td><td>Format client expects in response</td><td>application/json</td></tr>
+        <tr><td>Authorization</td><td>Request</td><td>Authentication credentials</td><td>Bearer eyJhbGci...</td></tr>
+        <tr><td>API-Key / x-api-key</td><td>Request</td><td>API key authentication</td><td>abc123xyz</td></tr>
+        <tr><td>Cache-Control</td><td>Both</td><td>Caching directives</td><td>no-cache, max-age=3600</td></tr>
+        <tr><td>Content-Length</td><td>Both</td><td>Body size in bytes</td><td>348</td></tr>
+        <tr><td>Location</td><td>Response</td><td>URL of created/redirected resource</td><td>/users/123</td></tr>
+        <tr><td>X-Request-Id</td><td>Both</td><td>Unique ID for tracing</td><td>abc-123-xyz</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">10</span> What is the difference between Query Parameters and Path Parameters?</div>
+    <div class="a">
+      <ul>
+        <li><strong>Path Parameters</strong> — Part of the URL path, used to identify a specific resource. Required. e.g., <code>/users/{id}</code> → <code>/users/123</code></li>
+        <li><strong>Query Parameters</strong> — Appended after <code>?</code>, used for filtering, sorting, pagination. Optional. e.g., <code>/users?page=2&amp;sort=name&amp;role=admin</code></li>
+      </ul>
+<pre><span class="cm">// Path param — WHO you want (specific resource)</span>
+GET /users/123         → get user with ID 123
+GET /orders/456/items  → get items of order 456
+
+<span class="cm">// Query param — HOW you want it (filter/sort/page)</span>
+GET /users?role=admin&amp;page=1&amp;size=20
+GET /products?category=electronics&amp;minPrice=100&amp;sort=price_asc</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 3 ======================== -->
+<div class="section page-break" id="s3">
+  <div class="section-header">
+    <h2>3. Java 11 HttpClient — Setup &amp; Basics</h2>
+    <div class="sub">Built-in Java HTTP client — no third-party library needed</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">11</span> What is the Java HttpClient? Why was it introduced?</div>
+    <div class="a">
+      <code>java.net.http.HttpClient</code> was introduced in <strong>Java 11</strong> (as a stable API after a preview in Java 9). Before it, Java only had <code>HttpURLConnection</code> which was verbose and cumbersome.<br><br>
+      <strong>Features:</strong>
+      <ul>
+        <li>Supports HTTP/1.1 and HTTP/2</li>
+        <li>Both synchronous (<code>send()</code>) and asynchronous (<code>sendAsync()</code>) requests</li>
+        <li>Built-in support for WebSocket</li>
+        <li>Fluent builder API — much cleaner code</li>
+        <li>No external dependency needed (unlike Apache HttpClient or OkHttp)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">12</span> What are the three core components of Java HttpClient?</div>
+    <div class="a">
+      <ul>
+        <li><strong>HttpClient</strong> — The main client instance. Configure timeouts, redirects, auth, proxy. Reuse across requests.</li>
+        <li><strong>HttpRequest</strong> — Represents a single HTTP request: method, URL, headers, body.</li>
+        <li><strong>HttpResponse&lt;T&gt;</strong> — Represents the server response: status code, headers, body.</li>
+      </ul>
+<pre><span class="kw">import</span> java.net.http.HttpClient;
+<span class="kw">import</span> java.net.http.HttpRequest;
+<span class="kw">import</span> java.net.http.HttpResponse;
+
+<span class="cm">// 1. Create client (reuse this across tests)</span>
+<span class="tp">HttpClient</span> client = <span class="tp">HttpClient</span>.newBuilder()
+    .connectTimeout(<span class="tp">Duration</span>.ofSeconds(10))
+    .followRedirects(<span class="tp">HttpClient.Redirect</span>.NORMAL)
+    .build();
+
+<span class="cm">// 2. Build request</span>
+<span class="tp">HttpRequest</span> request = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(<span class="st">"https://reqres.in/api/users/1"</span>))
+    .GET()
+    .header(<span class="st">"Accept"</span>, <span class="st">"application/json"</span>)
+    .timeout(<span class="tp">Duration</span>.ofSeconds(15))
+    .build();
+
+<span class="cm">// 3. Send and get response</span>
+<span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt; response = client.send(request, <span class="tp">HttpResponse.BodyHandlers</span>.ofString());
+
+<span class="cm">// 4. Assert</span>
+System.out.println(response.statusCode());  <span class="cm">// 200</span>
+System.out.println(response.body());        <span class="cm">// JSON string</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">13</span> What are BodyHandlers and BodyPublishers?</div>
+    <div class="a">
+      <ul>
+        <li><strong>BodyHandlers</strong> — Tell HttpClient how to handle the response body. Used in <code>client.send(request, handler)</code>.</li>
+        <li><strong>BodyPublishers</strong> — Define the request body content. Used when sending POST/PUT requests.</li>
+      </ul>
+<pre><span class="cm">// BodyHandlers — response body handling</span>
+<span class="tp">HttpResponse.BodyHandlers</span>.ofString()        <span class="cm">// body as String</span>
+<span class="tp">HttpResponse.BodyHandlers</span>.ofInputStream()    <span class="cm">// body as InputStream</span>
+<span class="tp">HttpResponse.BodyHandlers</span>.ofByteArray()      <span class="cm">// body as byte[]</span>
+<span class="tp">HttpResponse.BodyHandlers</span>.ofFile(path)       <span class="cm">// save body to file</span>
+<span class="tp">HttpResponse.BodyHandlers</span>.discarding()       <span class="cm">// ignore body (DELETE)</span>
+
+<span class="cm">// BodyPublishers — request body content</span>
+<span class="tp">HttpRequest.BodyPublishers</span>.ofString(<span class="st">"{ \"name\": \"John\" }"</span>)  <span class="cm">// String body</span>
+<span class="tp">HttpRequest.BodyPublishers</span>.ofFile(path)                        <span class="cm">// file body</span>
+<span class="tp">HttpRequest.BodyPublishers</span>.ofByteArray(bytes)                  <span class="cm">// byte[] body</span>
+<span class="tp">HttpRequest.BodyPublishers</span>.noBody()                            <span class="cm">// no body (GET)</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">14</span> What is the difference between synchronous send() and asynchronous sendAsync()?</div>
+    <div class="a">
+      <ul>
+        <li><strong>send()</strong> — Blocks the calling thread until the response arrives. Simple, straightforward.</li>
+        <li><strong>sendAsync()</strong> — Returns a <code>CompletableFuture&lt;HttpResponse&lt;T&gt;&gt;</code> immediately. The calling thread continues; a background thread handles the response. Useful for non-blocking / parallel API calls.</li>
+      </ul>
+<pre><span class="cm">// Synchronous — blocks thread</span>
+<span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt; response = client.<span class="fn">send</span>(request, <span class="tp">HttpResponse.BodyHandlers</span>.ofString());
+System.out.println(response.statusCode()); <span class="cm">// prints after response arrives</span>
+
+<span class="cm">// Asynchronous — non-blocking</span>
+client.<span class="fn">sendAsync</span>(request, <span class="tp">HttpResponse.BodyHandlers</span>.ofString())
+    .<span class="fn">thenApply</span>(<span class="tp">HttpResponse</span>::body)
+    .<span class="fn">thenAccept</span>(System.out::println)
+    .<span class="fn">join</span>(); <span class="cm">// wait for completion in tests</span>
+
+<span class="cm">// Parallel API calls — send multiple requests simultaneously</span>
+<span class="tp">CompletableFuture</span>&lt;<span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt;&gt; req1 = client.<span class="fn">sendAsync</span>(request1, <span class="tp">HttpResponse.BodyHandlers</span>.ofString());
+<span class="tp">CompletableFuture</span>&lt;<span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt;&gt; req2 = client.<span class="fn">sendAsync</span>(request2, <span class="tp">HttpResponse.BodyHandlers</span>.ofString());
+<span class="tp">CompletableFuture</span>.<span class="fn">allOf</span>(req1, req2).join(); <span class="cm">// wait for both</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 4 ======================== -->
+<div class="section page-break" id="s4">
+  <div class="section-header">
+    <h2>4. CRUD Operations with Java HttpClient</h2>
+    <div class="sub">Complete examples for GET, POST, PUT, PATCH, DELETE</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">15</span> How do you write a complete GET request with Java HttpClient?</div>
+    <div class="a">
+<pre><span class="kw">import</span> java.net.URI;
+<span class="kw">import</span> java.net.http.*;
+<span class="kw">import</span> java.time.Duration;
+
+<span class="kw">public class</span> <span class="tp">GetUserTest</span> {
+    <span class="kw">private static final</span> <span class="tp">HttpClient</span> client = <span class="tp">HttpClient</span>.newBuilder()
+        .connectTimeout(<span class="tp">Duration</span>.ofSeconds(10))
+        .build();
+
+    <span class="kw">public static void</span> <span class="fn">main</span>(<span class="tp">String</span>[] args) <span class="kw">throws Exception</span> {
+
+        <span class="cm">// Build request</span>
+        <span class="tp">HttpRequest</span> request = <span class="tp">HttpRequest</span>.newBuilder()
+            .uri(<span class="tp">URI</span>.create(<span class="st">"https://reqres.in/api/users/2"</span>))
+            .GET()
+            .header(<span class="st">"Accept"</span>, <span class="st">"application/json"</span>)
+            .build();
+
+        <span class="cm">// Send request</span>
+        <span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt; response = client.send(
+            request, <span class="tp">HttpResponse.BodyHandlers</span>.ofString()
+        );
+
+        <span class="cm">// Validate</span>
+        System.out.println(<span class="st">"Status: "</span> + response.statusCode()); <span class="cm">// 200</span>
+        System.out.println(<span class="st">"Body: "</span>   + response.body());
+
+        <span class="cm">// Assertions (with TestNG/JUnit)</span>
+        assert response.statusCode() == 200 : <span class="st">"Expected 200"</span>;
+        assert response.body().contains(<span class="st">"Janet"</span>) : <span class="st">"Name not found"</span>;
+    }
+}
+
+<span class="cm">// GET with query parameters — append to URI string</span>
+<span class="tp">String</span> url = <span class="st">"https://reqres.in/api/users?page=2&amp;per_page=6"</span>;
+<span class="tp">HttpRequest</span> req = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(url))
+    .GET().build();</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">16</span> How do you write a POST request with a JSON body?</div>
+    <div class="a">
+<pre><span class="cm">// POST — Create a new user</span>
+<span class="tp">String</span> requestBody = <span class="st">"""
+    {
+        "name": "John QA",
+        "job": "Test Automation Engineer"
+    }
+    """</span>; <span class="cm">// Java 15+ text block — or use Jackson to serialize</span>
+
+<span class="tp">HttpRequest</span> postRequest = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(<span class="st">"https://reqres.in/api/users"</span>))
+    .POST(<span class="tp">HttpRequest.BodyPublishers</span>.ofString(requestBody))
+    .header(<span class="st">"Content-Type"</span>, <span class="st">"application/json"</span>)
+    .header(<span class="st">"Accept"</span>,       <span class="st">"application/json"</span>)
+    .build();
+
+<span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt; response = client.send(
+    postRequest, <span class="tp">HttpResponse.BodyHandlers</span>.ofString()
+);
+
+System.out.println(response.statusCode()); <span class="cm">// 201 Created</span>
+System.out.println(response.body());
+<span class="cm">// Response: { "name": "John QA", "job": "...", "id": "123", "createdAt": "..." }</span>
+
+<span class="cm">// Extract ID from response body for further tests</span>
+<span class="cm">// (See Section 5 for JSON parsing)</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">17</span> How do you write PUT, PATCH, and DELETE requests?</div>
+    <div class="a">
+<pre><span class="cm">// PUT — full update</span>
+<span class="tp">HttpRequest</span> putRequest = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(<span class="st">"https://reqres.in/api/users/2"</span>))
+    .PUT(<span class="tp">HttpRequest.BodyPublishers</span>.ofString(<span class="st">"{ \"name\": \"Jane\", \"job\": \"Lead\" }"</span>))
+    .header(<span class="st">"Content-Type"</span>, <span class="st">"application/json"</span>)
+    .build();
+
+<span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt; putResp = client.send(putRequest, <span class="tp">HttpResponse.BodyHandlers</span>.ofString());
+<span class="cm">// 200 OK — response includes updatedAt timestamp</span>
+
+<span class="cm">// PATCH — partial update (HttpClient has no .PATCH() shortcut)</span>
+<span class="tp">HttpRequest</span> patchRequest = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(<span class="st">"https://reqres.in/api/users/2"</span>))
+    .method(<span class="st">"PATCH"</span>, <span class="tp">HttpRequest.BodyPublishers</span>.ofString(<span class="st">"{ \"job\": \"Senior Lead\" }"</span>))
+    .header(<span class="st">"Content-Type"</span>, <span class="st">"application/json"</span>)
+    .build();
+
+<span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt; patchResp = client.send(patchRequest, <span class="tp">HttpResponse.BodyHandlers</span>.ofString());
+<span class="cm">// 200 OK</span>
+
+<span class="cm">// DELETE — no body usually</span>
+<span class="tp">HttpRequest</span> deleteRequest = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(<span class="st">"https://reqres.in/api/users/2"</span>))
+    .DELETE()
+    .build();
+
+<span class="tp">HttpResponse</span>&lt;<span class="tp">Void</span>&gt; deleteResp = client.send(deleteRequest, <span class="tp">HttpResponse.BodyHandlers</span>.discarding());
+System.out.println(deleteResp.statusCode()); <span class="cm">// 204 No Content</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">18</span> How do you read response headers in Java HttpClient?</div>
+    <div class="a">
+<pre><span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt; response = client.send(request, <span class="tp">HttpResponse.BodyHandlers</span>.ofString());
+
+<span class="cm">// Get a specific header value</span>
+<span class="tp">String</span> contentType = response.headers().firstValue(<span class="st">"content-type"</span>).orElse(<span class="st">"not found"</span>);
+System.out.println(contentType); <span class="cm">// application/json; charset=utf-8</span>
+
+<span class="cm">// Get all values of a header (multi-value headers)</span>
+<span class="tp">List</span>&lt;<span class="tp">String</span>&gt; cookies = response.headers().allValues(<span class="st">"set-cookie"</span>);
+
+<span class="cm">// Get all headers as a Map</span>
+<span class="tp">Map</span>&lt;<span class="tp">String</span>, <span class="tp">List</span>&lt;<span class="tp">String</span>&gt;&gt; allHeaders = response.headers().map();
+allHeaders.forEach((name, values) -&gt;
+    System.out.println(name + <span class="st">": "</span> + <span class="tp">String</span>.join(<span class="st">", "</span>, values))
+);</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 5 ======================== -->
+<div class="section page-break" id="s5">
+  <div class="section-header">
+    <h2>5. JSON Parsing — Jackson &amp; Gson</h2>
+    <div class="sub">Converting between JSON strings and Java objects</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">19</span> What is Jackson? How do you parse JSON with it?</div>
+    <div class="a">
+      Jackson is the most widely used Java JSON library. It provides <code>ObjectMapper</code> for serialization (Java → JSON) and deserialization (JSON → Java).
+<pre><span class="cm">// Maven dependency</span>
+&lt;dependency&gt;
+  &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+  &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+  &lt;version&gt;2.17.0&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+<pre><span class="kw">import</span> com.fasterxml.jackson.databind.ObjectMapper;
+<span class="kw">import</span> com.fasterxml.jackson.databind.JsonNode;
+
+<span class="tp">ObjectMapper</span> mapper = <span class="kw">new</span> <span class="tp">ObjectMapper</span>();
+
+<span class="cm">// 1. Parse JSON string to JsonNode (tree model — no POJO needed)</span>
+<span class="tp">String</span> json = response.body();
+<span class="tp">JsonNode</span> root = mapper.readTree(json);
+
+<span class="cm">// Navigate the tree</span>
+<span class="tp">String</span> name   = root.path(<span class="st">"data"</span>).path(<span class="st">"first_name"</span>).asText();
+<span class="kw">int</span>    id     = root.path(<span class="st">"data"</span>).path(<span class="st">"id"</span>).asInt();
+<span class="tp">String</span> email  = root.at(<span class="st">"/data/email"</span>).asText(); <span class="cm">// JSON Pointer syntax</span>
+
+<span class="cm">// 2. Deserialize to POJO</span>
+<span class="tp">User</span> user = mapper.readValue(json, <span class="tp">User</span>.<span class="kw">class</span>);
+
+<span class="cm">// 3. Serialize POJO to JSON string</span>
+<span class="tp">User</span> newUser = <span class="kw">new</span> <span class="tp">User</span>(<span class="st">"John"</span>, <span class="st">"QA Lead"</span>);
+<span class="tp">String</span> jsonBody = mapper.writeValueAsString(newUser);
+
+<span class="cm">// 4. Deserialize to List</span>
+<span class="tp">List</span>&lt;<span class="tp">User</span>&gt; users = mapper.readValue(json, mapper.getTypeFactory()
+    .constructCollectionType(<span class="tp">List</span>.<span class="kw">class</span>, <span class="tp">User</span>.<span class="kw">class</span>));</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">20</span> How do you create a POJO for JSON deserialization?</div>
+    <div class="a">
+<pre><span class="cm">// User.java — matches this JSON:</span>
+<span class="cm">// { "id": 1, "first_name": "George", "email": "george@reqres.in" }</span>
+
+<span class="kw">import</span> com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+<span class="kw">import</span> com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = <span class="kw">true</span>)  <span class="cm">// ignore extra JSON fields</span>
+<span class="kw">public class</span> <span class="tp">User</span> {
+    <span class="kw">private int</span> id;
+
+    @JsonProperty(<span class="st">"first_name"</span>)  <span class="cm">// map snake_case JSON to camelCase Java</span>
+    <span class="kw">private</span> <span class="tp">String</span> firstName;
+
+    <span class="kw">private</span> <span class="tp">String</span> email;
+
+    <span class="cm">// Default constructor (required by Jackson)</span>
+    <span class="kw">public</span> <span class="fn">User</span>() {}
+
+    <span class="cm">// Getters and setters</span>
+    <span class="kw">public int</span> <span class="fn">getId</span>()           { <span class="kw">return</span> id; }
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">getFirstName</span>() { <span class="kw">return</span> firstName; }
+    <span class="kw">public</span> <span class="tp">String</span> <span class="fn">getEmail</span>()     { <span class="kw">return</span> email; }
+    <span class="kw">public void</span> <span class="fn">setId</span>(<span class="kw">int</span> id)                { <span class="kw">this</span>.id = id; }
+    <span class="kw">public void</span> <span class="fn">setFirstName</span>(<span class="tp">String</span> n)       { <span class="kw">this</span>.firstName = n; }
+    <span class="kw">public void</span> <span class="fn">setEmail</span>(<span class="tp">String</span> e)           { <span class="kw">this</span>.email = e; }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">21</span> How do you parse JSON using org.json or simple string methods?</div>
+    <div class="a">
+<pre><span class="cm">// Using org.json library (lightweight, simple)</span>
+<span class="kw">import</span> org.json.JSONObject;
+<span class="kw">import</span> org.json.JSONArray;
+
+<span class="tp">JSONObject</span> obj = <span class="kw">new</span> <span class="tp">JSONObject</span>(response.body());
+<span class="tp">String</span> name = obj.getJSONObject(<span class="st">"data"</span>).getString(<span class="st">"first_name"</span>);
+<span class="kw">int</span>    id   = obj.getJSONObject(<span class="st">"data"</span>).getInt(<span class="st">"id"</span>);
+
+<span class="cm">// Array parsing</span>
+<span class="tp">JSONArray</span> arr = obj.getJSONArray(<span class="st">"data"</span>);
+<span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; arr.length(); i++) {
+    <span class="tp">JSONObject</span> item = arr.getJSONObject(i);
+    System.out.println(item.getString(<span class="st">"email"</span>));
+}
+
+<span class="cm">// Build a JSON request body</span>
+<span class="tp">JSONObject</span> body = <span class="kw">new</span> <span class="tp">JSONObject</span>();
+body.put(<span class="st">"name"</span>, <span class="st">"John"</span>);
+body.put(<span class="st">"job"</span>,  <span class="st">"Tester"</span>);
+<span class="tp">String</span> requestBody = body.toString();</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 6 ======================== -->
+<div class="section page-break" id="s6">
+  <div class="section-header">
+    <h2>6. Authentication — Basic, Bearer Token, API Key</h2>
+    <div class="sub">How to pass authentication in API tests</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">22</span> What are the different types of API authentication?</div>
+    <div class="a">
+      <table>
+        <tr><th>Type</th><th>How it works</th><th>Header/Location</th></tr>
+        <tr><td>No Auth</td><td>Public API, no credentials needed</td><td>-</td></tr>
+        <tr><td>API Key</td><td>A secret key passed with every request</td><td>Header or query param</td></tr>
+        <tr><td>Basic Auth</td><td>username:password encoded in Base64</td><td>Authorization: Basic xxx</td></tr>
+        <tr><td>Bearer Token (JWT)</td><td>Token obtained from login; included in header</td><td>Authorization: Bearer token</td></tr>
+        <tr><td>OAuth 2.0</td><td>Token-based delegated authorization</td><td>Authorization: Bearer access_token</td></tr>
+        <tr><td>Digest Auth</td><td>Hashed credentials (more secure than Basic)</td><td>Authorization: Digest ...</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">23</span> How do you implement Basic Auth and Bearer Token with Java HttpClient?</div>
+    <div class="a">
+<pre><span class="kw">import</span> java.util.Base64;
+
+<span class="cm">// ── BASIC AUTH ──</span>
+<span class="tp">String</span> credentials = <span class="st">"admin"</span> + <span class="st">":"</span> + <span class="st">"password123"</span>;
+<span class="tp">String</span> encoded = <span class="tp">Base64</span>.getEncoder().encodeToString(credentials.getBytes());
+
+<span class="tp">HttpRequest</span> basicAuthRequest = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(<span class="st">"https://api.example.com/secure"</span>))
+    .GET()
+    .header(<span class="st">"Authorization"</span>, <span class="st">"Basic "</span> + encoded)
+    .build();
+
+<span class="cm">// ── BEARER TOKEN ──</span>
+<span class="tp">String</span> token = <span class="fn">getAuthToken</span>(); <span class="cm">// call login API to get token</span>
+
+<span class="tp">HttpRequest</span> bearerRequest = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(<span class="st">"https://api.example.com/users"</span>))
+    .GET()
+    .header(<span class="st">"Authorization"</span>, <span class="st">"Bearer "</span> + token)
+    .header(<span class="st">"Content-Type"</span>,  <span class="st">"application/json"</span>)
+    .build();
+
+<span class="cm">// ── API KEY ──</span>
+<span class="tp">HttpRequest</span> apiKeyRequest = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(<span class="st">"https://api.example.com/data"</span>))
+    .GET()
+    .header(<span class="st">"x-api-key"</span>, <span class="st">"your-api-key-here"</span>)
+    .build();</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">24</span> How do you get a token from a login API and use it in subsequent requests?</div>
+    <div class="a">
+<pre><span class="kw">public class</span> <span class="tp">AuthUtils</span> {
+    <span class="kw">private static final</span> <span class="tp">HttpClient</span> client = <span class="tp">HttpClient</span>.newHttpClient();
+    <span class="kw">private static final</span> <span class="tp">ObjectMapper</span> mapper = <span class="kw">new</span> <span class="tp">ObjectMapper</span>();
+
+    <span class="cm">// Step 1: Call login endpoint to get token</span>
+    <span class="kw">public static</span> <span class="tp">String</span> <span class="fn">getToken</span>() <span class="kw">throws Exception</span> {
+        <span class="tp">String</span> loginBody = <span class="st">"{ \"email\": \"test@test.com\", \"password\": \"Test@123\" }"</span>;
+
+        <span class="tp">HttpRequest</span> loginReq = <span class="tp">HttpRequest</span>.newBuilder()
+            .uri(<span class="tp">URI</span>.create(<span class="st">"https://reqres.in/api/login"</span>))
+            .POST(<span class="tp">HttpRequest.BodyPublishers</span>.ofString(loginBody))
+            .header(<span class="st">"Content-Type"</span>, <span class="st">"application/json"</span>)
+            .build();
+
+        <span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt; loginResp = client.send(loginReq, <span class="tp">HttpResponse.BodyHandlers</span>.ofString());
+
+        <span class="cm">// Parse token from response: { "token": "QpwL5tpe..." }</span>
+        <span class="kw">return</span> mapper.readTree(loginResp.body()).path(<span class="st">"token"</span>).asText();
+    }
+}
+
+<span class="cm">// Step 2: Use token in API tests — store in @BeforeClass</span>
+<span class="kw">static</span> <span class="tp">String</span> authToken;
+
+@BeforeClass
+<span class="kw">public static void</span> <span class="fn">setUp</span>() <span class="kw">throws Exception</span> {
+    authToken = <span class="tp">AuthUtils</span>.getToken();
+}
+
+@Test
+<span class="kw">public void</span> <span class="fn">getUsers</span>() <span class="kw">throws Exception</span> {
+    <span class="tp">HttpRequest</span> req = <span class="tp">HttpRequest</span>.newBuilder()
+        .uri(<span class="tp">URI</span>.create(BASE_URL + <span class="st">"/users"</span>))
+        .GET()
+        .header(<span class="st">"Authorization"</span>, <span class="st">"Bearer "</span> + authToken)
+        .build();
+    <span class="cm">// ...</span>
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 7 ======================== -->
+<div class="section page-break" id="s7">
+  <div class="section-header">
+    <h2>7. RestAssured — The QA Industry Standard</h2>
+    <div class="sub">Most automation teams use RestAssured for API testing in Java</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">25</span> What is RestAssured? How does it differ from Java HttpClient?</div>
+    <div class="a">
+      RestAssured is a Java library specifically designed for REST API testing. It provides a fluent DSL (Domain Specific Language) that makes tests highly readable.
+      <table>
+        <tr><th>Feature</th><th>Java HttpClient</th><th>RestAssured</th></tr>
+        <tr><td>Verbosity</td><td>More boilerplate</td><td>Concise, readable</td></tr>
+        <tr><td>Assertions</td><td>Manual (JUnit/TestNG)</td><td>Built-in chained assertions</td></tr>
+        <tr><td>JSON path</td><td>Jackson/Gson manual</td><td>Built-in JSONPath &amp; GPath</td></tr>
+        <tr><td>Schema validation</td><td>Manual</td><td>Built-in JSON schema validation</td></tr>
+        <tr><td>Auth handling</td><td>Manual header</td><td>.auth().basic(), .oauth2()</td></tr>
+        <tr><td>Purpose</td><td>General HTTP client</td><td>Specifically for API testing</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">26</span> Show a complete CRUD test using RestAssured.</div>
+    <div class="a">
+<pre><span class="kw">import</span> io.restassured.RestAssured;
+<span class="kw">import static</span> io.restassured.RestAssured.*;
+<span class="kw">import static</span> org.hamcrest.Matchers.*;
+
+<span class="kw">public class</span> <span class="tp">UserApiTest</span> {
+
+    @BeforeClass
+    <span class="kw">public static void</span> <span class="fn">setup</span>() {
+        <span class="tp">RestAssured</span>.baseURI = <span class="st">"https://reqres.in"</span>;
+        <span class="tp">RestAssured</span>.basePath = <span class="st">"/api"</span>;
+    }
+
+    <span class="cm">// GET — with assertions</span>
+    @Test
+    <span class="kw">public void</span> <span class="fn">getUser</span>() {
+        <span class="fn">given</span>()
+            .header(<span class="st">"Accept"</span>, <span class="st">"application/json"</span>)
+        .<span class="fn">when</span>()
+            .get(<span class="st">"/users/2"</span>)
+        .<span class="fn">then</span>()
+            .statusCode(200)
+            .body(<span class="st">"data.id"</span>,         equalTo(2))
+            .body(<span class="st">"data.first_name"</span>, equalTo(<span class="st">"Janet"</span>))
+            .body(<span class="st">"data.email"</span>,      containsString(<span class="st">"@reqres.in"</span>))
+            .time(lessThan(3000L));
+    }
+
+    <span class="cm">// POST — create and extract ID</span>
+    @Test
+    <span class="kw">public void</span> <span class="fn">createUser</span>() {
+        <span class="tp">String</span> body = <span class="st">"{ \"name\": \"QA Bot\", \"job\": \"Tester\" }"</span>;
+
+        <span class="tp">String</span> userId = <span class="fn">given</span>()
+            .contentType(<span class="st">"application/json"</span>)
+            .body(body)
+        .<span class="fn">when</span>()
+            .post(<span class="st">"/users"</span>)
+        .<span class="fn">then</span>()
+            .statusCode(201)
+            .body(<span class="st">"name"</span>, equalTo(<span class="st">"QA Bot"</span>))
+            .body(<span class="st">"id"</span>,   notNullValue())
+        .<span class="fn">extract</span>().path(<span class="st">"id"</span>);
+
+        System.out.println(<span class="st">"Created user ID: "</span> + userId);
+    }
+
+    <span class="cm">// DELETE — verify 204</span>
+    @Test
+    <span class="kw">public void</span> <span class="fn">deleteUser</span>() {
+        <span class="fn">given</span>()
+        .<span class="fn">when</span>()
+            .delete(<span class="st">"/users/2"</span>)
+        .<span class="fn">then</span>()
+            .statusCode(204);
+    }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">27</span> How do you use JSONPath in RestAssured?</div>
+    <div class="a">
+<pre><span class="cm">// JSONPath in .body() assertions</span>
+.<span class="fn">then</span>()
+    .body(<span class="st">"data.id"</span>, equalTo(2))                    <span class="cm">// exact value</span>
+    .body(<span class="st">"data.email"</span>, containsString(<span class="st">"@"</span>))         <span class="cm">// contains</span>
+    .body(<span class="st">"data"</span>, notNullValue())                      <span class="cm">// not null</span>
+    .body(<span class="st">"data.first_name"</span>, equalToIgnoringCase(<span class="st">"janet"</span>))
+
+<span class="cm">// Extract a value</span>
+<span class="tp">String</span> email = <span class="fn">given</span>().<span class="fn">when</span>().get(<span class="st">"/users/2"</span>)
+    .<span class="fn">then</span>().extract().path(<span class="st">"data.email"</span>);
+
+<span class="cm">// Get full response as JsonPath</span>
+<span class="tp">Response</span> response = <span class="fn">given</span>().<span class="fn">when</span>().get(<span class="st">"/users?page=1"</span>);
+<span class="tp">List</span>&lt;<span class="tp">String</span>&gt; emails = response.jsonPath().getList(<span class="st">"data.email"</span>);
+<span class="kw">int</span> totalPages = response.jsonPath().getInt(<span class="st">"total_pages"</span>);
+
+<span class="cm">// Array assertions</span>
+.<span class="fn">body</span>(<span class="st">"data"</span>, hasSize(6))
+.<span class="fn">body</span>(<span class="st">"data.id"</span>, hasItems(1, 2, 3))
+.<span class="fn">body</span>(<span class="st">"data.email"</span>, everyItem(containsString(<span class="st">"@reqres.in"</span>)))</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">28</span> How do you validate a JSON schema in RestAssured?</div>
+    <div class="a">
+<pre><span class="cm">// src/test/resources/schemas/user-schema.json</span>
+{
+  <span class="st">"type"</span>: <span class="st">"object"</span>,
+  <span class="st">"properties"</span>: {
+    <span class="st">"data"</span>: {
+      <span class="st">"type"</span>: <span class="st">"object"</span>,
+      <span class="st">"properties"</span>: {
+        <span class="st">"id"</span>:    { <span class="st">"type"</span>: <span class="st">"integer"</span> },
+        <span class="st">"email"</span>: { <span class="st">"type"</span>: <span class="st">"string"</span>, <span class="st">"format"</span>: <span class="st">"email"</span> },
+        <span class="st">"first_name"</span>: { <span class="st">"type"</span>: <span class="st">"string"</span> }
+      },
+      <span class="st">"required"</span>: [<span class="st">"id"</span>, <span class="st">"email"</span>]
+    }
+  }
+}</pre>
+<pre><span class="kw">import static</span> io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+
+@Test
+<span class="kw">public void</span> <span class="fn">validateUserSchema</span>() {
+    <span class="fn">given</span>().<span class="fn">when</span>().get(<span class="st">"/users/2"</span>)
+        .<span class="fn">then</span>()
+        .statusCode(200)
+        .body(matchesJsonSchemaInClasspath(<span class="st">"schemas/user-schema.json"</span>));
+}</pre>
+      <div class="tip"><strong>Schema validation</strong> is powerful — it verifies the structure and data types of the response, not just values. Catches API contract breaks early.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 8 ======================== -->
+<div class="section page-break" id="s8">
+  <div class="section-header">
+    <h2>8. API Test Design — Frameworks &amp; Best Practices</h2>
+    <div class="sub">How senior candidates structure API automation frameworks</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">29</span> How do you structure a reusable API test framework?</div>
+    <div class="a">
+<pre>src/
+├── main/java/
+│   ├── api/
+│   │   ├── BaseApi.java          <span class="cm">// HttpClient setup, base headers</span>
+│   │   ├── UserApi.java          <span class="cm">// User endpoint methods</span>
+│   │   └── OrderApi.java         <span class="cm">// Order endpoint methods</span>
+│   ├── models/
+│   │   ├── User.java             <span class="cm">// Request/Response POJOs</span>
+│   │   └── ApiResponse.java      <span class="cm">// Generic response wrapper</span>
+│   └── utils/
+│       ├── AuthUtils.java        <span class="cm">// Token management</span>
+│       ├── JsonUtils.java        <span class="cm">// JSON helpers</span>
+│       └── ConfigReader.java     <span class="cm">// Base URL, credentials</span>
+└── test/java/
+    └── tests/
+        ├── UserApiTest.java
+        └── OrderApiTest.java</pre>
+<pre><span class="cm">// BaseApi.java — centralized client config</span>
+<span class="kw">public abstract class</span> <span class="tp">BaseApi</span> {
+    <span class="kw">protected static final</span> <span class="tp">HttpClient</span> client = <span class="tp">HttpClient</span>.newBuilder()
+        .connectTimeout(<span class="tp">Duration</span>.ofSeconds(15))
+        .build();
+    <span class="kw">protected static final</span> <span class="tp">String</span> BASE_URL = <span class="tp">ConfigReader</span>.get(<span class="st">"apiBaseUrl"</span>);
+    <span class="kw">protected static</span> <span class="tp">String</span> authToken;
+
+    @BeforeClass
+    <span class="kw">public static void</span> <span class="fn">init</span>() <span class="kw">throws Exception</span> {
+        authToken = <span class="tp">AuthUtils</span>.getToken();
+    }
+
+    <span class="kw">protected</span> <span class="tp">HttpRequest.Builder</span> <span class="fn">baseRequest</span>(<span class="tp">String</span> path) {
+        <span class="kw">return</span> <span class="tp">HttpRequest</span>.newBuilder()
+            .uri(<span class="tp">URI</span>.create(BASE_URL + path))
+            .header(<span class="st">"Authorization"</span>, <span class="st">"Bearer "</span> + authToken)
+            .header(<span class="st">"Content-Type"</span>,  <span class="st">"application/json"</span>)
+            .header(<span class="st">"Accept"</span>,        <span class="st">"application/json"</span>);
+    }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">30</span> What should you validate in an API test?</div>
+    <div class="a">
+      For a thorough API test, validate:
+      <ol>
+        <li><strong>Status code</strong> — Is it the expected code? (200, 201, 204, 400, 404…)</li>
+        <li><strong>Response body — field values</strong> — Does the data match what was sent/expected?</li>
+        <li><strong>Response body — data types</strong> — Is ID an integer, not a string? Schema validation.</li>
+        <li><strong>Response headers</strong> — Content-Type: application/json? Authentication headers present?</li>
+        <li><strong>Response time</strong> — Is the API responding within acceptable SLA? (e.g., &lt; 2000ms)</li>
+        <li><strong>Error messages</strong> — For 4xx responses, is the error message descriptive and correct?</li>
+        <li><strong>Negative scenarios</strong> — Missing required fields → 400. Wrong auth → 401. Invalid ID → 404.</li>
+        <li><strong>Boundary conditions</strong> — Empty string, max length, negative numbers, null values.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">31</span> What is the difference between API testing and UI testing? When to use which?</div>
+    <div class="a">
+      <table>
+        <tr><th>Aspect</th><th>API Testing</th><th>UI Testing</th></tr>
+        <tr><td>Speed</td><td>Very fast (ms)</td><td>Slow (seconds)</td></tr>
+        <tr><td>Stability</td><td>Very stable (less flaky)</td><td>Prone to UI changes, timing issues</td></tr>
+        <tr><td>Coverage</td><td>Business logic, data validation</td><td>User flows, visual rendering</td></tr>
+        <tr><td>Maintenance</td><td>Low — APIs change less</td><td>High — UI changes frequently</td></tr>
+        <tr><td>Tools (Java)</td><td>RestAssured, HttpClient, Postman</td><td>Selenium, Playwright</td></tr>
+      </table>
+      <strong>Testing pyramid strategy:</strong>
+      <ul>
+        <li><strong>70% API/Integration tests</strong> — Fast, covers most logic</li>
+        <li><strong>20% UI E2E tests</strong> — Critical user journeys only</li>
+        <li><strong>10% Unit tests</strong> — Core business logic</li>
+      </ul>
+      <div class="tip"><strong>Best practice:</strong> Use API calls for test data setup and teardown in UI tests — never create data only via UI. 10x faster and more reliable.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 9 ======================== -->
+<div class="section" id="s9">
+  <div class="section-header">
+    <h2>9. Real Interview Scenario Questions</h2>
+    <div class="sub">Practical questions with structured answers</div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">32</span> How do you test a REST API that requires OAuth 2.0 authentication?</div>
+    <div class="a">
+      OAuth 2.0 uses a token-based flow. The most common grant type for testing is <strong>Client Credentials</strong> (machine-to-machine) or <strong>Resource Owner Password</strong> (for test users).<br><br>
+      <strong>Steps:</strong>
+      <ol>
+        <li>Call the token endpoint with client credentials to get an access token</li>
+        <li>Store the token (it expires — handle refresh)</li>
+        <li>Pass it as <code>Authorization: Bearer {token}</code> in every API call</li>
+      </ol>
+<pre><span class="cm">// Step 1: Get OAuth token (client credentials flow)</span>
+<span class="tp">String</span> tokenBody = <span class="st">"grant_type=client_credentials"</span>
+    + <span class="st">"&amp;client_id="</span>     + <span class="tp">ConfigReader</span>.get(<span class="st">"clientId"</span>)
+    + <span class="st">"&amp;client_secret="</span> + <span class="tp">ConfigReader</span>.get(<span class="st">"clientSecret"</span>)
+    + <span class="st">"&amp;scope=api.read"</span>;
+
+<span class="tp">HttpRequest</span> tokenReq = <span class="tp">HttpRequest</span>.newBuilder()
+    .uri(<span class="tp">URI</span>.create(<span class="st">"https://auth.example.com/token"</span>))
+    .POST(<span class="tp">HttpRequest.BodyPublishers</span>.ofString(tokenBody))
+    .header(<span class="st">"Content-Type"</span>, <span class="st">"application/x-www-form-urlencoded"</span>)
+    .build();
+
+<span class="tp">HttpResponse</span>&lt;<span class="tp">String</span>&gt; tokenResp = client.send(tokenReq, <span class="tp">HttpResponse.BodyHandlers</span>.ofString());
+<span class="tp">String</span> accessToken = mapper.readTree(tokenResp.body()).path(<span class="st">"access_token"</span>).asText();</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">33</span> How do you test an API for pagination?</div>
+    <div class="a">
+<pre><span class="cm">// Test first page</span>
+<span class="fn">given</span>()
+    .queryParam(<span class="st">"page"</span>, 1)
+    .queryParam(<span class="st">"per_page"</span>, 6)
+.<span class="fn">when</span>()
+    .get(<span class="st">"/users"</span>)
+.<span class="fn">then</span>()
+    .statusCode(200)
+    .body(<span class="st">"page"</span>,         equalTo(1))
+    .body(<span class="st">"per_page"</span>,     equalTo(6))
+    .body(<span class="st">"data"</span>,         hasSize(6))
+    .body(<span class="st">"total"</span>,        greaterThan(0))
+    .body(<span class="st">"total_pages"</span>,  greaterThan(0));
+
+<span class="cm">// Test last page — should not have more items than per_page</span>
+<span class="tp">Response</span> firstPage = <span class="fn">given</span>().queryParam(<span class="st">"page"</span>,1).get(<span class="st">"/users"</span>);
+<span class="kw">int</span> totalPages = firstPage.jsonPath().getInt(<span class="st">"total_pages"</span>);
+
+<span class="fn">given</span>()
+    .queryParam(<span class="st">"page"</span>, totalPages)
+.<span class="fn">when</span>()
+    .get(<span class="st">"/users"</span>)
+.<span class="fn">then</span>()
+    .statusCode(200)
+    .body(<span class="st">"data.size()"</span>, greaterThan(0)); <span class="cm">// last page has data</span>
+
+<span class="cm">// Test beyond last page — should return 404 or empty</span>
+<span class="fn">given</span>()
+    .queryParam(<span class="st">"page"</span>, totalPages + 1)
+.<span class="fn">when</span>()
+    .get(<span class="st">"/users"</span>)
+.<span class="fn">then</span>()
+    .body(<span class="st">"data"</span>, hasSize(0)); <span class="cm">// or .statusCode(404)</span></pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">34</span> How do you test negative API scenarios?</div>
+    <div class="a">
+<pre><span class="cm">// 1. Missing required field → 400 Bad Request</span>
+<span class="fn">given</span>()
+    .body(<span class="st">"{ \"name\": \"\" }"</span>) <span class="cm">// missing 'job'</span>
+.<span class="fn">when</span>()
+    .post(<span class="st">"/users"</span>)
+.<span class="fn">then</span>()
+    .statusCode(400)
+    .body(<span class="st">"error"</span>, containsString(<span class="st">"job is required"</span>));
+
+<span class="cm">// 2. Invalid ID → 404 Not Found</span>
+<span class="fn">given</span>().<span class="fn">when</span>()
+    .get(<span class="st">"/users/9999"</span>)
+.<span class="fn">then</span>()
+    .statusCode(404);
+
+<span class="cm">// 3. Missing auth token → 401 Unauthorized</span>
+<span class="fn">given</span>()
+    .header(<span class="st">"Authorization"</span>, <span class="st">""</span>) <span class="cm">// no token</span>
+.<span class="fn">when</span>()
+    .get(<span class="st">"/secure-endpoint"</span>)
+.<span class="fn">then</span>()
+    .statusCode(401)
+    .body(<span class="st">"error"</span>, equalTo(<span class="st">"Missing authentication token"</span>));
+
+<span class="cm">// 4. Invalid data type → 422 Unprocessable</span>
+<span class="fn">given</span>()
+    .body(<span class="st">"{ \"age\": \"not-a-number\" }"</span>)
+.<span class="fn">when</span>()
+    .post(<span class="st">"/users"</span>)
+.<span class="fn">then</span>()
+    .statusCode(422);
+
+<span class="cm">// 5. Expired token → 401</span>
+<span class="fn">given</span>()
+    .header(<span class="st">"Authorization"</span>, <span class="st">"Bearer EXPIRED_TOKEN"</span>)
+.<span class="fn">when</span>()
+    .get(<span class="st">"/users"</span>)
+.<span class="fn">then</span>()
+    .statusCode(401);</pre>
+    </div>
+  </div>
+
+  <div class="qa">
+    <div class="q"><span class="qn">35</span> Quick-fire: 10 short API testing questions</div>
+    <div class="a">
+      <ol>
+        <li><strong>What is the difference between 401 and 403?</strong> — 401: Not authenticated (no/bad token). 403: Authenticated but not authorized (wrong role/permission).</li>
+        <li><strong>What is idempotency?</strong> — Calling the same request multiple times produces the same result. GET, PUT, DELETE are idempotent. POST is not.</li>
+        <li><strong>What is Content-Type vs Accept header?</strong> — Content-Type: format of the request body you're sending. Accept: format you expect in the response.</li>
+        <li><strong>What is CORS?</strong> — Cross-Origin Resource Sharing. Browser security policy that blocks requests from a different origin. APIs allow it via <code>Access-Control-Allow-Origin</code> response header.</li>
+        <li><strong>What is the difference between JSON and XML?</strong> — JSON: lightweight, readable, array support, language-agnostic. XML: verbose, supports attributes, schemas (XSD), namespaces. REST uses JSON; SOAP uses XML.</li>
+        <li><strong>What is HTTP/2?</strong> — The second major version of HTTP. Supports multiplexing (multiple requests over one connection), header compression, server push. Java HttpClient supports it.</li>
+        <li><strong>What is a mock API?</strong> — A simulated API that returns predefined responses. Used in testing when the real API isn't available or to test specific edge cases. Tools: WireMock, MockServer.</li>
+        <li><strong>What is Postman used for in API testing?</strong> — Manual API testing, collections, environments, automated test scripts (Newman), documentation generation, and team collaboration.</li>
+        <li><strong>What does the Accept: application/json header do?</strong> — Tells the server the client expects a JSON response. If server can't provide JSON, it may return 406 Not Acceptable.</li>
+        <li><strong>How do you measure API response time in RestAssured?</strong> — <code>.then().time(lessThan(2000L))</code> — asserts response is under 2 seconds. Or use <code>response.getTime()</code> to get the value.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p style="font-size:15px; font-weight:700;">API Testing with Java HTTP Client — Interview Q&amp;A</p>
+    <p style="font-size:12px; opacity:0.85;">9 Sections &nbsp;|&nbsp; 60+ Questions &nbsp;|&nbsp; REST Basics · HttpClient · CRUD · JSON Parsing · Auth · RestAssured · Test Design</p>
+    <p style="font-size:11px; opacity:0.6; margin-top:6px;">Prepared April 2026 &nbsp;|&nbsp; For Automation Tester API Interview Prep</p>
+  </div>
+</div>
+
+</body>
+</html>

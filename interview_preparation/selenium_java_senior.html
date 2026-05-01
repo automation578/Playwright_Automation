@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Selenium Java Interview Prep — 6+ Years Experience</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; color: #1a1a1a; background: #fff; }
+  .cover { page-break-after: always; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, #1e3a5f, #2d6a9f); color: #fff; text-align: center; padding: 40px; }
+  .cover h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; letter-spacing: 1px; }
+  .cover h2 { font-size: 20px; font-weight: 400; margin-bottom: 30px; opacity: 0.85; }
+  .cover .badge { background: #f0a500; color: #1a1a1a; padding: 8px 24px; border-radius: 20px; font-size: 15px; font-weight: 700; margin-bottom: 20px; }
+  .cover .meta { font-size: 12px; opacity: 0.7; margin-top: 40px; }
+  .toc { page-break-after: always; padding: 40px 50px; }
+  .toc h2 { font-size: 22px; color: #1e3a5f; border-bottom: 3px solid #2d6a9f; padding-bottom: 8px; margin-bottom: 20px; }
+  .toc ol { margin-left: 20px; line-height: 2.2; }
+  .toc a { color: #2d6a9f; text-decoration: none; font-size: 13px; }
+  .section { padding: 36px 50px; page-break-inside: avoid; }
+  .section-header { background: linear-gradient(90deg, #1e3a5f, #2d6a9f); color: #fff; padding: 12px 20px; border-radius: 6px; margin-bottom: 20px; page-break-after: avoid; }
+  .section-header h2 { font-size: 17px; font-weight: 700; }
+  .section-header .subtitle { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+  h3 { font-size: 14px; color: #1e3a5f; margin: 18px 0 8px; border-left: 4px solid #2d6a9f; padding-left: 10px; }
+  h4 { font-size: 12px; color: #333; margin: 12px 0 6px; font-weight: 700; }
+  p { line-height: 1.7; margin-bottom: 10px; color: #333; }
+  ul, ol { margin: 8px 0 12px 20px; }
+  li { line-height: 1.8; color: #333; }
+  pre { background: #1e2d3d; color: #e8f4f8; padding: 14px 16px; border-radius: 6px; font-family: 'Consolas', monospace; font-size: 11.5px; line-height: 1.6; overflow-x: auto; margin: 10px 0 14px; white-space: pre-wrap; word-break: break-word; }
+  .comment { color: #7ec8a0; }
+  .keyword { color: #569cd6; }
+  .string { color: #ce9178; }
+  .qa-block { background: #f8f9ff; border: 1px solid #dde4f5; border-radius: 6px; padding: 14px 16px; margin: 12px 0; }
+  .qa-block .q { font-weight: 700; color: #1e3a5f; margin-bottom: 6px; }
+  .qa-block .a { color: #333; line-height: 1.7; }
+  .tip { background: #fff8e1; border-left: 4px solid #f0a500; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .tip strong { color: #b37700; }
+  .warn { background: #fff0f0; border-left: 4px solid #e53935; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .warn strong { color: #c62828; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 10px 0; }
+  .card { background: #f4f7ff; border: 1px solid #d0d9f5; border-radius: 6px; padding: 12px 14px; }
+  .card h4 { color: #1e3a5f; margin-top: 0; }
+  .badge-inline { display: inline-block; background: #e8f4e8; color: #2e7d32; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; margin-left: 6px; vertical-align: middle; }
+  .badge-hard { background: #fde8e8; color: #c62828; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+  th { background: #1e3a5f; color: #fff; padding: 8px 12px; text-align: left; }
+  td { padding: 7px 12px; border-bottom: 1px solid #e0e6f5; }
+  tr:nth-child(even) td { background: #f4f7ff; }
+  .page-break { page-break-after: always; }
+  @media print {
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    pre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover">
+  <div class="badge">6+ Years Experience</div>
+  <h1>Selenium Java<br>Interview Preparation</h1>
+  <h2>Senior / Lead Test Automation Engineer</h2>
+  <p style="opacity:0.75; font-size:13px; max-width:500px;">Comprehensive guide covering advanced Java, Selenium WebDriver, framework design, CI/CD, BDD, API testing, and behavioral questions for senior roles.</p>
+  <div class="meta">Prepared: April 2026 &nbsp;|&nbsp; Topics: 12 Sections &nbsp;|&nbsp; Q&amp;A: 80+ Questions</div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#s1">Advanced Core Java for Automation</a></li>
+    <li><a href="#s2">Advanced Selenium WebDriver</a></li>
+    <li><a href="#s3">Framework Design &amp; Architecture</a></li>
+    <li><a href="#s4">TestNG Deep Dive</a></li>
+    <li><a href="#s5">Cucumber BDD with Selenium</a></li>
+    <li><a href="#s6">API Testing — RestAssured</a></li>
+    <li><a href="#s7">Selenium Grid &amp; Docker Parallel Execution</a></li>
+    <li><a href="#s8">CI/CD — Jenkins, Maven, Git</a></li>
+    <li><a href="#s9">Design Patterns in Test Automation</a></li>
+    <li><a href="#s10">Performance, Debugging &amp; Troubleshooting</a></li>
+    <li><a href="#s11">Senior-Level Scenario Questions</a></li>
+    <li><a href="#s12">Behavioral &amp; Leadership Questions</a></li>
+  </ol>
+</div>
+
+<!-- SECTION 1 -->
+<div class="section page-break" id="s1">
+  <div class="section-header">
+    <h2>1. Advanced Core Java for Automation</h2>
+    <div class="subtitle">Topics that differentiate 6+ year candidates from juniors</div>
+  </div>
+
+  <h3>Generics</h3>
+  <pre><span class="comment">// Generic utility — type-safe reusable method</span>
+<span class="keyword">public</span> &lt;T&gt; List&lt;T&gt; getElements(By locator, Class&lt;T&gt; type) {
+    <span class="keyword">return</span> driver.findElements(locator).stream()
+        .map(e -&gt; type.cast(e))
+        .collect(Collectors.toList());
+}
+
+<span class="comment">// Bounded wildcards</span>
+<span class="keyword">public</span> &lt;T <span class="keyword">extends</span> BasePage&gt; T navigateTo(Class&lt;T&gt; page) {
+    <span class="keyword">return</span> PageFactory.initElements(driver, page);
+}</pre>
+
+  <h3>Java 8 — Lambda &amp; Streams in Automation Context</h3>
+  <pre><span class="comment">// Filter visible elements using Streams</span>
+List&lt;WebElement&gt; visibleLinks = driver.findElements(By.tagName(<span class="string">"a"</span>))
+    .stream()
+    .filter(WebElement::isDisplayed)
+    .filter(e -&gt; !e.getText().isEmpty())
+    .collect(Collectors.toList());
+
+<span class="comment">// Map element texts to a list</span>
+List&lt;String&gt; menuItems = driver.findElements(By.cssSelector(<span class="string">"nav li"</span>))
+    .stream()
+    .map(WebElement::getText)
+    .collect(Collectors.toList());
+
+<span class="comment">// Check if any element matches a condition</span>
+<span class="keyword">boolean</span> hasError = driver.findElements(By.className(<span class="string">"error-msg"</span>))
+    .stream()
+    .anyMatch(e -&gt; e.getText().contains(<span class="string">"required"</span>));</pre>
+
+  <h3>Functional Interfaces &amp; Custom Expected Conditions</h3>
+  <pre><span class="comment">// Function as a parameter</span>
+<span class="keyword">public</span> WebElement waitFor(Function&lt;WebDriver, WebElement&gt; condition) {
+    <span class="keyword">return new</span> WebDriverWait(driver, Duration.ofSeconds(15))
+        .until(condition);
+}
+
+<span class="comment">// Custom ExpectedCondition using lambda</span>
+ExpectedCondition&lt;Boolean&gt; rowCountGt = d -&gt;
+    d.findElements(By.cssSelector(<span class="string">"table tr"</span>)).size() &gt; 3;
+
+wait.until(rowCountGt);</pre>
+
+  <h3>Multithreading — ThreadLocal for Parallel Execution</h3>
+  <pre><span class="comment">// Thread-safe driver management — critical for parallel runs</span>
+<span class="keyword">public class</span> DriverManager {
+    <span class="keyword">private static final</span> ThreadLocal&lt;WebDriver&gt; driverThread = <span class="keyword">new</span> ThreadLocal&lt;&gt;();
+
+    <span class="keyword">public static</span> WebDriver getDriver() {
+        <span class="keyword">return</span> driverThread.get();
+    }
+
+    <span class="keyword">public static void</span> setDriver(WebDriver driver) {
+        driverThread.set(driver);
+    }
+
+    <span class="keyword">public static void</span> removeDriver() {
+        driverThread.remove(); <span class="comment">// MUST call to prevent memory leaks</span>
+    }
+}</pre>
+
+  <div class="tip"><strong>Interview Insight:</strong> Interviewers at senior level always ask about ThreadLocal. Know WHY it's needed — without it, parallel test threads share one driver instance causing race conditions and test corruption.</div>
+
+  <h3>Collections — HashMap Internals</h3>
+  <p>Commonly asked: <em>"How does HashMap work internally?"</em></p>
+  <ul>
+    <li>HashMap uses an array of buckets (default 16). Key's <code>hashCode()</code> determines bucket index.</li>
+    <li>Collision is resolved using a LinkedList in the same bucket (Java 8+ uses Red-Black Tree when bucket &gt; 8).</li>
+    <li>Load factor (default 0.75) triggers rehashing when 75% full — doubles capacity.</li>
+    <li>Keys must override both <code>hashCode()</code> and <code>equals()</code>.</li>
+  </ul>
+
+  <h3>String vs StringBuilder vs StringBuffer</h3>
+  <table>
+    <tr><th>Class</th><th>Mutable</th><th>Thread-Safe</th><th>Use Case</th></tr>
+    <tr><td>String</td><td>No</td><td>Yes (immutable)</td><td>Constants, map keys</td></tr>
+    <tr><td>StringBuilder</td><td>Yes</td><td>No</td><td>Single-thread string building</td></tr>
+    <tr><td>StringBuffer</td><td>Yes</td><td>Yes (synchronized)</td><td>Multi-thread (rarely needed)</td></tr>
+  </table>
+</div>
+
+<!-- SECTION 2 -->
+<div class="section page-break" id="s2">
+  <div class="section-header">
+    <h2>2. Advanced Selenium WebDriver</h2>
+    <div class="subtitle">Deep-dive topics for senior automation engineers</div>
+  </div>
+
+  <h3>Fluent Wait — The Right Way</h3>
+  <pre><span class="comment">// Fluent wait with custom polling and ignored exceptions</span>
+Wait&lt;WebDriver&gt; fluentWait = <span class="keyword">new</span> FluentWait&lt;&gt;(driver)
+    .withTimeout(Duration.ofSeconds(30))
+    .pollingEvery(Duration.ofMillis(500))
+    .ignoring(NoSuchElementException.class)
+    .ignoring(StaleElementReferenceException.class)
+    .withMessage(<span class="string">"Element not found after 30 seconds"</span>);
+
+WebElement element = fluentWait.until(
+    ExpectedConditions.elementToBeClickable(By.id(<span class="string">"submit"</span>))
+);</pre>
+
+  <div class="tip"><strong>Key difference:</strong> Fluent Wait = custom polling interval + specific exception ignoring. Explicit Wait = fixed 500ms polling, less configurable. Implicit Wait = global, applies to all <code>findElement</code> calls — mixing with Explicit Wait causes unpredictable timeouts.</div>
+
+  <h3>Handling StaleElementReferenceException</h3>
+  <pre><span class="comment">// Retry wrapper for stale element handling</span>
+<span class="keyword">public</span> WebElement findStableElement(By locator) {
+    <span class="keyword">int</span> attempts = 0;
+    <span class="keyword">while</span> (attempts &lt; 3) {
+        <span class="keyword">try</span> {
+            <span class="keyword">return</span> driver.findElement(locator);
+        } <span class="keyword">catch</span> (StaleElementReferenceException e) {
+            attempts++;
+        }
+    }
+    <span class="keyword">throw new</span> RuntimeException(<span class="string">"Element stale after 3 attempts: "</span> + locator);
+}
+
+<span class="comment">// Better: use ExpectedConditions.refreshed()</span>
+wait.until(ExpectedConditions.refreshed(
+    ExpectedConditions.elementToBeClickable(locator)
+));</pre>
+
+  <h3>Shadow DOM Handling</h3>
+  <pre><span class="comment">// Access shadow root elements (modern web components)</span>
+WebElement host = driver.findElement(By.cssSelector(<span class="string">"my-component"</span>));
+SearchContext shadowRoot = host.getShadowRoot(); <span class="comment">// Selenium 4+</span>
+WebElement input = shadowRoot.findElement(By.cssSelector(<span class="string">"input"</span>));
+
+<span class="comment">// Selenium 3 fallback using JS</span>
+JavascriptExecutor js = (JavascriptExecutor) driver;
+WebElement shadowInput = (WebElement) js.executeScript(
+    <span class="string">"return arguments[0].shadowRoot.querySelector('input')"</span>, host
+);</pre>
+
+  <h3>Window &amp; Tab Management</h3>
+  <pre><span class="comment">// Capture all window handles and switch to new tab</span>
+String mainWindow = driver.getWindowHandle();
+Set&lt;String&gt; allWindows = driver.getWindowHandles();
+
+<span class="keyword">for</span> (String handle : allWindows) {
+    <span class="keyword">if</span> (!handle.equals(mainWindow)) {
+        driver.switchTo().window(handle);
+        <span class="keyword">break</span>;
+    }
+}
+<span class="comment">// Do work in new window...</span>
+driver.close();
+driver.switchTo().window(mainWindow); <span class="comment">// Switch back</span>
+
+<span class="comment">// Selenium 4 — Open new tab directly</span>
+driver.switchTo().newWindow(WindowType.TAB);</pre>
+
+  <h3>JavaScript Executor — Advanced Use Cases</h3>
+  <pre><span class="comment">// Scroll element into view</span>
+js.executeScript(<span class="string">"arguments[0].scrollIntoView({behavior:'smooth',block:'center'});"</span>, el);
+
+<span class="comment">// Set value on readonly/hidden input</span>
+js.executeScript(<span class="string">"arguments[0].value = arguments[1];"</span>, input, <span class="string">"testValue"</span>);
+
+<span class="comment">// Highlight element for debugging</span>
+js.executeScript(<span class="string">"arguments[0].style.border='3px solid red';"</span>, element);
+
+<span class="comment">// Get text from hidden element</span>
+String text = (String) js.executeScript(
+    <span class="string">"return arguments[0].textContent;"</span>, hiddenEl
+);
+
+<span class="comment">// Async JS execution (returns via callback)</span>
+js.executeAsyncScript(
+    <span class="string">"var cb = arguments[arguments.length-1]; setTimeout(cb, 2000);"</span>
+);</pre>
+
+  <h3>Selenium 4 New Features</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4>Relative Locators</h4>
+      <pre style="font-size:10.5px">// Find element ABOVE another
+driver.findElement(
+  RelativeLocator.with(By.tagName("input"))
+  .above(By.id("email"))
+);</pre>
+    </div>
+    <div class="card">
+      <h4>Chrome DevTools Protocol</h4>
+      <pre style="font-size:10.5px">// Network throttling
+DevTools devTools = ((HasDevTools)driver).getDevTools();
+devTools.createSession();
+devTools.send(Network.emulateNetworkConditions(
+  false, 100, 50000, 10000));</pre>
+    </div>
+  </div>
+
+  <h3>EventFiringWebDriver (Selenium 3) / WebDriverListener (Selenium 4)</h3>
+  <pre><span class="comment">// Selenium 4 — Implement WebDriverListener for logging/reporting</span>
+<span class="keyword">public class</span> AutomationListener <span class="keyword">implements</span> WebDriverListener {
+    @Override
+    <span class="keyword">public void</span> beforeClick(WebElement element) {
+        log.info(<span class="string">"Clicking: "</span> + element.getAttribute(<span class="string">"id"</span>));
+    }
+    @Override
+    <span class="keyword">public void</span> afterNavigateTo(String url, WebDriver driver) {
+        log.info(<span class="string">"Navigated to: "</span> + url);
+    }
+}
+
+<span class="comment">// Wrap driver</span>
+WebDriver decorated = <span class="keyword">new</span> Decorated&lt;&gt;(driver, <span class="keyword">new</span> AutomationListener());</pre>
+</div>
+
+<!-- SECTION 3 -->
+<div class="section page-break" id="s3">
+  <div class="section-header">
+    <h2>3. Framework Design &amp; Architecture</h2>
+    <div class="subtitle">How a senior engineer designs scalable, maintainable test frameworks</div>
+  </div>
+
+  <h3>Hybrid Framework Architecture</h3>
+  <pre>src/
+├── main/java/
+│   ├── base/
+│   │   ├── BasePage.java          <span class="comment">// Common page methods, waits</span>
+│   │   └── BaseTest.java          <span class="comment">// Driver init, teardown, listeners</span>
+│   ├── pages/
+│   │   ├── LoginPage.java
+│   │   └── DashboardPage.java
+│   ├── components/                <span class="comment">// Reusable UI components (navbar, modal)</span>
+│   │   └── NavigationBar.java
+│   ├── utils/
+│   │   ├── DriverManager.java     <span class="comment">// ThreadLocal driver factory</span>
+│   │   ├── ConfigReader.java      <span class="comment">// Properties / YAML config</span>
+│   │   ├── ExcelUtils.java        <span class="comment">// Data-driven helpers</span>
+│   │   └── WaitUtils.java
+│   └── listeners/
+│       ├── TestListener.java      <span class="comment">// ITestListener — screenshots, logs</span>
+│       └── RetryAnalyzer.java     <span class="comment">// IRetryAnalyzer</span>
+├── test/java/
+│   └── tests/
+│       ├── LoginTest.java
+│       └── CheckoutTest.java
+└── resources/
+    ├── config.properties
+    ├── testng.xml
+    └── testdata/</pre>
+
+  <h3>Singleton Driver Factory</h3>
+  <pre><span class="keyword">public class</span> DriverFactory {
+    <span class="keyword">private static final</span> ThreadLocal&lt;WebDriver&gt; driver = <span class="keyword">new</span> ThreadLocal&lt;&gt;();
+
+    <span class="keyword">public static</span> WebDriver initDriver(String browser) {
+        WebDriver d;
+        <span class="keyword">switch</span> (browser.toLowerCase()) {
+            <span class="keyword">case</span> <span class="string">"chrome"</span>:
+                ChromeOptions opts = <span class="keyword">new</span> ChromeOptions();
+                opts.addArguments(<span class="string">"--headless=new"</span>, <span class="string">"--no-sandbox"</span>);
+                d = <span class="keyword">new</span> ChromeDriver(opts);
+                <span class="keyword">break</span>;
+            <span class="keyword">case</span> <span class="string">"firefox"</span>:
+                d = <span class="keyword">new</span> FirefoxDriver();
+                <span class="keyword">break</span>;
+            <span class="keyword">default</span>:
+                <span class="keyword">throw new</span> IllegalArgumentException(<span class="string">"Unsupported: "</span> + browser);
+        }
+        driver.set(d);
+        <span class="keyword">return</span> d;
+    }
+
+    <span class="keyword">public static</span> WebDriver getDriver() { <span class="keyword">return</span> driver.get(); }
+    <span class="keyword">public static void</span> quitDriver() { driver.get().quit(); driver.remove(); }
+}</pre>
+
+  <h3>BasePage — Robust Element Interactions</h3>
+  <pre><span class="keyword">public abstract class</span> BasePage {
+    <span class="keyword">protected</span> WebDriver driver;
+    <span class="keyword">protected</span> WebDriverWait wait;
+
+    <span class="keyword">public</span> BasePage(WebDriver driver) {
+        <span class="keyword">this</span>.driver = driver;
+        <span class="keyword">this</span>.wait = <span class="keyword">new</span> WebDriverWait(driver, Duration.ofSeconds(15));
+        PageFactory.initElements(driver, <span class="keyword">this</span>);
+    }
+
+    <span class="keyword">protected void</span> click(By locator) {
+        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+    }
+
+    <span class="keyword">protected void</span> type(By locator, String text) {
+        WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+        el.clear();
+        el.sendKeys(text);
+    }
+
+    <span class="keyword">protected</span> String getText(By locator) {
+        <span class="keyword">return</span> wait.until(ExpectedConditions.visibilityOfElementLocated(locator)).getText().trim();
+    }
+
+    <span class="keyword">protected boolean</span> isVisible(By locator) {
+        <span class="keyword">try</span> { <span class="keyword">return</span> driver.findElement(locator).isDisplayed(); }
+        <span class="keyword">catch</span> (NoSuchElementException e) { <span class="keyword">return false</span>; }
+    }
+}</pre>
+
+  <h3>Config Reader — Environment Switching</h3>
+  <pre><span class="keyword">public class</span> ConfigReader {
+    <span class="keyword">private static</span> Properties props = <span class="keyword">new</span> Properties();
+    <span class="keyword">static</span> {
+        String env = System.getProperty(<span class="string">"env"</span>, <span class="string">"qa"</span>);
+        <span class="keyword">try</span> (InputStream is = ConfigReader.<span class="keyword">class</span>.getResourceAsStream(
+                <span class="string">"/"</span> + env + <span class="string">".properties"</span>)) {
+            props.load(is);
+        } <span class="keyword">catch</span> (IOException e) { <span class="keyword">throw new</span> RuntimeException(e); }
+    }
+    <span class="keyword">public static</span> String get(String key) { <span class="keyword">return</span> props.getProperty(key); }
+}
+<span class="comment">// Run: mvn test -Denv=staging -Dbrowser=firefox</span></pre>
+</div>
+
+<!-- SECTION 4 -->
+<div class="section page-break" id="s4">
+  <div class="section-header">
+    <h2>4. TestNG Deep Dive</h2>
+    <div class="subtitle">Advanced TestNG for enterprise-level test suites</div>
+  </div>
+
+  <h3>IRetryAnalyzer — Smart Retry</h3>
+  <pre><span class="keyword">public class</span> RetryAnalyzer <span class="keyword">implements</span> IRetryAnalyzer {
+    <span class="keyword">private int</span> count = 0;
+    <span class="keyword">private static final int</span> MAX_RETRY = 2;
+
+    @Override
+    <span class="keyword">public boolean</span> retry(ITestResult result) {
+        <span class="keyword">if</span> (count &lt; MAX_RETRY) { count++; <span class="keyword">return true</span>; }
+        <span class="keyword">return false</span>;
+    }
+}
+
+<span class="comment">// Apply globally via IAnnotationTransformer (no need to annotate each test)</span>
+<span class="keyword">public class</span> RetryTransformer <span class="keyword">implements</span> IAnnotationTransformer {
+    @Override
+    <span class="keyword">public void</span> transform(ITestAnnotation annotation, Class tc, Constructor c, Method m) {
+        annotation.setRetryAnalyzer(RetryAnalyzer.<span class="keyword">class</span>);
+    }
+}</pre>
+
+  <h3>ITestListener — Screenshots &amp; Reporting</h3>
+  <pre><span class="keyword">public class</span> TestListener <span class="keyword">implements</span> ITestListener {
+    @Override
+    <span class="keyword">public void</span> onTestFailure(ITestResult result) {
+        WebDriver driver = DriverFactory.getDriver();
+        <span class="keyword">if</span> (driver != <span class="keyword">null</span>) {
+            File shot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            String path = <span class="string">"reports/screenshots/"</span> + result.getName() + <span class="string">"_"</span>
+                        + System.currentTimeMillis() + <span class="string">".png"</span>;
+            <span class="keyword">try</span> { FileUtils.copyFile(shot, <span class="keyword">new</span> File(path)); }
+            <span class="keyword">catch</span> (IOException e) { e.printStackTrace(); }
+
+            <span class="comment">// Attach to Extent/Allure report</span>
+            Allure.addAttachment(<span class="string">"Screenshot"</span>, <span class="keyword">new</span> FileInputStream(shot));
+        }
+    }
+}</pre>
+
+  <h3>Parallel Execution in testng.xml</h3>
+  <pre>&lt;suite name="Regression" parallel="methods" thread-count="5"&gt;
+  &lt;listeners&gt;
+    &lt;listener class-name="listeners.TestListener"/&gt;
+    &lt;listener class-name="listeners.RetryTransformer"/&gt;
+  &lt;/listeners&gt;
+  &lt;test name="Smoke" preserve-order="true"&gt;
+    &lt;groups&gt;
+      &lt;run&gt;&lt;include name="smoke"/&gt;&lt;/run&gt;
+    &lt;/groups&gt;
+    &lt;classes&gt;
+      &lt;class name="tests.LoginTest"/&gt;
+      &lt;class name="tests.CheckoutTest"/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt;
+&lt;/suite&gt;</pre>
+
+  <h3>@DataProvider with Excel</h3>
+  <pre>@DataProvider(name = <span class="string">"loginData"</span>, parallel = <span class="keyword">true</span>)
+<span class="keyword">public</span> Object[][] loginData() {
+    <span class="keyword">return</span> ExcelUtils.getData(<span class="string">"testdata/login.xlsx"</span>, <span class="string">"Sheet1"</span>);
+}
+
+@Test(dataProvider = <span class="string">"loginData"</span>)
+<span class="keyword">public void</span> testLogin(String username, String password, String expected) {
+    loginPage.login(username, password);
+    Assert.assertEquals(dashboardPage.getTitle(), expected);
+}</pre>
+
+  <h3>Soft Assertions — When to Use</h3>
+  <pre><span class="keyword">public void</span> validateUserProfile() {
+    SoftAssert soft = <span class="keyword">new</span> SoftAssert();
+    soft.assertEquals(page.getName(), <span class="string">"John"</span>, <span class="string">"Name mismatch"</span>);
+    soft.assertEquals(page.getEmail(), <span class="string">"john@test.com"</span>, <span class="string">"Email mismatch"</span>);
+    soft.assertTrue(page.isAvatarVisible(), <span class="string">"Avatar not visible"</span>);
+    soft.assertAll(); <span class="comment">// Reports ALL failures, not just first</span>
+}</pre>
+
+  <div class="tip"><strong>When to use Soft Assertions:</strong> When you want to validate multiple independent fields and report all failures in one test run. Don't use when a failure in step N makes step N+1 meaningless.</div>
+</div>
+
+<!-- SECTION 5 -->
+<div class="section page-break" id="s5">
+  <div class="section-header">
+    <h2>5. Cucumber BDD with Selenium</h2>
+    <div class="subtitle">Behavior-Driven Development for business-readable test suites</div>
+  </div>
+
+  <h3>Project Structure</h3>
+  <pre>src/test/
+├── java/
+│   ├── stepdefinitions/
+│   │   ├── LoginSteps.java
+│   │   └── Hooks.java           <span class="comment">// @Before @After setup/teardown</span>
+│   ├── runners/
+│   │   └── TestRunner.java
+│   └── pages/
+└── resources/
+    └── features/
+        └── login.feature</pre>
+
+  <h3>Feature File</h3>
+  <pre>Feature: User Login
+
+  Background:
+    Given the user is on the login page
+
+  Scenario Outline: Validate login with multiple credentials
+    When the user enters "&lt;username&gt;" and "&lt;password&gt;"
+    Then the user should see "&lt;message&gt;"
+
+    Examples:
+      | username      | password    | message          |
+      | admin@co.com  | Admin@123   | Welcome, Admin   |
+      | user@co.com   | wrong       | Invalid password |</pre>
+
+  <h3>Step Definitions</h3>
+  <pre>@Given(<span class="string">"the user is on the login page"</span>)
+<span class="keyword">public void</span> navigateToLogin() {
+    driver.get(config.get(<span class="string">"baseUrl"</span>));
+}
+
+@When(<span class="string">"the user enters {string} and {string}"</span>)
+<span class="keyword">public void</span> enterCredentials(String user, String pass) {
+    loginPage.enterUsername(user);
+    loginPage.enterPassword(pass);
+    loginPage.clickLogin();
+}
+
+@Then(<span class="string">"the user should see {string}"</span>)
+<span class="keyword">public void</span> verifyMessage(String expected) {
+    Assert.assertTrue(dashboardPage.getWelcomeMsg().contains(expected));
+}</pre>
+
+  <h3>Runner with Tags</h3>
+  <pre>@RunWith(Cucumber.<span class="keyword">class</span>)
+@CucumberOptions(
+    features = <span class="string">"src/test/resources/features"</span>,
+    glue = <span class="string">"stepdefinitions"</span>,
+    tags = <span class="string">"@smoke and not @wip"</span>,
+    plugin = {<span class="string">"pretty"</span>, <span class="string">"html:reports/cucumber"</span>,
+              <span class="string">"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"</span>},
+    monochrome = <span class="keyword">true</span>
+)
+<span class="keyword">public class</span> TestRunner {}</pre>
+
+  <h3>Hooks — Setup &amp; Teardown</h3>
+  <pre><span class="keyword">public class</span> Hooks {
+    <span class="keyword">private</span> WebDriver driver;
+
+    @Before(<span class="string">"@ui"</span>)
+    <span class="keyword">public void</span> setUp(Scenario scenario) {
+        driver = DriverFactory.initDriver(ConfigReader.get(<span class="string">"browser"</span>));
+        driver.manage().window().maximize();
+    }
+
+    @After(<span class="string">"@ui"</span>)
+    <span class="keyword">public void</span> tearDown(Scenario scenario) {
+        <span class="keyword">if</span> (scenario.isFailed()) {
+            <span class="keyword">byte</span>[] screenshot = ((TakesScreenshot) driver)
+                .getScreenshotAs(OutputType.BYTES);
+            scenario.attach(screenshot, <span class="string">"image/png"</span>, <span class="string">"failure-screenshot"</span>);
+        }
+        DriverFactory.quitDriver();
+    }
+}</pre>
+</div>
+
+<!-- SECTION 6 -->
+<div class="section page-break" id="s6">
+  <div class="section-header">
+    <h2>6. API Testing — RestAssured</h2>
+    <div class="subtitle">Expected at senior level — most teams integrate API + UI testing</div>
+  </div>
+
+  <h3>Setup &amp; Base Request Spec</h3>
+  <pre><span class="comment">// BaseApiTest.java</span>
+@BeforeClass
+<span class="keyword">public void</span> setup() {
+    RestAssured.baseURI = ConfigReader.get(<span class="string">"apiBaseUrl"</span>);
+    RequestSpecification reqSpec = <span class="keyword">new</span> RequestSpecBuilder()
+        .setContentType(ContentType.JSON)
+        .addHeader(<span class="string">"Authorization"</span>, <span class="string">"Bearer "</span> + getToken())
+        .setRelaxedHTTPSValidation()
+        .build();
+    RestAssured.requestSpecification = reqSpec;
+}</pre>
+
+  <h3>CRUD Test Examples</h3>
+  <pre><span class="comment">// GET with assertions</span>
+given()
+    .queryParam(<span class="string">"userId"</span>, 1)
+.when()
+    .get(<span class="string">"/users"</span>)
+.then()
+    .statusCode(200)
+    .body(<span class="string">"data.first_name"</span>, equalTo(<span class="string">"George"</span>))
+    .body(<span class="string">"data.id"</span>, greaterThan(0))
+    .time(lessThan(2000L));
+
+<span class="comment">// POST with body extraction</span>
+String userId = given()
+    .body(<span class="string">"{ \"name\": \"John\", \"job\": \"QA Lead\" }"</span>)
+.when()
+    .post(<span class="string">"/users"</span>)
+.then()
+    .statusCode(201)
+    .extract().jsonPath().getString(<span class="string">"id"</span>);
+
+<span class="comment">// PUT update</span>
+given()
+    .body(<span class="string">"{ \"job\": \"Senior QA\" }"</span>)
+.when()
+    .put(<span class="string">"/users/"</span> + userId)
+.then()
+    .statusCode(200)
+    .body(<span class="string">"updatedAt"</span>, notNullValue());</pre>
+
+  <h3>Schema Validation</h3>
+  <pre><span class="comment">// Validate response against JSON schema file</span>
+given()
+    .get(<span class="string">"/users/1"</span>)
+.then()
+    .statusCode(200)
+    .body(matchesJsonSchemaInClasspath(<span class="string">"schemas/user-schema.json"</span>));</pre>
+
+  <h3>API + UI Integration Pattern</h3>
+  <pre><span class="comment">// Create test data via API, then validate in UI</span>
+@Test
+<span class="keyword">public void</span> verifyOrderDisplayedInUI() {
+    <span class="comment">// Setup via API (fast, no UI)</span>
+    String orderId = ApiUtils.createOrder(<span class="string">"PROD-001"</span>, 3);
+
+    <span class="comment">// Validate in UI</span>
+    loginPage.login(<span class="string">"user"</span>, <span class="string">"pass"</span>);
+    ordersPage.search(orderId);
+    Assert.assertTrue(ordersPage.isOrderVisible(orderId));
+
+    <span class="comment">// Cleanup via API (fast)</span>
+    ApiUtils.deleteOrder(orderId);
+}</pre>
+
+  <div class="tip"><strong>Senior tip:</strong> Use APIs for test data setup and teardown — never create test data only through the UI. It's 10x faster and more reliable. Only use UI for the assertion step.</div>
+</div>
+
+<!-- SECTION 7 -->
+<div class="section page-break" id="s7">
+  <div class="section-header">
+    <h2>7. Selenium Grid &amp; Docker — Parallel Execution</h2>
+    <div class="subtitle">Infrastructure for running tests at scale</div>
+  </div>
+
+  <h3>Selenium Grid 4 Architecture</h3>
+  <pre><span class="comment"># Start Hub</span>
+java -jar selenium-server.jar hub
+
+<span class="comment"># Start Chrome Node</span>
+java -jar selenium-server.jar node --hub http://hub:4444
+
+<span class="comment"># Connect via RemoteWebDriver</span></pre>
+
+  <pre><span class="keyword">public</span> WebDriver createRemoteDriver(String browser) {
+    ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
+    options.addArguments(<span class="string">"--headless=new"</span>);
+    <span class="keyword">return new</span> RemoteWebDriver(
+        <span class="keyword">new</span> URL(<span class="string">"http://selenium-hub:4444/wd/hub"</span>),
+        options
+    );
+}</pre>
+
+  <h3>Docker Compose — Grid Setup</h3>
+  <pre>version: <span class="string">'3.8'</span>
+services:
+  selenium-hub:
+    image: selenium/hub:4.18.0
+    ports: [<span class="string">"4444:4444"</span>]
+
+  chrome:
+    image: selenium/node-chrome:4.18.0
+    depends_on: [selenium-hub]
+    environment:
+      SE_EVENT_BUS_HOST: selenium-hub
+      SE_NODE_MAX_SESSIONS: 5
+    deploy:
+      replicas: 3   <span class="comment"># 3 Chrome nodes = 15 parallel sessions</span>
+
+  firefox:
+    image: selenium/node-firefox:4.18.0
+    depends_on: [selenium-hub]
+    environment:
+      SE_EVENT_BUS_HOST: selenium-hub</pre>
+
+  <h3>Maven Surefire — Parallel TestNG</h3>
+  <pre>&lt;plugin&gt;
+  &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+  &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    &lt;suiteXmlFiles&gt;
+      &lt;suiteXmlFile&gt;src/test/resources/testng.xml&lt;/suiteXmlFile&gt;
+    &lt;/suiteXmlFiles&gt;
+    &lt;systemPropertyVariables&gt;
+      &lt;browser&gt;${browser}&lt;/browser&gt;
+      &lt;env&gt;${env}&lt;/env&gt;
+    &lt;/systemPropertyVariables&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;</pre>
+</div>
+
+<!-- SECTION 8 -->
+<div class="section page-break" id="s8">
+  <div class="section-header">
+    <h2>8. CI/CD — Jenkins, Maven, Git</h2>
+    <div class="subtitle">End-to-end automation pipeline knowledge</div>
+  </div>
+
+  <h3>Jenkinsfile — Declarative Pipeline</h3>
+  <pre>pipeline {
+    agent any
+    parameters {
+        choice(name: <span class="string">'ENV'</span>, choices: [<span class="string">'qa'</span>,<span class="string">'staging'</span>,<span class="string">'prod'</span>])
+        choice(name: <span class="string">'BROWSER'</span>, choices: [<span class="string">'chrome'</span>,<span class="string">'firefox'</span>])
+        string(name: <span class="string">'TAGS'</span>, defaultValue: <span class="string">'@smoke'</span>)
+    }
+    stages {
+        stage(<span class="string">'Checkout'</span>) { steps { checkout scm } }
+        stage(<span class="string">'Test'</span>) {
+            steps {
+                sh <span class="string">"""mvn test \
+                   -Denv=${params.ENV} \
+                   -Dbrowser=${params.BROWSER} \
+                   -Dtags=${params.TAGS}"""</span>
+            }
+        }
+        stage(<span class="string">'Publish Report'</span>) {
+            steps {
+                allure([
+                    results: [[path: <span class="string">'target/allure-results'</span>]]
+                ])
+            }
+        }
+    }
+    post {
+        always { junit <span class="string">'target/surefire-reports/**/*.xml'</span> }
+        failure { emailext to: <span class="string">'team@co.com'</span>, subject: <span class="string">'Tests Failed!'</span> }
+    }
+}</pre>
+
+  <h3>Git Branching Strategy for QA</h3>
+  <table>
+    <tr><th>Branch</th><th>Purpose</th><th>Auto-triggers</th></tr>
+    <tr><td>main</td><td>Production-ready automation code</td><td>Full regression on merge</td></tr>
+    <tr><td>develop</td><td>Integration branch</td><td>Smoke tests on each commit</td></tr>
+    <tr><td>feature/QA-xxx</td><td>New test development</td><td>Lint + compile check</td></tr>
+    <tr><td>hotfix/xxx</td><td>Urgent test fixes</td><td>Smoke tests on push</td></tr>
+  </table>
+
+  <h3>Maven Key Commands</h3>
+  <pre><span class="comment"># Run specific suite with parameters</span>
+mvn test -Dsurefire.suiteXmlFiles=testng-regression.xml -Denv=qa -Dbrowser=chrome
+
+<span class="comment"># Run specific test class</span>
+mvn -Dtest=LoginTest test
+
+<span class="comment"># Run tests by group</span>
+mvn test -Dgroups=smoke
+
+<span class="comment"># Skip tests, just compile</span>
+mvn clean install -DskipTests
+
+<span class="comment"># Generate Allure report locally</span>
+mvn allure:serve</pre>
+</div>
+
+<!-- SECTION 9 -->
+<div class="section page-break" id="s9">
+  <div class="section-header">
+    <h2>9. Design Patterns in Test Automation</h2>
+    <div class="subtitle">Demonstrates architectural thinking expected at senior level</div>
+  </div>
+
+  <h3>Patterns You Must Know</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4>Page Object Model (POM)</h4>
+      <p>Separate page locators and actions from test logic. Each page = one class.</p>
+    </div>
+    <div class="card">
+      <h4>Singleton</h4>
+      <p>Ensure only one WebDriver instance per thread (via ThreadLocal).</p>
+    </div>
+    <div class="card">
+      <h4>Factory</h4>
+      <p>Create drivers/objects without exposing creation logic. <code>DriverFactory.create("chrome")</code></p>
+    </div>
+    <div class="card">
+      <h4>Fluent Interface</h4>
+      <p>Method chaining in Page Objects for readable test code.</p>
+    </div>
+    <div class="card">
+      <h4>Strategy</h4>
+      <p>Switch between wait strategies or reporting strategies at runtime.</p>
+    </div>
+    <div class="card">
+      <h4>Builder</h4>
+      <p>Construct complex test data objects with optional fields.</p>
+    </div>
+  </div>
+
+  <h3>Fluent Interface Pattern</h3>
+  <pre><span class="comment">// Test reads like English — senior interviewers love this</span>
+loginPage
+    .enterUsername(<span class="string">"admin"</span>)
+    .enterPassword(<span class="string">"pass"</span>)
+    .clickLogin()
+    .assertWelcomeMessage(<span class="string">"Welcome, Admin"</span>);
+
+<span class="comment">// Implementation — each method returns 'this' or next page</span>
+<span class="keyword">public</span> LoginPage enterUsername(String user) {
+    usernameField.sendKeys(user);
+    <span class="keyword">return this</span>;
+}
+<span class="keyword">public</span> DashboardPage clickLogin() {
+    loginBtn.click();
+    <span class="keyword">return new</span> DashboardPage(driver);
+}</pre>
+
+  <h3>Builder Pattern for Test Data</h3>
+  <pre><span class="keyword">public class</span> User {
+    <span class="keyword">private final</span> String name, email, role;
+    <span class="keyword">private</span> User(Builder b) { name=b.name; email=b.email; role=b.role; }
+
+    <span class="keyword">public static class</span> Builder {
+        <span class="keyword">private</span> String name=<span class="string">"Default"</span>, email=<span class="string">"def@test.com"</span>, role=<span class="string">"user"</span>;
+        <span class="keyword">public</span> Builder name(String v) { name=v; <span class="keyword">return this</span>; }
+        <span class="keyword">public</span> Builder email(String v) { email=v; <span class="keyword">return this</span>; }
+        <span class="keyword">public</span> Builder role(String v) { role=v; <span class="keyword">return this</span>; }
+        <span class="keyword">public</span> User build() { <span class="keyword">return new</span> User(<span class="keyword">this</span>); }
+    }
+}
+
+<span class="comment">// Usage in test</span>
+User admin = <span class="keyword">new</span> User.Builder().name(<span class="string">"Admin"</span>).role(<span class="string">"admin"</span>).build();</pre>
+</div>
+
+<!-- SECTION 10 -->
+<div class="section page-break" id="s10">
+  <div class="section-header">
+    <h2>10. Performance, Debugging &amp; Troubleshooting</h2>
+    <div class="subtitle">How seniors diagnose and fix automation problems</div>
+  </div>
+
+  <h3>Root Cause of Common Failures</h3>
+  <table>
+    <tr><th>Exception</th><th>Root Cause</th><th>Fix</th></tr>
+    <tr><td>NoSuchElementException</td><td>Element not in DOM yet, wrong locator</td><td>Explicit wait, verify locator in DevTools</td></tr>
+    <tr><td>StaleElementReferenceException</td><td>DOM rebuilt after element found (SPA, AJAX)</td><td>Re-find element, use <code>refreshed()</code></td></tr>
+    <tr><td>ElementNotInteractableException</td><td>Element exists but not clickable (hidden, overlapped)</td><td>Scroll into view, wait for clickable, JS click</td></tr>
+    <tr><td>TimeoutException</td><td>Wait condition never met</td><td>Check locator, increase timeout, check network</td></tr>
+    <tr><td>ElementClickInterceptedException</td><td>Another element overlaying the target (cookie banner, modal)</td><td>Dismiss overlay first, JS click, or Actions click</td></tr>
+    <tr><td>WebDriverException: disconnected</td><td>Browser crashed or driver version mismatch</td><td>Update WebDriverManager, check ChromeDriver/Chrome versions</td></tr>
+  </table>
+
+  <h3>Diagnosing Flaky Tests</h3>
+  <ul>
+    <li><strong>Timing issues:</strong> Replace Thread.sleep with proper waits; add network idle checks</li>
+    <li><strong>Test order dependency:</strong> Each test must be independent — use @BeforeMethod setup</li>
+    <li><strong>Shared state:</strong> Use ThreadLocal; never use static WebDriver in parallel runs</li>
+    <li><strong>Environment issues:</strong> Add logs at key steps; take screenshots on each page load</li>
+    <li><strong>Data conflicts:</strong> Use unique test data per test (timestamp suffix, API-generated)</li>
+  </ul>
+
+  <h3>WebDriverManager — Auto Driver Management</h3>
+  <pre><span class="comment">// No more manual driver downloads!</span>
+<span class="keyword">import</span> io.github.bonigarcia.wdm.WebDriverManager;
+
+WebDriverManager.chromedriver().setup();
+WebDriver driver = <span class="keyword">new</span> ChromeDriver();
+
+<span class="comment">// For specific version</span>
+WebDriverManager.chromedriver().browserVersion(<span class="string">"120"</span>).setup();
+
+<span class="comment">// In Docker/CI — use grid instead</span>
+WebDriverManager.seleniumServerStandalone().setup();</pre>
+
+  <h3>Logging with Log4j2</h3>
+  <pre><span class="keyword">public class</span> BasePage {
+    <span class="keyword">private static final</span> Logger log = LogManager.getLogger(BasePage.<span class="keyword">class</span>);
+
+    <span class="keyword">protected void</span> click(By locator) {
+        log.info(<span class="string">"Clicking element: {}"</span>, locator);
+        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+        log.debug(<span class="string">"Click successful"</span>);
+    }
+}</pre>
+</div>
+
+<!-- SECTION 11 -->
+<div class="section page-break" id="s11">
+  <div class="section-header">
+    <h2>11. Senior-Level Scenario Questions</h2>
+    <div class="subtitle">Expect these at 6+ year interviews — answer with architecture, not just code</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: How would you design a test automation framework from scratch for a large e-commerce application?</div>
+    <div class="a">
+      <strong>Answer structure:</strong><br>
+      1. <strong>Analyze:</strong> Tech stack (React SPA?), team size, CI/CD maturity, test types needed (UI, API, mobile?)<br>
+      2. <strong>Architecture:</strong> Hybrid framework — POM + data-driven + keyword-driven. Maven project structure. ThreadLocal driver management for parallel execution.<br>
+      3. <strong>Layers:</strong> Base layer (driver, config) → Page Objects → Test layer → Utilities → Reporting (Allure + Extent)<br>
+      4. <strong>CI/CD:</strong> Jenkins pipeline → Selenium Grid on Docker → Slack/email notifications → Allure dashboard<br>
+      5. <strong>Strategy:</strong> API layer for setup/teardown. Smoke on every commit, regression nightly, full suite on release.
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: Our regression suite takes 4 hours. How would you reduce it to under 1 hour?</div>
+    <div class="a">
+      <strong>Multi-pronged approach:</strong><br>
+      1. <strong>Parallel execution:</strong> TestNG parallel="methods" + Selenium Grid (immediate 3-5x gain)<br>
+      2. <strong>API over UI:</strong> Replace UI setup/teardown with API calls (50-70% faster per test)<br>
+      3. <strong>Test selection:</strong> Risk-based testing — run critical path on every merge, full suite nightly<br>
+      4. <strong>Headless execution:</strong> --headless=new Chrome (20-30% faster than headed)<br>
+      5. <strong>Remove redundancy:</strong> Audit for duplicate coverage; group related assertions in one test<br>
+      6. <strong>Infrastructure:</strong> Faster CI nodes, keep browser sessions warm where possible
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: How do you handle test data management in automation?</div>
+    <div class="a">
+      <strong>Strategy by scope:</strong><br>
+      1. <strong>Static data:</strong> JSON/YAML files for lookup data, enums for constants<br>
+      2. <strong>Dynamic data:</strong> API calls to create fresh data per test; timestamp-suffix for uniqueness<br>
+      3. <strong>Database:</strong> SQL queries to seed/reset state (requires DB access — only in lower envs)<br>
+      4. <strong>Cleanup:</strong> Always clean up in @AfterMethod via API delete or DB rollback<br>
+      5. <strong>Environment isolation:</strong> Each env has own data; tests never share data across threads
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: A developer says "automation is slowing us down." How do you handle this?</div>
+    <div class="a">
+      <strong>This is a leadership question, not a technical one.</strong><br>
+      1. Listen first — understand their specific pain point (slow feedback? brittle tests? blocking merges?)<br>
+      2. Show data — flakiness rate, coverage, bugs caught before prod<br>
+      3. Collaborate — add them to automation code reviews; make it a shared responsibility<br>
+      4. Fix root cause — if tests are slow/flaky, that's a real problem to solve, not dismiss<br>
+      5. Shift-left — pair with devs to write tests during feature development, not after
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: How do you ensure tests don't fail due to environment issues vs actual bugs?</div>
+    <div class="a">
+      1. <strong>Health checks:</strong> Verify app is up before running tests (pre-condition in BaseTest)<br>
+      2. <strong>Retry logic:</strong> IRetryAnalyzer with 2 retries; intermittent = infrastructure, consistent = bug<br>
+      3. <strong>Categorized failures:</strong> Tag failures as INFRA / APP / DATA / SCRIPT in reports<br>
+      4. <strong>Monitoring:</strong> Alert on sudden spike in failures vs gradual degradation<br>
+      5. <strong>Environment parity:</strong> Use containers to keep test env consistent
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: How do you test Single Page Applications (React/Angular) with Selenium?</div>
+    <div class="a">
+      1. <strong>Wait for Angular:</strong> Use <code>ngDriver</code> or wait for Angular's <code>$http</code> calls to complete<br>
+      2. <strong>Network idle:</strong> Custom wait for no pending XHR requests via JS<br>
+      3. <strong>Route changes:</strong> URL doesn't reload; wait for new content to appear, not page load<br>
+      4. <strong>Shadow DOM:</strong> Use <code>getShadowRoot()</code> (Selenium 4) or JS executor<br>
+      5. <strong>Dynamic IDs:</strong> Avoid auto-generated IDs; use stable data attributes (<code>data-testid</code>)
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 12 -->
+<div class="section" id="s12">
+  <div class="section-header">
+    <h2>12. Behavioral &amp; Leadership Questions</h2>
+    <div class="subtitle">For senior/lead roles — use STAR method (Situation, Task, Action, Result)</div>
+  </div>
+
+  <h3>Common Behavioral Questions &amp; Talking Points</h3>
+
+  <div class="qa-block">
+    <div class="q">Q: Describe a time you improved the quality of a release significantly.</div>
+    <div class="a"><em>Talk about:</em> Introducing a test strategy, identifying a critical gap in coverage, adding API testing that caught a regression before UAT, reducing production defect escape rate with metrics.</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: Tell me about a time you mentored a junior automation engineer.</div>
+    <div class="a"><em>Talk about:</em> Code reviews, pair programming, creating coding standards, teaching POM/design patterns, reviewing test strategies together, growth you saw in the junior.</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: How do you prioritize what to automate?</div>
+    <div class="a"><em>Framework to use:</em> High frequency + high risk = automate first. Flaky manual tests = automate. Complex multi-step flows = automate. One-time edge cases = manual. Exploratory = manual always.</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: How do you handle disagreements with developers about bug severity?</div>
+    <div class="a"><em>Talk about:</em> Using data (user impact, frequency, business risk), escalation paths, involving product owners for priority decisions, documenting risk when bugs are deferred.</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q">Q: What's the most complex automation challenge you've solved?</div>
+    <div class="a"><em>Good topics:</em> Multi-window flows, iframe-heavy apps, file upload/download automation, handling CAPTCHA (mock/disable in test env), OAuth login flows, cross-browser inconsistencies.</div>
+  </div>
+
+  <h3>Questions to Ask the Interviewer</h3>
+  <ul>
+    <li>What is the current automation coverage, and what's the team's goal?</li>
+    <li>How is the QA team involved in the sprint cycle — shift-left or after dev?</li>
+    <li>What does the CI/CD pipeline look like, and where does automation run?</li>
+    <li>What are the biggest pain points with the current automation suite?</li>
+    <li>How is the automation code maintained — dedicated QA team or shared with devs?</li>
+  </ul>
+
+  <h3>Key Metrics to Know</h3>
+  <table>
+    <tr><th>Metric</th><th>What it shows</th><th>Good target</th></tr>
+    <tr><td>Flakiness Rate</td><td>Test reliability</td><td>&lt; 2%</td></tr>
+    <tr><td>Defect Escape Rate</td><td>Bugs reaching production</td><td>&lt; 5% of total bugs</td></tr>
+    <tr><td>Automation Coverage</td><td>% of test cases automated</td><td>70%+ for regression</td></tr>
+    <tr><td>Execution Time</td><td>Pipeline feedback speed</td><td>Smoke &lt; 15min, Regression &lt; 60min</td></tr>
+    <tr><td>MTTR (Mean Time to Repair)</td><td>How quickly failing tests get fixed</td><td>&lt; 1 day for critical</td></tr>
+  </table>
+
+  <div class="tip"><strong>Final tip:</strong> At 6+ years, interviewers want to see <em>ownership</em>. Say "I designed...", "I decided...", "I led the effort to..." — not "we always used..." or "the framework had...". Own your contributions.</div>
+
+  <div style="margin-top:40px; padding:20px; background:#1e3a5f; color:#fff; border-radius:8px; text-align:center;">
+    <p style="font-size:14px; font-weight:700; color:#fff;">Selenium Java Senior Interview Prep</p>
+    <p style="font-size:12px; opacity:0.8; color:#fff;">12 Sections | 80+ Q&amp;A | Framework Design | BDD | API | CI/CD | Leadership</p>
+    <p style="font-size:11px; opacity:0.6; margin-top:8px; color:#fff;">Prepared April 2026</p>
+  </div>
+</div>
+
+</body>
+</html>
