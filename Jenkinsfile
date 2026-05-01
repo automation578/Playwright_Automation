@@ -1,11 +1,7 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'NodeJS'
-    }
-
-    triggers {
+triggers {
         githubPush()
         cron('0 23 * * *')
     }
