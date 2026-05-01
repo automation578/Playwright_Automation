@@ -14,6 +14,6 @@ test('handle radio button',async ({page})=>{
 
 
 
-    await page.waitForTimeout(6000); //pausing code
+    await page.waitForTimeout(4000); //pausing code
 
 })
