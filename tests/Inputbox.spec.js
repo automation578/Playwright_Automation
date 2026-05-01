@@ -12,4 +12,5 @@ test('Inputbox', async ({ page }) => {
     await expect(inputboxPage.firstNameInput).toBeEnabled();
 
     await inputboxPage.fillFirstName('John');
+    await page.waitForTimeout(1000);
 })
