@@ -10,6 +10,6 @@ test('test', async ({ page }) => {
   await page.getByRole('button', { name: 'Login' }).click();
   await page.getByRole('banner').getByText('Jojon Sujontor').click();
   await page.getByRole('menuitem', { name: 'Logout' }).click();
-      await page.waitForTimeout(4000); //pausing code
+      await page.waitForTimeout(3000); //pausing code
 
 });
