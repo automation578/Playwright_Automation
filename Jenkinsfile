@@ -65,7 +65,7 @@ pipeline {
         // 4. ALLURE REPORT — generate after tests
         stage('Generate Allure Report') {
             steps {
-                bat 'npx allure generate allure-results --clean -o allure-report'
+                bat 'npx allure generate -o allure-report allure-results'
             }
         }
     }
