@@ -8,7 +8,7 @@ test('test', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Password' }).click();
   await page.getByRole('textbox', { name: 'Password' }).fill('admin123');
   await page.getByRole('button', { name: 'Login' }).click();
-  await page.getByRole('banner').getByText('Jojon Sujontor').click();
+  await page.locator('.oxd-userdropdown-tab').click();
   await page.getByRole('menuitem', { name: 'Logout' }).click();
       await page.waitForTimeout(6000); //pausing code
 
