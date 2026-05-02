@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Selenium Java Interview Q&A — Fundamentals</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; color: #1a1a1a; background: #fff; }
+  .cover { page-break-after: always; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: linear-gradient(135deg, #1b5e20, #388e3c); color: #fff; text-align: center; padding: 40px; }
+  .cover h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; letter-spacing: 1px; }
+  .cover h2 { font-size: 20px; font-weight: 400; margin-bottom: 30px; opacity: 0.85; }
+  .cover .badge { background: #ffca28; color: #1a1a1a; padding: 8px 24px; border-radius: 20px; font-size: 15px; font-weight: 700; margin-bottom: 20px; }
+  .cover .meta { font-size: 12px; opacity: 0.7; margin-top: 40px; }
+  .toc { page-break-after: always; padding: 40px 50px; }
+  .toc h2 { font-size: 22px; color: #1b5e20; border-bottom: 3px solid #388e3c; padding-bottom: 8px; margin-bottom: 20px; }
+  .toc ol { margin-left: 20px; line-height: 2.4; }
+  .toc a { color: #388e3c; text-decoration: none; font-size: 13px; }
+  .section { padding: 36px 50px; page-break-inside: avoid; }
+  .section-header { background: linear-gradient(90deg, #1b5e20, #388e3c); color: #fff; padding: 12px 20px; border-radius: 6px; margin-bottom: 20px; }
+  .section-header h2 { font-size: 17px; font-weight: 700; }
+  .section-header .subtitle { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+  h3 { font-size: 14px; color: #1b5e20; margin: 20px 0 8px; border-left: 4px solid #388e3c; padding-left: 10px; }
+  p { line-height: 1.75; margin-bottom: 10px; color: #333; }
+  ul, ol { margin: 8px 0 12px 20px; }
+  li { line-height: 1.9; color: #333; }
+  pre { background: #1e2d1e; color: #e8f5e9; padding: 14px 16px; border-radius: 6px; font-family: 'Consolas', monospace; font-size: 11.5px; line-height: 1.65; overflow-x: auto; margin: 10px 0 14px; white-space: pre-wrap; word-break: break-word; }
+  .comment { color: #81c784; }
+  .keyword { color: #80cbc4; }
+  .string { color: #ffcc80; }
+  .qa-block { background: #f1f8f1; border: 1px solid #c8e6c9; border-radius: 6px; padding: 16px 18px; margin: 14px 0; }
+  .qa-block .q { font-weight: 700; color: #1b5e20; margin-bottom: 8px; font-size: 13.5px; }
+  .qa-block .a { color: #333; line-height: 1.8; }
+  .qa-block .a ul { margin-top: 6px; }
+  .tip { background: #fff8e1; border-left: 4px solid #ffb300; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .tip strong { color: #e65100; }
+  .warn { background: #fbe9e7; border-left: 4px solid #e64a19; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .warn strong { color: #bf360c; }
+  .note { background: #e3f2fd; border-left: 4px solid #1565c0; padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 12px; }
+  .note strong { color: #0d47a1; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 10px 0; }
+  .card { background: #f1f8f1; border: 1px solid #c8e6c9; border-radius: 6px; padding: 12px 14px; }
+  .card h4 { color: #1b5e20; margin: 0 0 6px; font-size: 12.5px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+  th { background: #1b5e20; color: #fff; padding: 9px 12px; text-align: left; }
+  td { padding: 8px 12px; border-bottom: 1px solid #c8e6c9; }
+  tr:nth-child(even) td { background: #f1f8f1; }
+  .page-break { page-break-after: always; }
+  .qnum { display: inline-block; background: #388e3c; color: #fff; width: 22px; height: 22px; border-radius: 50%; text-align: center; line-height: 22px; font-size: 11px; font-weight: 700; margin-right: 8px; flex-shrink: 0; }
+  .q-row { display: flex; align-items: flex-start; }
+  @media print {
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    pre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="badge">Fresher to Mid-Level</div>
+  <h1>Selenium Java<br>Interview Q&amp;A</h1>
+  <h2>Fundamentals with Detailed Explanations</h2>
+  <p style="opacity:0.8; font-size:13px; max-width:520px; margin-top:10px;">100+ questions with clear answers and explanations covering Selenium basics, locators, waits, POM, TestNG, and real interview scenarios.</p>
+  <div class="meta">Prepared: April 2026 &nbsp;|&nbsp; 10 Sections &nbsp;|&nbsp; 100+ Q&amp;A</div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#s1">Selenium Basics &amp; Introduction</a></li>
+    <li><a href="#s2">Setting Up Selenium with Java &amp; Maven</a></li>
+    <li><a href="#s3">Locators — Finding Elements</a></li>
+    <li><a href="#s4">WebDriver Core Commands</a></li>
+    <li><a href="#s5">Waits — Implicit, Explicit, Fluent</a></li>
+    <li><a href="#s6">Handling Web Elements (Dropdowns, Alerts, Frames, Windows)</a></li>
+    <li><a href="#s7">Page Object Model (POM)</a></li>
+    <li><a href="#s8">TestNG — Test Framework</a></li>
+    <li><a href="#s9">Exception Handling &amp; Common Errors</a></li>
+    <li><a href="#s10">Real Interview Scenario Questions</a></li>
+  </ol>
+</div>
+
+<!-- ======================== SECTION 1 ======================== -->
+<div class="section page-break" id="s1">
+  <div class="section-header">
+    <h2>1. Selenium Basics &amp; Introduction</h2>
+    <div class="subtitle">Core concepts every candidate must know</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">1</span> What is Selenium? What are its components?</div>
+    <div class="a">
+      Selenium is an open-source suite of tools for automating web browsers. It supports multiple languages (Java, Python, C#, etc.) and browsers (Chrome, Firefox, Safari, Edge).<br><br>
+      <strong>Four components:</strong>
+      <ul>
+        <li><strong>Selenium WebDriver</strong> — The core API that directly communicates with the browser through its native driver (ChromeDriver, GeckoDriver). This is what most test frameworks use.</li>
+        <li><strong>Selenium IDE</strong> — A browser extension for recording and playback of tests. Good for beginners, not suitable for production use.</li>
+        <li><strong>Selenium Grid</strong> — Allows running tests in parallel across multiple machines and browsers simultaneously.</li>
+        <li><strong>Selenium RC (deprecated)</strong> — The old server-based approach. Replaced by WebDriver.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">2</span> What is WebDriver? How does it work?</div>
+    <div class="a">
+      WebDriver is an interface in Selenium that provides methods to control a browser programmatically. It communicates with the browser using the <strong>W3C WebDriver Protocol</strong> (HTTP-based JSON Wire Protocol).<br><br>
+      <strong>How it works:</strong>
+      <ul>
+        <li>Your Java code calls a WebDriver method (e.g., <code>driver.findElement()</code>)</li>
+        <li>The Selenium client library converts this to an HTTP request</li>
+        <li>The browser driver (ChromeDriver) receives the request and executes it in the browser</li>
+        <li>The browser sends the result back via HTTP response</li>
+      </ul>
+      <strong>Example:</strong> ChromeDriver is a standalone server that implements the W3C protocol and acts as a bridge between your test code and Chrome.
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">3</span> What are the limitations of Selenium?</div>
+    <div class="a">
+      <ul>
+        <li>Cannot automate desktop/native applications — only web browsers</li>
+        <li>No built-in reporting — need external tools (Allure, ExtentReports)</li>
+        <li>Cannot handle CAPTCHA by design (security feature)</li>
+        <li>Requires browser driver updates when the browser updates</li>
+        <li>Limited support for image-based verification</li>
+        <li>Flakiness due to dynamic web content and timing issues</li>
+        <li>Cannot automate mobile apps directly — needs Appium for that</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">4</span> What is the difference between Selenium 3 and Selenium 4?</div>
+    <div class="a">
+      <table>
+        <tr><th>Feature</th><th>Selenium 3</th><th>Selenium 4</th></tr>
+        <tr><td>Protocol</td><td>JSON Wire Protocol</td><td>W3C WebDriver Protocol (standard)</td></tr>
+        <tr><td>Relative Locators</td><td>Not available</td><td>Available (above, below, near, toLeftOf)</td></tr>
+        <tr><td>New Tab/Window</td><td>Manual handle switching</td><td><code>driver.switchTo().newWindow()</code></td></tr>
+        <tr><td>Chrome DevTools</td><td>Not supported natively</td><td>CDP support built-in</td></tr>
+        <tr><td>Screenshots</td><td>Full page only</td><td>Element-level screenshots</td></tr>
+        <tr><td>Grid</td><td>Hub + Node model</td><td>Fully distributed, Docker-friendly</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">5</span> What browsers does Selenium support?</div>
+    <div class="a">
+      Selenium supports: <strong>Chrome</strong> (ChromeDriver), <strong>Firefox</strong> (GeckoDriver), <strong>Edge</strong> (EdgeDriver), <strong>Safari</strong> (SafariDriver — built into Safari on Mac), <strong>Internet Explorer</strong> (IEDriverServer — legacy).
+      <br><br>Each browser needs its corresponding driver executable that matches the browser version.
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 2 ======================== -->
+<div class="section page-break" id="s2">
+  <div class="section-header">
+    <h2>2. Setting Up Selenium with Java &amp; Maven</h2>
+    <div class="subtitle">Project setup, dependencies, and first test</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">6</span> What Maven dependencies do you need for Selenium?</div>
+    <div class="a">
+<pre><span class="comment">&lt;!-- pom.xml dependencies --&gt;</span>
+&lt;dependencies&gt;
+    <span class="comment">&lt;!-- Selenium WebDriver --&gt;</span>
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.seleniumhq.selenium&lt;/groupId&gt;
+        &lt;artifactId&gt;selenium-java&lt;/artifactId&gt;
+        &lt;version&gt;4.18.0&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    <span class="comment">&lt;!-- Auto-manages browser drivers --&gt;</span>
+    &lt;dependency&gt;
+        &lt;groupId&gt;io.github.bonigarcia&lt;/groupId&gt;
+        &lt;artifactId&gt;webdrivermanager&lt;/artifactId&gt;
+        &lt;version&gt;5.7.0&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    <span class="comment">&lt;!-- TestNG test framework --&gt;</span>
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.testng&lt;/groupId&gt;
+        &lt;artifactId&gt;testng&lt;/artifactId&gt;
+        &lt;version&gt;7.9.0&lt;/version&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">7</span> Write a simple first Selenium test in Java.</div>
+    <div class="a">
+<pre><span class="keyword">import</span> org.openqa.selenium.WebDriver;
+<span class="keyword">import</span> org.openqa.selenium.chrome.ChromeDriver;
+<span class="keyword">import</span> io.github.bonigarcia.wdm.WebDriverManager;
+<span class="keyword">import</span> org.testng.Assert;
+<span class="keyword">import</span> org.testng.annotations.*;
+
+<span class="keyword">public class</span> FirstTest {
+    WebDriver driver;
+
+    @BeforeMethod
+    <span class="keyword">public void</span> setUp() {
+        WebDriverManager.chromedriver().setup(); <span class="comment">// auto-downloads ChromeDriver</span>
+        driver = <span class="keyword">new</span> ChromeDriver();
+        driver.manage().window().maximize();
+    }
+
+    @Test
+    <span class="keyword">public void</span> verifyPageTitle() {
+        driver.get(<span class="string">"https://www.google.com"</span>);
+        String title = driver.getTitle();
+        Assert.assertEquals(title, <span class="string">"Google"</span>);
+    }
+
+    @AfterMethod
+    <span class="keyword">public void</span> tearDown() {
+        <span class="keyword">if</span> (driver != <span class="keyword">null</span>) {
+            driver.quit();
+        }
+    }
+}</pre>
+      <strong>Explanation:</strong> <code>@BeforeMethod</code> runs before each test to create the driver. <code>@AfterMethod</code> runs after each test to close the browser. <code>driver.quit()</code> closes all browser windows and ends the driver session.
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">8</span> What is the difference between driver.close() and driver.quit()?</div>
+    <div class="a">
+      <ul>
+        <li><strong>driver.close()</strong> — Closes only the <em>currently focused</em> browser window/tab. The WebDriver session remains active. Use this when you open multiple windows and want to close just one.</li>
+        <li><strong>driver.quit()</strong> — Closes <em>all</em> browser windows and completely terminates the WebDriver session. Always use this in @AfterMethod/teardown to avoid browser processes lingering in memory.</li>
+      </ul>
+      <div class="warn"><strong>Common mistake:</strong> Using <code>close()</code> instead of <code>quit()</code> in teardown leaves ChromeDriver processes running in the background, consuming memory.</div>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">9</span> What is WebDriverManager and why is it used?</div>
+    <div class="a">
+      WebDriverManager (by Boni Garcia) is a library that <strong>automatically downloads and manages browser driver binaries</strong> (ChromeDriver, GeckoDriver, etc.) matching the installed browser version.<br><br>
+      <strong>Without WebDriverManager:</strong> You must manually download ChromeDriver, set the system property, and update it every time Chrome updates.<br>
+      <strong>With WebDriverManager:</strong>
+<pre>WebDriverManager.chromedriver().setup(); <span class="comment">// one line — done</span>
+WebDriver driver = <span class="keyword">new</span> ChromeDriver();</pre>
+      This is now standard practice in all modern Selenium Java projects.
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 3 ======================== -->
+<div class="section page-break" id="s3">
+  <div class="section-header">
+    <h2>3. Locators — Finding Elements</h2>
+    <div class="subtitle">The most tested topic in Selenium interviews</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">10</span> What are the different types of locators in Selenium?</div>
+    <div class="a">
+      <table>
+        <tr><th>Locator</th><th>Method</th><th>Best used when</th></tr>
+        <tr><td>ID</td><td><code>By.id("username")</code></td><td>Element has a unique, stable ID — fastest and most reliable</td></tr>
+        <tr><td>Name</td><td><code>By.name("email")</code></td><td>Form elements with a name attribute</td></tr>
+        <tr><td>Class Name</td><td><code>By.className("btn-primary")</code></td><td>Single class; fails if multiple classes</td></tr>
+        <tr><td>Tag Name</td><td><code>By.tagName("input")</code></td><td>Finding all elements of a type</td></tr>
+        <tr><td>Link Text</td><td><code>By.linkText("Click Here")</code></td><td>Anchor tags with exact visible text</td></tr>
+        <tr><td>Partial Link Text</td><td><code>By.partialLinkText("Click")</code></td><td>Anchor tags with partial text</td></tr>
+        <tr><td>CSS Selector</td><td><code>By.cssSelector("input#email")</code></td><td>Fast, flexible, works for most cases</td></tr>
+        <tr><td>XPath</td><td><code>By.xpath("//input[@id='email']")</code></td><td>Complex conditions, traversal, text matching</td></tr>
+      </table>
+      <div class="tip"><strong>Priority order:</strong> ID > Name > CSS Selector > XPath. Avoid XPath unless CSS can't do it — XPath is slower and more brittle.</div>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">11</span> Explain CSS Selector with examples.</div>
+    <div class="a">
+      CSS Selectors use CSS syntax to locate elements. They are faster than XPath and widely preferred.
+<pre><span class="comment">// By tag and ID</span>
+By.cssSelector(<span class="string">"input#username"</span>)         <span class="comment">// &lt;input id="username"&gt;</span>
+
+<span class="comment">// By tag and class</span>
+By.cssSelector(<span class="string">"button.btn-primary"</span>)     <span class="comment">// &lt;button class="btn-primary"&gt;</span>
+
+<span class="comment">// By attribute</span>
+By.cssSelector(<span class="string">"input[type='submit']"</span>)   <span class="comment">// &lt;input type="submit"&gt;</span>
+
+<span class="comment">// Attribute starts with</span>
+By.cssSelector(<span class="string">"input[id^='user']"</span>)      <span class="comment">// id starts with "user"</span>
+
+<span class="comment">// Attribute ends with</span>
+By.cssSelector(<span class="string">"input[id$='name']"</span>)      <span class="comment">// id ends with "name"</span>
+
+<span class="comment">// Attribute contains</span>
+By.cssSelector(<span class="string">"input[id*='ser']"</span>)       <span class="comment">// id contains "ser"</span>
+
+<span class="comment">// Parent &gt; direct child</span>
+By.cssSelector(<span class="string">"div.form > input"</span>)
+
+<span class="comment">// nth child</span>
+By.cssSelector(<span class="string">"table tr:nth-child(2)"</span>)  <span class="comment">// 2nd row</span></pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">12</span> Explain XPath with examples — absolute vs relative.</div>
+    <div class="a">
+      <strong>Absolute XPath</strong> — starts from root, follows the full path. Brittle — breaks if any element in the path changes.
+<pre><span class="comment">// Absolute — avoid this</span>
+/html/body/div[1]/form/input[2]</pre>
+
+      <strong>Relative XPath</strong> — starts with <code>//</code>, searches anywhere in the DOM. Preferred.
+<pre><span class="comment">// By attribute</span>
+//input[@id='username']
+//button[@type='submit']
+
+<span class="comment">// By text content</span>
+//button[text()='Login']
+//a[contains(text(),'Sign')]
+
+<span class="comment">// By multiple attributes</span>
+//input[@type='text' and @name='email']
+
+<span class="comment">// Parent to child</span>
+//div[@class='form']//input
+
+<span class="comment">// Child to parent (XPath only — CSS can't do this)</span>
+//input[@id='username']/..        <span class="comment">// goes up to parent</span>
+//input[@id='username']/parent::div
+
+<span class="comment">// Following sibling</span>
+//label[text()='Email']/following-sibling::input</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">13</span> What is the difference between findElement() and findElements()?</div>
+    <div class="a">
+      <ul>
+        <li><strong>findElement(By locator)</strong> — Returns a single <code>WebElement</code>. Throws <code>NoSuchElementException</code> if the element is not found.</li>
+        <li><strong>findElements(By locator)</strong> — Returns a <code>List&lt;WebElement&gt;</code>. Returns an <strong>empty list</strong> (not an exception) if nothing is found. Use this to check if an element exists, or to get all matching elements.</li>
+      </ul>
+<pre><span class="comment">// Check if element exists safely</span>
+<span class="keyword">boolean</span> exists = !driver.findElements(By.id(<span class="string">"error-msg"</span>)).isEmpty();
+
+<span class="comment">// Get all rows in a table</span>
+List&lt;WebElement&gt; rows = driver.findElements(By.cssSelector(<span class="string">"table tr"</span>));
+System.out.println(<span class="string">"Row count: "</span> + rows.size());</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">14</span> How do you find a dynamic element whose ID changes every time?</div>
+    <div class="a">
+      Dynamic IDs cannot be used directly. Use these alternatives:
+      <ul>
+        <li>Use a stable attribute: <code>data-testid</code>, <code>name</code>, <code>class</code></li>
+        <li>CSS partial match: <code>By.cssSelector("[id^='prefix_']")</code> — if ID has a stable prefix</li>
+        <li>Text-based XPath: <code>//button[contains(text(),'Submit')]</code></li>
+        <li>Parent-child relationship: navigate via a stable parent element</li>
+        <li>Ask the dev team to add a <code>data-testid</code> attribute — the right long-term fix</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 4 ======================== -->
+<div class="section page-break" id="s4">
+  <div class="section-header">
+    <h2>4. WebDriver Core Commands</h2>
+    <div class="subtitle">The essential API methods you must know by heart</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">15</span> What are the most commonly used WebDriver commands?</div>
+    <div class="a">
+<pre><span class="comment">// Navigation</span>
+driver.get(<span class="string">"https://example.com"</span>);         <span class="comment">// open URL, waits for page load</span>
+driver.navigate().to(<span class="string">"https://example.com"</span>); <span class="comment">// same, but supports back/forward</span>
+driver.navigate().back();
+driver.navigate().forward();
+driver.navigate().refresh();
+
+<span class="comment">// Browser info</span>
+driver.getTitle();           <span class="comment">// page title</span>
+driver.getCurrentUrl();      <span class="comment">// current URL</span>
+driver.getPageSource();      <span class="comment">// full HTML source</span>
+
+<span class="comment">// Window management</span>
+driver.manage().window().maximize();
+driver.manage().window().setSize(<span class="keyword">new</span> Dimension(1280, 720));
+
+<span class="comment">// Cookies</span>
+driver.manage().addCookie(<span class="keyword">new</span> Cookie(<span class="string">"token"</span>, <span class="string">"abc123"</span>));
+driver.manage().getCookies();
+driver.manage().deleteAllCookies();
+
+<span class="comment">// Element interactions</span>
+WebElement el = driver.findElement(By.id(<span class="string">"btn"</span>));
+el.click();
+el.sendKeys(<span class="string">"Hello"</span>);
+el.clear();
+el.getText();
+el.getAttribute(<span class="string">"value"</span>);
+el.isDisplayed();   <span class="comment">// visible?</span>
+el.isEnabled();     <span class="comment">// interactable?</span>
+el.isSelected();    <span class="comment">// checked/selected (checkbox, radio)?</span></pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">16</span> What is the difference between get() and navigate().to()?</div>
+    <div class="a">
+      Both open a URL and wait for the page to load. The difference:
+      <ul>
+        <li><code>driver.get()</code> — Opens a URL. Does not maintain browser history in the session.</li>
+        <li><code>driver.navigate().to()</code> — Opens a URL AND maintains browser history, allowing <code>navigate().back()</code> and <code>navigate().forward()</code> to work.</li>
+      </ul>
+      In practice, use <code>navigate().to()</code> when you need back/forward navigation in your test. Otherwise both are equivalent.
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">17</span> How do you take a screenshot in Selenium?</div>
+    <div class="a">
+<pre><span class="keyword">import</span> org.apache.commons.io.FileUtils;
+<span class="keyword">import</span> org.openqa.selenium.OutputType;
+<span class="keyword">import</span> org.openqa.selenium.TakesScreenshot;
+
+<span class="comment">// Cast driver to TakesScreenshot</span>
+TakesScreenshot ts = (TakesScreenshot) driver;
+
+<span class="comment">// Get screenshot as File</span>
+File srcFile = ts.getScreenshotAs(OutputType.FILE);
+
+<span class="comment">// Save to disk</span>
+File destFile = <span class="keyword">new</span> File(<span class="string">"screenshots/test_"</span> + System.currentTimeMillis() + <span class="string">".png"</span>);
+FileUtils.copyFile(srcFile, destFile);
+
+<span class="comment">// As byte[] — for embedding in Allure/TestNG reports</span>
+<span class="keyword">byte</span>[] bytes = ts.getScreenshotAs(OutputType.BYTES);
+
+<span class="comment">// Element-level screenshot (Selenium 4 only)</span>
+WebElement element = driver.findElement(By.id(<span class="string">"chart"</span>));
+File elShot = element.getScreenshotAs(OutputType.FILE);</pre>
+      <div class="tip"><strong>Best practice:</strong> Call screenshot in <code>@AfterMethod</code> only when the test has failed — check <code>ITestResult.getStatus() == ITestResult.FAILURE</code>.</div>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">18</span> How do you use JavascriptExecutor? When do you need it?</div>
+    <div class="a">
+      JavascriptExecutor executes JavaScript directly in the browser. Use it when Selenium's native methods don't work (hidden elements, scroll, readonly fields).
+<pre><span class="comment">// Cast driver</span>
+JavascriptExecutor js = (JavascriptExecutor) driver;
+
+<span class="comment">// Scroll to bottom of page</span>
+js.executeScript(<span class="string">"window.scrollTo(0, document.body.scrollHeight);"</span>);
+
+<span class="comment">// Scroll element into view</span>
+WebElement el = driver.findElement(By.id(<span class="string">"footer"</span>));
+js.executeScript(<span class="string">"arguments[0].scrollIntoView(true);"</span>, el);
+
+<span class="comment">// Click via JS (when normal click fails)</span>
+js.executeScript(<span class="string">"arguments[0].click();"</span>, el);
+
+<span class="comment">// Set value on readonly input</span>
+js.executeScript(<span class="string">"arguments[0].value='2026-01-01';"</span>, dateInput);
+
+<span class="comment">// Get hidden element text</span>
+String text = (String) js.executeScript(<span class="string">"return arguments[0].innerText;"</span>, el);
+
+<span class="comment">// Check page load complete</span>
+String state = (String) js.executeScript(<span class="string">"return document.readyState;"</span>);
+<span class="comment">// returns "complete" when page is fully loaded</span></pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">19</span> How do you perform keyboard and mouse actions using Actions class?</div>
+    <div class="a">
+<pre><span class="keyword">import</span> org.openqa.selenium.interactions.Actions;
+
+Actions actions = <span class="keyword">new</span> Actions(driver);
+
+<span class="comment">// Mouse hover</span>
+actions.moveToElement(menuItem).perform();
+
+<span class="comment">// Right-click (context menu)</span>
+actions.contextClick(element).perform();
+
+<span class="comment">// Double-click</span>
+actions.doubleClick(element).perform();
+
+<span class="comment">// Drag and drop</span>
+actions.dragAndDrop(source, target).perform();
+
+<span class="comment">// Click and hold, move, release</span>
+actions.clickAndHold(source).moveToElement(target).release().perform();
+
+<span class="comment">// Keyboard — hold Shift and click (multi-select)</span>
+actions.keyDown(Keys.SHIFT).click(el1).click(el2).keyUp(Keys.SHIFT).perform();
+
+<span class="comment">// Press Enter key</span>
+actions.sendKeys(Keys.ENTER).perform();
+
+<span class="comment">// Chain multiple actions</span>
+actions.moveToElement(menu)
+       .click()
+       .moveToElement(submenu)
+       .click()
+       .build()
+       .perform();</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 5 ======================== -->
+<div class="section page-break" id="s5">
+  <div class="section-header">
+    <h2>5. Waits — Implicit, Explicit, Fluent</h2>
+    <div class="subtitle">The most important concept for stable tests — heavily tested in interviews</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">20</span> Why do we need waits in Selenium?</div>
+    <div class="a">
+      Web applications are dynamic — elements load asynchronously (via AJAX, API calls, animations). Without waits, Selenium may try to interact with an element before it exists in the DOM, causing <code>NoSuchElementException</code> or <code>ElementNotInteractableException</code>.<br><br>
+      Waits tell Selenium to pause and check until a condition is met, making tests stable.
+      <div class="warn"><strong>Never use Thread.sleep()</strong> — it always waits the full time even if the element loads early. It's a hardcoded pause, not a smart wait.</div>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">21</span> Explain Implicit Wait.</div>
+    <div class="a">
+      Implicit wait sets a <strong>global timeout</strong> that applies to every <code>findElement()</code> call. If the element isn't immediately found, Selenium polls the DOM repeatedly until the timeout expires.
+<pre><span class="comment">// Set globally once — affects all findElement calls</span>
+driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+<span class="comment">// Now this won't fail immediately if element takes a few seconds to appear</span>
+WebElement el = driver.findElement(By.id(<span class="string">"username"</span>));</pre>
+      <strong>Limitation:</strong> It applies to ALL findElement calls and cannot be overridden for specific elements. Cannot wait for custom conditions (like element to be clickable).
+      <div class="tip"><strong>Best practice:</strong> Set implicit wait to a low value (3-5s) or don't use it at all — use Explicit Wait instead for precise control.</div>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">22</span> Explain Explicit Wait with ExpectedConditions.</div>
+    <div class="a">
+      Explicit wait waits for a <strong>specific condition</strong> on a <strong>specific element</strong> before proceeding. More precise and powerful than implicit wait.
+<pre><span class="keyword">import</span> org.openqa.selenium.support.ui.WebDriverWait;
+<span class="keyword">import</span> org.openqa.selenium.support.ui.ExpectedConditions;
+
+WebDriverWait wait = <span class="keyword">new</span> WebDriverWait(driver, Duration.ofSeconds(15));
+
+<span class="comment">// Wait until element is visible in DOM</span>
+WebElement el = wait.until(
+    ExpectedConditions.visibilityOfElementLocated(By.id(<span class="string">"result"</span>))
+);
+
+<span class="comment">// Wait until element is clickable (visible + enabled)</span>
+wait.until(ExpectedConditions.elementToBeClickable(By.id(<span class="string">"submit"</span>))).click();
+
+<span class="comment">// Wait until text appears in element</span>
+wait.until(ExpectedConditions.textToBePresentInElementLocated(
+    By.id(<span class="string">"status"</span>), <span class="string">"Success"</span>
+));
+
+<span class="comment">// Wait until element disappears (loading spinner)</span>
+wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id(<span class="string">"spinner"</span>)));
+
+<span class="comment">// Wait for URL to change</span>
+wait.until(ExpectedConditions.urlContains(<span class="string">"dashboard"</span>));
+
+<span class="comment">// Wait for title</span>
+wait.until(ExpectedConditions.titleContains(<span class="string">"Home"</span>));</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">23</span> Explain Fluent Wait and how it differs from Explicit Wait.</div>
+    <div class="a">
+      Fluent Wait is an advanced form of Explicit Wait with more configuration options:
+<pre><span class="keyword">import</span> org.openqa.selenium.support.ui.FluentWait;
+
+Wait&lt;WebDriver&gt; fluentWait = <span class="keyword">new</span> FluentWait&lt;&gt;(driver)
+    .withTimeout(Duration.ofSeconds(30))         <span class="comment">// max wait time</span>
+    .pollingEvery(Duration.ofMillis(500))        <span class="comment">// check every 500ms</span>
+    .ignoring(NoSuchElementException.<span class="keyword">class</span>)     <span class="comment">// ignore this exception while polling</span>
+    .ignoring(StaleElementReferenceException.<span class="keyword">class</span>)
+    .withMessage(<span class="string">"Button not found after 30 seconds"</span>); <span class="comment">// custom error message</span>
+
+WebElement btn = fluentWait.until(
+    ExpectedConditions.elementToBeClickable(By.id(<span class="string">"submit"</span>))
+);</pre>
+      <table>
+        <tr><th>Feature</th><th>Explicit Wait</th><th>Fluent Wait</th></tr>
+        <tr><td>Polling interval</td><td>Fixed (500ms default)</td><td>Configurable</td></tr>
+        <tr><td>Exception ignoring</td><td>Not configurable</td><td>Configurable</td></tr>
+        <tr><td>Custom message</td><td>Not supported</td><td>Supported</td></tr>
+        <tr><td>Use case</td><td>Most scenarios</td><td>Slow-loading or unstable elements</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">24</span> Why should you not mix Implicit and Explicit waits?</div>
+    <div class="a">
+      Mixing both causes <strong>unpredictable behavior and double-wait times</strong>. When both are active:
+      <ul>
+        <li>Implicit wait is global and fires on every <code>findElement()</code></li>
+        <li>Explicit wait has its own polling loop</li>
+        <li>If the element doesn't exist, Selenium may wait for the full implicit wait duration <em>on each polling cycle</em> of the explicit wait — causing very long wait times</li>
+      </ul>
+      <div class="tip"><strong>Rule:</strong> Pick one strategy. Prefer Explicit Wait for professional frameworks. If you use implicit wait, keep it very short (2-3s) and don't mix with explicit waits on the same elements.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 6 ======================== -->
+<div class="section page-break" id="s6">
+  <div class="section-header">
+    <h2>6. Handling Web Elements</h2>
+    <div class="subtitle">Dropdowns, Alerts, Frames, Multiple Windows — all frequently asked</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">25</span> How do you handle a dropdown (&lt;select&gt; element) in Selenium?</div>
+    <div class="a">
+      Use the <code>Select</code> class for HTML <code>&lt;select&gt;</code> dropdowns.
+<pre><span class="keyword">import</span> org.openqa.selenium.support.ui.Select;
+
+WebElement dropdownEl = driver.findElement(By.id(<span class="string">"country"</span>));
+Select select = <span class="keyword">new</span> Select(dropdownEl);
+
+<span class="comment">// Three ways to select an option</span>
+select.selectByVisibleText(<span class="string">"United States"</span>);  <span class="comment">// by the displayed text</span>
+select.selectByValue(<span class="string">"us"</span>);                    <span class="comment">// by the 'value' attribute</span>
+select.selectByIndex(2);                         <span class="comment">// by position (0-based)</span>
+
+<span class="comment">// Get all options</span>
+List&lt;WebElement&gt; options = select.getOptions();
+options.forEach(o -&gt; System.out.println(o.getText()));
+
+<span class="comment">// Get selected option</span>
+String selected = select.getFirstSelectedOption().getText();
+
+<span class="comment">// Multi-select dropdown</span>
+select.selectByVisibleText(<span class="string">"Option A"</span>);
+select.selectByVisibleText(<span class="string">"Option B"</span>);
+select.deselectAll(); <span class="comment">// only works if isMultiple()</span></pre>
+      <div class="tip"><strong>Note:</strong> The <code>Select</code> class only works with native HTML <code>&lt;select&gt;</code> tags. For custom dropdowns (built with div/ul), click the element and then click the option as a normal WebElement.</div>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">26</span> How do you handle alerts in Selenium?</div>
+    <div class="a">
+      JavaScript alerts/confirms/prompts are handled using <code>driver.switchTo().alert()</code>.
+<pre><span class="comment">// Wait for alert to appear</span>
+WebDriverWait wait = <span class="keyword">new</span> WebDriverWait(driver, Duration.ofSeconds(5));
+Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+
+<span class="comment">// Get alert message</span>
+String message = alert.getText();
+System.out.println(<span class="string">"Alert says: "</span> + message);
+
+<span class="comment">// Simple alert — just OK button</span>
+alert.accept();   <span class="comment">// click OK</span>
+
+<span class="comment">// Confirm dialog — OK and Cancel</span>
+alert.accept();   <span class="comment">// click OK</span>
+alert.dismiss();  <span class="comment">// click Cancel</span>
+
+<span class="comment">// Prompt — enter text before accepting</span>
+alert.sendKeys(<span class="string">"My input text"</span>);
+alert.accept();</pre>
+      <div class="warn"><strong>Common mistake:</strong> Trying to use <code>findElement()</code> inside an alert. Alerts are not DOM elements — always use the Alert API.</div>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">27</span> How do you switch between iframes?</div>
+    <div class="a">
+      An iframe is an embedded HTML page within a page. WebDriver cannot directly interact with elements inside an iframe — you must switch context first.
+<pre><span class="comment">// Switch to iframe by index (0-based)</span>
+driver.switchTo().frame(0);
+
+<span class="comment">// Switch by name or ID attribute</span>
+driver.switchTo().frame(<span class="string">"iframeName"</span>);
+
+<span class="comment">// Switch by WebElement (most reliable)</span>
+WebElement iframeEl = driver.findElement(By.cssSelector(<span class="string">"iframe.payment-frame"</span>));
+driver.switchTo().frame(iframeEl);
+
+<span class="comment">// Now interact with elements inside the iframe</span>
+driver.findElement(By.id(<span class="string">"card-number"</span>)).sendKeys(<span class="string">"4111111111111111"</span>);
+
+<span class="comment">// Switch BACK to the main page</span>
+driver.switchTo().defaultContent();
+
+<span class="comment">// Switch to parent frame (when iframes are nested)</span>
+driver.switchTo().parentFrame();</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">28</span> How do you handle multiple browser windows or tabs?</div>
+    <div class="a">
+<pre><span class="comment">// Store handle of current (main) window</span>
+String mainWindow = driver.getWindowHandle();
+
+<span class="comment">// Click something that opens a new tab/window</span>
+driver.findElement(By.linkText(<span class="string">"Open New Tab"</span>)).click();
+
+<span class="comment">// Get all open window handles</span>
+Set&lt;String&gt; allWindows = driver.getWindowHandles();
+
+<span class="comment">// Switch to the new window</span>
+<span class="keyword">for</span> (String handle : allWindows) {
+    <span class="keyword">if</span> (!handle.equals(mainWindow)) {
+        driver.switchTo().window(handle);
+        <span class="keyword">break</span>;
+    }
+}
+
+<span class="comment">// Interact with new window</span>
+System.out.println(<span class="string">"New window title: "</span> + driver.getTitle());
+
+<span class="comment">// Close new window and switch back</span>
+driver.close();
+driver.switchTo().window(mainWindow);</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">29</span> How do you handle file uploads?</div>
+    <div class="a">
+<pre><span class="comment">// For &lt;input type="file"&gt; — use sendKeys with file path</span>
+WebElement fileInput = driver.findElement(By.cssSelector(<span class="string">"input[type='file']"</span>));
+fileInput.sendKeys(<span class="string">"C:\\Users\\user\\Documents\\test.pdf"</span>);
+
+<span class="comment">// No need to click "Open" in dialog — sendKeys handles it</span>
+
+<span class="comment">// For custom upload buttons (not input[type=file]):</span>
+<span class="comment">// Use Robot class or AutoIt for OS-level dialog handling</span>
+Robot robot = <span class="keyword">new</span> Robot();
+StringSelection selection = <span class="keyword">new</span> StringSelection(<span class="string">"C:\\file.pdf"</span>);
+Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, <span class="keyword">null</span>);
+robot.keyPress(KeyEvent.VK_CONTROL);
+robot.keyPress(KeyEvent.VK_V);
+robot.keyRelease(KeyEvent.VK_V);
+robot.keyRelease(KeyEvent.VK_CONTROL);
+robot.keyPress(KeyEvent.VK_ENTER);
+robot.keyRelease(KeyEvent.VK_ENTER);</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">30</span> How do you handle checkboxes and radio buttons?</div>
+    <div class="a">
+<pre><span class="comment">// Checkbox — check if selected before clicking</span>
+WebElement checkbox = driver.findElement(By.id(<span class="string">"agree"</span>));
+<span class="keyword">if</span> (!checkbox.isSelected()) {
+    checkbox.click();  <span class="comment">// select it</span>
+}
+
+<span class="comment">// Uncheck it</span>
+<span class="keyword">if</span> (checkbox.isSelected()) {
+    checkbox.click();
+}
+
+<span class="comment">// Radio button — just click (selecting one deselects others)</span>
+driver.findElement(By.cssSelector(<span class="string">"input[value='male']"</span>)).click();
+
+<span class="comment">// Verify selection</span>
+<span class="keyword">boolean</span> isChecked = driver.findElement(By.id(<span class="string">"agree"</span>)).isSelected();
+Assert.assertTrue(isChecked, <span class="string">"Checkbox should be checked"</span>);</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 7 ======================== -->
+<div class="section page-break" id="s7">
+  <div class="section-header">
+    <h2>7. Page Object Model (POM)</h2>
+    <div class="subtitle">Design pattern that separates page elements from test logic</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">31</span> What is the Page Object Model? Why do we use it?</div>
+    <div class="a">
+      POM is a design pattern where each web page (or major component) has a corresponding Java class. That class contains:
+      <ul>
+        <li>All locators for elements on that page</li>
+        <li>Methods that represent actions on that page (login, search, submit)</li>
+      </ul>
+      <strong>Why use POM?</strong>
+      <ul>
+        <li><strong>Maintainability:</strong> If a locator changes, update it in ONE place (the page class), not in every test</li>
+        <li><strong>Reusability:</strong> Methods can be reused across multiple tests</li>
+        <li><strong>Readability:</strong> Tests read like plain English — <code>loginPage.login("user", "pass")</code></li>
+        <li><strong>Separation of concerns:</strong> Test logic is separate from page interaction logic</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">32</span> Show a complete POM example — LoginPage and LoginTest.</div>
+    <div class="a">
+<pre><span class="comment">// LoginPage.java — Page Object</span>
+<span class="keyword">public class</span> LoginPage {
+    <span class="keyword">private</span> WebDriver driver;
+    <span class="keyword">private</span> WebDriverWait wait;
+
+    <span class="comment">// Locators</span>
+    <span class="keyword">private</span> By usernameField = By.id(<span class="string">"username"</span>);
+    <span class="keyword">private</span> By passwordField = By.id(<span class="string">"password"</span>);
+    <span class="keyword">private</span> By loginButton   = By.cssSelector(<span class="string">"button[type='submit']"</span>);
+    <span class="keyword">private</span> By errorMessage  = By.className(<span class="string">"error-msg"</span>);
+
+    <span class="keyword">public</span> LoginPage(WebDriver driver) {
+        <span class="keyword">this</span>.driver = driver;
+        <span class="keyword">this</span>.wait = <span class="keyword">new</span> WebDriverWait(driver, Duration.ofSeconds(10));
+    }
+
+    <span class="keyword">public void</span> enterUsername(String username) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField))
+            .sendKeys(username);
+    }
+
+    <span class="keyword">public void</span> enterPassword(String password) {
+        driver.findElement(passwordField).sendKeys(password);
+    }
+
+    <span class="keyword">public</span> DashboardPage clickLogin() {
+        driver.findElement(loginButton).click();
+        <span class="keyword">return new</span> DashboardPage(driver); <span class="comment">// returns next page object</span>
+    }
+
+    <span class="keyword">public</span> String getErrorMessage() {
+        <span class="keyword">return</span> wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage))
+                   .getText();
+    }
+
+    <span class="comment">// Convenience method</span>
+    <span class="keyword">public</span> DashboardPage login(String user, String pass) {
+        enterUsername(user);
+        enterPassword(pass);
+        <span class="keyword">return</span> clickLogin();
+    }
+}</pre>
+<pre><span class="comment">// LoginTest.java — Test class (clean, no locators here)</span>
+<span class="keyword">public class</span> LoginTest {
+    WebDriver driver;
+    LoginPage loginPage;
+
+    @BeforeMethod
+    <span class="keyword">public void</span> setUp() {
+        WebDriverManager.chromedriver().setup();
+        driver = <span class="keyword">new</span> ChromeDriver();
+        driver.get(<span class="string">"https://app.example.com/login"</span>);
+        loginPage = <span class="keyword">new</span> LoginPage(driver);
+    }
+
+    @Test
+    <span class="keyword">public void</span> validLogin() {
+        DashboardPage dashboard = loginPage.login(<span class="string">"admin"</span>, <span class="string">"Admin@123"</span>);
+        Assert.assertTrue(dashboard.isWelcomeMessageVisible());
+    }
+
+    @Test
+    <span class="keyword">public void</span> invalidLogin() {
+        loginPage.enterUsername(<span class="string">"wrong@test.com"</span>);
+        loginPage.enterPassword(<span class="string">"wrongpass"</span>);
+        loginPage.clickLogin();
+        Assert.assertEquals(loginPage.getErrorMessage(), <span class="string">"Invalid credentials"</span>);
+    }
+
+    @AfterMethod
+    <span class="keyword">public void</span> tearDown() { driver.quit(); }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">33</span> What is PageFactory and @FindBy? How does it differ from By locators?</div>
+    <div class="a">
+      PageFactory is a Selenium utility that initializes page objects using <code>@FindBy</code> annotations.
+<pre><span class="keyword">import</span> org.openqa.selenium.support.FindBy;
+<span class="keyword">import</span> org.openqa.selenium.support.PageFactory;
+
+<span class="keyword">public class</span> LoginPage {
+    <span class="keyword">private</span> WebDriver driver;
+
+    <span class="comment">// @FindBy annotations replace By.* locators</span>
+    @FindBy(id = <span class="string">"username"</span>)
+    <span class="keyword">private</span> WebElement usernameField;
+
+    @FindBy(css = <span class="string">"button[type='submit']"</span>)
+    <span class="keyword">private</span> WebElement loginButton;
+
+    @FindBy(xpath = <span class="string">"//div[@class='error']"</span>)
+    <span class="keyword">private</span> WebElement errorMessage;
+
+    <span class="comment">// FindAll — gets all matching elements</span>
+    @FindAll({
+        @FindBy(className = <span class="string">"menu-item"</span>),
+        @FindBy(css = <span class="string">"nav a"</span>)
+    })
+    <span class="keyword">private</span> List&lt;WebElement&gt; menuItems;
+
+    <span class="keyword">public</span> LoginPage(WebDriver driver) {
+        <span class="keyword">this</span>.driver = driver;
+        PageFactory.initElements(driver, <span class="keyword">this</span>); <span class="comment">// REQUIRED — initializes all @FindBy fields</span>
+    }
+
+    <span class="keyword">public void</span> login(String user, String pass) {
+        usernameField.sendKeys(user);
+        loginButton.click();
+    }
+}</pre>
+      <strong>Key difference:</strong> <code>@FindBy</code> uses lazy initialization — elements are looked up fresh each time they are used, which helps with <code>StaleElementReferenceException</code>. Regular <code>By</code> locators also look up elements on each call but are more explicit.
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 8 ======================== -->
+<div class="section page-break" id="s8">
+  <div class="section-header">
+    <h2>8. TestNG — Test Framework</h2>
+    <div class="subtitle">Annotations, assertions, grouping, and data providers</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">34</span> What are the key TestNG annotations and their execution order?</div>
+    <div class="a">
+<pre><span class="keyword">public class</span> TestNGAnnotationOrder {
+
+    @BeforeSuite   <span class="comment">// runs once before ALL tests in the suite</span>
+    <span class="keyword">public void</span> beforeSuite() {}
+
+    @BeforeTest    <span class="comment">// runs before each &lt;test&gt; tag in testng.xml</span>
+    <span class="keyword">public void</span> beforeTest() {}
+
+    @BeforeClass   <span class="comment">// runs once before the first method in this class</span>
+    <span class="keyword">public void</span> beforeClass() {}
+
+    @BeforeMethod  <span class="comment">// runs before EACH @Test method — most commonly used</span>
+    <span class="keyword">public void</span> beforeMethod() {}
+
+    @Test
+    <span class="keyword">public void</span> myTest() {}
+
+    @AfterMethod   <span class="comment">// runs after EACH @Test method</span>
+    <span class="keyword">public void</span> afterMethod() {}
+
+    @AfterClass    <span class="comment">// runs once after all methods in this class</span>
+    <span class="keyword">public void</span> afterClass() {}
+
+    @AfterTest     <span class="comment">// runs after each &lt;test&gt; tag in testng.xml</span>
+    <span class="keyword">public void</span> afterTest() {}
+
+    @AfterSuite    <span class="comment">// runs once after ALL tests in the suite</span>
+    <span class="keyword">public void</span> afterSuite() {}
+}</pre>
+      <strong>Order:</strong> BeforeSuite → BeforeTest → BeforeClass → BeforeMethod → Test → AfterMethod → AfterClass → AfterTest → AfterSuite
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">35</span> What are TestNG assertions? Hard vs Soft assertions?</div>
+    <div class="a">
+<pre><span class="keyword">import</span> org.testng.Assert;
+<span class="keyword">import</span> org.testng.asserts.SoftAssert;
+
+<span class="comment">// Hard Assert — stops test immediately on failure</span>
+Assert.assertEquals(actual, expected, <span class="string">"Values don't match"</span>);
+Assert.assertTrue(condition, <span class="string">"Condition is false"</span>);
+Assert.assertFalse(condition);
+Assert.assertNotNull(object, <span class="string">"Object is null"</span>);
+Assert.assertNull(object);
+
+<span class="comment">// Soft Assert — collects ALL failures, reports at the end</span>
+SoftAssert soft = <span class="keyword">new</span> SoftAssert();
+soft.assertEquals(page.getName(), <span class="string">"John"</span>, <span class="string">"Name wrong"</span>);
+soft.assertEquals(page.getEmail(), <span class="string">"john@test.com"</span>, <span class="string">"Email wrong"</span>);
+soft.assertTrue(page.isLogoutVisible(), <span class="string">"Logout not visible"</span>);
+soft.assertAll(); <span class="comment">// MUST call this — otherwise failures are ignored!</span></pre>
+      <strong>When to use each:</strong>
+      <ul>
+        <li><strong>Hard Assert</strong> — When a failure in step N means subsequent steps are invalid (e.g., login failed → can't test anything else)</li>
+        <li><strong>Soft Assert</strong> — When validating multiple independent fields on a form or page and you want all failures reported at once</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">36</span> How do you use @DataProvider for data-driven testing?</div>
+    <div class="a">
+<pre><span class="comment">// DataProvider method — provides test data as 2D array</span>
+@DataProvider(name = <span class="string">"loginCredentials"</span>)
+<span class="keyword">public</span> Object[][] loginData() {
+    <span class="keyword">return new</span> Object[][] {
+        { <span class="string">"admin@test.com"</span>,  <span class="string">"Admin@123"</span>,  <span class="string">"Welcome, Admin"</span>  },
+        { <span class="string">"user@test.com"</span>,   <span class="string">"User@123"</span>,   <span class="string">"Welcome, User"</span>   },
+        { <span class="string">"wrong@test.com"</span>,  <span class="string">"wrongpass"</span>,  <span class="string">"Invalid password"</span> }
+    };
+}
+
+<span class="comment">// Test method — receives one row per execution</span>
+@Test(dataProvider = <span class="string">"loginCredentials"</span>)
+<span class="keyword">public void</span> testLogin(String email, String password, String expectedMsg) {
+    loginPage.enterUsername(email);
+    loginPage.enterPassword(password);
+    loginPage.clickLogin();
+    Assert.assertTrue(driver.getPageSource().contains(expectedMsg));
+}
+<span class="comment">// This test runs 3 times — once per data row</span></pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">37</span> How do you group tests and run specific groups in TestNG?</div>
+    <div class="a">
+<pre><span class="comment">// Tag tests with groups</span>
+@Test(groups = {<span class="string">"smoke"</span>, <span class="string">"regression"</span>})
+<span class="keyword">public void</span> loginTest() { ... }
+
+@Test(groups = {<span class="string">"regression"</span>})
+<span class="keyword">public void</span> searchTest() { ... }
+
+@Test(groups = {<span class="string">"smoke"</span>})
+<span class="keyword">public void</span> homePageTest() { ... }</pre>
+<pre><span class="comment">&lt;!-- testng.xml — run only smoke tests --&gt;</span>
+&lt;suite name="Suite"&gt;
+  &lt;test name="Smoke Run"&gt;
+    &lt;groups&gt;
+      &lt;run&gt;
+        &lt;include name="smoke"/&gt;
+        &lt;exclude name="wip"/&gt;
+      &lt;/run&gt;
+    &lt;/groups&gt;
+    &lt;classes&gt;
+      &lt;class name="tests.LoginTest"/&gt;
+      &lt;class name="tests.SearchTest"/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt;
+&lt;/suite&gt;</pre>
+      <div class="tip"><strong>Common groups:</strong> smoke (critical path, runs on every deployment), regression (full suite, runs nightly), sanity (quick health check), wip (work in progress, excluded from CI).</div>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">38</span> How do you set test priority and dependencies in TestNG?</div>
+    <div class="a">
+<pre><span class="comment">// Priority — lower number runs first (default is 0)</span>
+@Test(priority = 1)
+<span class="keyword">public void</span> launchApp() { ... }
+
+@Test(priority = 2)
+<span class="keyword">public void</span> login() { ... }
+
+@Test(priority = 3)
+<span class="keyword">public void</span> search() { ... }
+
+<span class="comment">// dependsOnMethods — test runs only if dependency passes</span>
+@Test
+<span class="keyword">public void</span> loginTest() { ... }
+
+@Test(dependsOnMethods = <span class="string">"loginTest"</span>)
+<span class="keyword">public void</span> checkoutTest() {
+    <span class="comment">// skipped if loginTest fails</span>
+}
+
+<span class="comment">// dependsOnGroups</span>
+@Test(dependsOnGroups = <span class="string">"smoke"</span>)
+<span class="keyword">public void</span> advancedTest() { ... }</pre>
+      <div class="warn"><strong>Best practice:</strong> Tests should be independent — avoid <code>dependsOnMethods</code> in real frameworks. It creates brittle test chains. Use @BeforeMethod to set up fresh state instead.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 9 ======================== -->
+<div class="section page-break" id="s9">
+  <div class="section-header">
+    <h2>9. Exception Handling &amp; Common Errors</h2>
+    <div class="subtitle">Know each exception, its cause, and how to fix it</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">39</span> Explain the most common Selenium exceptions and how to handle them.</div>
+    <div class="a">
+      <table>
+        <tr><th>Exception</th><th>Cause</th><th>Fix</th></tr>
+        <tr>
+          <td><strong>NoSuchElementException</strong></td>
+          <td>Element not found in DOM with the given locator</td>
+          <td>Verify locator in DevTools → use Explicit Wait → check if element is inside an iframe</td>
+        </tr>
+        <tr>
+          <td><strong>StaleElementReferenceException</strong></td>
+          <td>Element was found, then the DOM refreshed (AJAX, page navigation) making the reference invalid</td>
+          <td>Re-find the element; use <code>ExpectedConditions.refreshed()</code>; use Page Object (it re-finds on each access)</td>
+        </tr>
+        <tr>
+          <td><strong>ElementNotInteractableException</strong></td>
+          <td>Element exists but is hidden, disabled, or covered by another element</td>
+          <td>Wait for element to be visible/enabled; scroll into view; use JS click as last resort</td>
+        </tr>
+        <tr>
+          <td><strong>ElementClickInterceptedException</strong></td>
+          <td>Click intercepted by another element (cookie banner, modal, tooltip)</td>
+          <td>Dismiss the overlay first; wait for it to disappear; use JS click</td>
+        </tr>
+        <tr>
+          <td><strong>TimeoutException</strong></td>
+          <td>Wait condition not met within the timeout period</td>
+          <td>Increase timeout; verify the condition is correct; check if element is in iframe or new window</td>
+        </tr>
+        <tr>
+          <td><strong>InvalidSelectorException</strong></td>
+          <td>XPath or CSS syntax is invalid</td>
+          <td>Validate the selector in browser DevTools console first</td>
+        </tr>
+        <tr>
+          <td><strong>NoAlertPresentException</strong></td>
+          <td>Trying to switch to an alert that hasn't appeared yet</td>
+          <td>Use <code>ExpectedConditions.alertIsPresent()</code> before switching</td>
+        </tr>
+        <tr>
+          <td><strong>NoSuchWindowException</strong></td>
+          <td>Trying to switch to a window handle that no longer exists</td>
+          <td>Verify window handles before switching; check if window was closed</td>
+        </tr>
+        <tr>
+          <td><strong>WebDriverException: session not created</strong></td>
+          <td>Browser and driver version mismatch</td>
+          <td>Update WebDriverManager or manually download matching driver version</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">40</span> What is StaleElementReferenceException and how do you fix it?</div>
+    <div class="a">
+      It occurs when Selenium holds a reference to an element, but the DOM changes (AJAX refresh, page navigation, Angular re-render), making that reference point to an element that no longer exists.
+<pre><span class="comment">// Method 1: Re-find the element</span>
+<span class="keyword">try</span> {
+    driver.findElement(By.id(<span class="string">"btn"</span>)).click();
+} <span class="keyword">catch</span> (StaleElementReferenceException e) {
+    driver.findElement(By.id(<span class="string">"btn"</span>)).click(); <span class="comment">// re-find and retry</span>
+}
+
+<span class="comment">// Method 2: Use ExpectedConditions.refreshed()</span>
+WebDriverWait wait = <span class="keyword">new</span> WebDriverWait(driver, Duration.ofSeconds(10));
+wait.until(ExpectedConditions.refreshed(
+    ExpectedConditions.elementToBeClickable(By.id(<span class="string">"btn"</span>))
+)).click();
+
+<span class="comment">// Method 3: Retry loop</span>
+<span class="keyword">int</span> attempts = 0;
+<span class="keyword">while</span> (attempts &lt; 3) {
+    <span class="keyword">try</span> {
+        driver.findElement(By.id(<span class="string">"btn"</span>)).click();
+        <span class="keyword">break</span>;
+    } <span class="keyword">catch</span> (StaleElementReferenceException e) {
+        attempts++;
+    }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">41</span> How do you verify if an element is present on the page without throwing an exception?</div>
+    <div class="a">
+<pre><span class="comment">// Use findElements — returns empty list, not exception</span>
+<span class="keyword">public boolean</span> isElementPresent(By locator) {
+    <span class="keyword">return</span> !driver.findElements(locator).isEmpty();
+}
+
+<span class="comment">// With try-catch</span>
+<span class="keyword">public boolean</span> isElementVisible(By locator) {
+    <span class="keyword">try</span> {
+        <span class="keyword">return</span> driver.findElement(locator).isDisplayed();
+    } <span class="keyword">catch</span> (NoSuchElementException e) {
+        <span class="keyword">return false</span>;
+    }
+}
+
+<span class="comment">// Usage in test</span>
+<span class="keyword">if</span> (isElementPresent(By.id(<span class="string">"cookie-banner"</span>))) {
+    driver.findElement(By.id(<span class="string">"accept-cookies"</span>)).click();
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== SECTION 10 ======================== -->
+<div class="section" id="s10">
+  <div class="section-header">
+    <h2>10. Real Interview Scenario Questions</h2>
+    <div class="subtitle">How to answer practical "how would you handle..." questions</div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">42</span> How would you automate a login flow that uses OTP (one-time password)?</div>
+    <div class="a">
+      Real OTPs cannot be automated directly. Standard approaches:
+      <ul>
+        <li><strong>Best approach:</strong> Ask the dev team to expose a test API endpoint that returns the OTP for test accounts. Call it in your test and enter the OTP.</li>
+        <li><strong>Test environment bypass:</strong> Use a fixed OTP (e.g., 000000) for test accounts in non-production environments — configured on the backend.</li>
+        <li><strong>TOTP (time-based OTP):</strong> Use a library like <code>GoogleAuthenticator</code> in Java to generate the same TOTP using the shared secret key.</li>
+        <li><strong>Email OTP:</strong> Use a test email API (Mailinator, MailSlurp) to read the OTP email programmatically.</li>
+        <li><strong>SMS OTP:</strong> Use a virtual SIM API service (Twilio test mode) to retrieve the SMS.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">43</span> How do you handle a date picker (calendar widget)?</div>
+    <div class="a">
+<pre><span class="comment">// Strategy 1: Direct input — fastest if the field accepts typed dates</span>
+WebElement dateField = driver.findElement(By.id(<span class="string">"startDate"</span>));
+dateField.clear();
+dateField.sendKeys(<span class="string">"04/30/2026"</span>);
+dateField.sendKeys(Keys.TAB); <span class="comment">// trigger validation</span>
+
+<span class="comment">// Strategy 2: JS injection — for readonly date fields</span>
+JavascriptExecutor js = (JavascriptExecutor) driver;
+js.executeScript(<span class="string">"arguments[0].value='2026-04-30';"</span>, dateField);
+
+<span class="comment">// Strategy 3: Navigate the calendar UI — when above methods fail</span>
+driver.findElement(By.id(<span class="string">"datepicker-icon"</span>)).click(); <span class="comment">// open picker</span>
+
+<span class="comment">// Navigate months until target month is visible</span>
+<span class="keyword">while</span> (!driver.findElement(By.className(<span class="string">"month-year"</span>)).getText().equals(<span class="string">"April 2026"</span>)) {
+    driver.findElement(By.cssSelector(<span class="string">".next-month"</span>)).click();
+}
+<span class="comment">// Click the target date</span>
+driver.findElement(By.xpath(<span class="string">"//td[text()='30' and not(contains(@class,'disabled'))]"</span>)).click();</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">44</span> How do you verify a file was downloaded successfully?</div>
+    <div class="a">
+<pre><span class="comment">// Configure download directory in ChromeOptions</span>
+String downloadPath = System.getProperty(<span class="string">"user.home"</span>) + <span class="string">"/Downloads/test"</span>;
+ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
+options.addArguments(<span class="string">"--no-sandbox"</span>);
+
+Map&lt;String, Object&gt; prefs = <span class="keyword">new</span> HashMap&lt;&gt;();
+prefs.put(<span class="string">"download.default_directory"</span>, downloadPath);
+prefs.put(<span class="string">"download.prompt_for_download"</span>, <span class="keyword">false</span>);
+options.setExperimentalOption(<span class="string">"prefs"</span>, prefs);
+
+WebDriver driver = <span class="keyword">new</span> ChromeDriver(options);
+
+<span class="comment">// Click download button in your test</span>
+driver.findElement(By.id(<span class="string">"downloadBtn"</span>)).click();
+
+<span class="comment">// Wait for file to appear (poll file system)</span>
+File downloadDir = <span class="keyword">new</span> File(downloadPath);
+WebDriverWait wait = <span class="keyword">new</span> WebDriverWait(driver, Duration.ofSeconds(30));
+wait.until(d -&gt; {
+    File[] files = downloadDir.listFiles((dir, name) -&gt; name.endsWith(<span class="string">".pdf"</span>));
+    <span class="keyword">return</span> files != <span class="keyword">null</span> &amp;&amp; files.length &gt; 0;
+});
+
+<span class="comment">// Verify file name and size</span>
+File downloaded = downloadDir.listFiles((dir, name) -&gt; name.endsWith(<span class="string">".pdf"</span>))[0];
+Assert.assertTrue(downloaded.exists());
+Assert.assertTrue(downloaded.length() &gt; 0, <span class="string">"File is empty"</span>);</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">45</span> How do you scroll to an element and interact with it?</div>
+    <div class="a">
+<pre><span class="comment">// Method 1: JavascriptExecutor — most reliable</span>
+WebElement element = driver.findElement(By.id(<span class="string">"submit-btn"</span>));
+JavascriptExecutor js = (JavascriptExecutor) driver;
+js.executeScript(<span class="string">"arguments[0].scrollIntoView({behavior:'smooth', block:'center'});"</span>, element);
+element.click();
+
+<span class="comment">// Method 2: Actions class</span>
+Actions actions = <span class="keyword">new</span> Actions(driver);
+actions.scrollToElement(element).perform(); <span class="comment">// Selenium 4 only</span>
+element.click();
+
+<span class="comment">// Method 3: Keys — scroll by keyboard</span>
+driver.findElement(By.tagName(<span class="string">"body"</span>)).sendKeys(Keys.END); <span class="comment">// scroll to bottom</span>
+
+<span class="comment">// Scroll by pixel</span>
+js.executeScript(<span class="string">"window.scrollBy(0, 500);"</span>); <span class="comment">// scroll down 500px</span>
+js.executeScript(<span class="string">"window.scrollTo(0, 0);"</span>);   <span class="comment">// scroll to top</span></pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">46</span> How do you read data from a table in Selenium?</div>
+    <div class="a">
+<pre><span class="comment">// Get all rows</span>
+List&lt;WebElement&gt; rows = driver.findElements(By.cssSelector(<span class="string">"table tbody tr"</span>));
+System.out.println(<span class="string">"Total rows: "</span> + rows.size());
+
+<span class="comment">// Iterate rows and columns</span>
+<span class="keyword">for</span> (WebElement row : rows) {
+    List&lt;WebElement&gt; cells = row.findElements(By.tagName(<span class="string">"td"</span>));
+    <span class="keyword">for</span> (WebElement cell : cells) {
+        System.out.print(cell.getText() + <span class="string">" | "</span>);
+    }
+    System.out.println();
+}
+
+<span class="comment">// Get specific cell — row 2, column 3 (1-based XPath)</span>
+String cellValue = driver.findElement(
+    By.xpath(<span class="string">"//table/tbody/tr[2]/td[3]"</span>)
+).getText();
+
+<span class="comment">// Find row by column value (search in table)</span>
+List&lt;WebElement&gt; allRows = driver.findElements(By.cssSelector(<span class="string">"table tr"</span>));
+<span class="keyword">for</span> (WebElement row : allRows) {
+    <span class="keyword">if</span> (row.getText().contains(<span class="string">"John Doe"</span>)) {
+        row.findElement(By.linkText(<span class="string">"Edit"</span>)).click();
+        <span class="keyword">break</span>;
+    }
+}</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">47</span> What is headless browser testing? When do you use it?</div>
+    <div class="a">
+      Headless mode runs the browser without a visible GUI. The browser executes normally but without rendering a window on screen.
+<pre><span class="comment">// Chrome headless</span>
+ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
+options.addArguments(<span class="string">"--headless=new"</span>);   <span class="comment">// Selenium 4 / Chrome 112+</span>
+options.addArguments(<span class="string">"--no-sandbox"</span>);
+options.addArguments(<span class="string">"--disable-dev-shm-usage"</span>);
+options.addArguments(<span class="string">"--window-size=1920,1080"</span>);
+WebDriver driver = <span class="keyword">new</span> ChromeDriver(options);
+
+<span class="comment">// Firefox headless</span>
+FirefoxOptions ffOptions = <span class="keyword">new</span> FirefoxOptions();
+ffOptions.addArguments(<span class="string">"-headless"</span>);
+WebDriver driver = <span class="keyword">new</span> FirefoxDriver(ffOptions);</pre>
+      <strong>When to use headless:</strong>
+      <ul>
+        <li>CI/CD pipelines (Jenkins, GitHub Actions) — no display server available</li>
+        <li>Faster test execution (20-30% faster than headed)</li>
+        <li>Server environments (Linux without GUI)</li>
+      </ul>
+      <strong>When NOT to use:</strong> During development/debugging — you need to see the browser to diagnose failures.
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">48</span> How do you run Selenium tests in parallel?</div>
+    <div class="a">
+<pre><span class="comment">&lt;!-- testng.xml — parallel execution --&gt;</span>
+&lt;suite name="ParallelSuite" parallel="methods" thread-count="4"&gt;
+  &lt;test name="AllTests"&gt;
+    &lt;classes&gt;
+      &lt;class name="tests.LoginTest"/&gt;
+      &lt;class name="tests.SearchTest"/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt;
+&lt;/suite&gt;</pre>
+<pre><span class="comment">// CRITICAL: Use ThreadLocal to give each thread its own driver instance</span>
+<span class="keyword">public class</span> DriverManager {
+    <span class="keyword">private static</span> ThreadLocal&lt;WebDriver&gt; tlDriver = <span class="keyword">new</span> ThreadLocal&lt;&gt;();
+
+    <span class="keyword">public static void</span> setDriver(WebDriver driver) { tlDriver.set(driver); }
+    <span class="keyword">public static</span> WebDriver getDriver() { <span class="keyword">return</span> tlDriver.get(); }
+    <span class="keyword">public static void</span> quit() { tlDriver.get().quit(); tlDriver.remove(); }
+}
+
+<span class="comment">// BaseTest — creates driver in @BeforeMethod (called per-thread)</span>
+@BeforeMethod
+<span class="keyword">public void</span> setUp() {
+    WebDriverManager.chromedriver().setup();
+    DriverManager.setDriver(<span class="keyword">new</span> ChromeDriver());
+}
+
+@AfterMethod
+<span class="keyword">public void</span> tearDown() { DriverManager.quit(); }</pre>
+      <div class="warn"><strong>Never use a static WebDriver field in parallel tests.</strong> Multiple threads sharing one driver instance causes race conditions and random test failures.</div>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">49</span> What is the difference between XPath axes — child, descendant, following-sibling, parent?</div>
+    <div class="a">
+      <table>
+        <tr><th>Axis</th><th>Description</th><th>Example</th></tr>
+        <tr><td><code>child::</code></td><td>Direct children only</td><td><code>//div/child::input</code></td></tr>
+        <tr><td><code>descendant::</code></td><td>All nested children (any depth)</td><td><code>//form/descendant::input</code></td></tr>
+        <tr><td><code>parent::</code></td><td>The direct parent element</td><td><code>//input[@id='x']/parent::div</code></td></tr>
+        <tr><td><code>ancestor::</code></td><td>All ancestors up to root</td><td><code>//input/ancestor::form</code></td></tr>
+        <tr><td><code>following-sibling::</code></td><td>Siblings that come after</td><td><code>//label[text()='Email']/following-sibling::input</code></td></tr>
+        <tr><td><code>preceding-sibling::</code></td><td>Siblings that come before</td><td><code>//td[text()='Edit']/preceding-sibling::td[1]</code></td></tr>
+        <tr><td><code>following::</code></td><td>All elements after in the document</td><td><code>//h2/following::p[1]</code></td></tr>
+        <tr><td><code>self::</code></td><td>The current element itself</td><td><code>//input/self::input</code></td></tr>
+      </table>
+<pre><span class="comment">// Real example: click Edit button in the row that contains "John"</span>
+driver.findElement(By.xpath(
+    <span class="string">"//td[text()='John']/following-sibling::td/button[text()='Edit']"</span>
+)).click();</pre>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="q"><span class="qnum">50</span> Quick fire — 10 commonly asked short questions</div>
+    <div class="a">
+      <ol>
+        <li><strong>What is a WebElement?</strong> — An interface representing an HTML element found on the page.</li>
+        <li><strong>Can Selenium handle CAPTCHA?</strong> — No. Ask devs to disable it in test environments or use a CAPTCHA bypass service.</li>
+        <li><strong>What is the default polling interval in Explicit Wait?</strong> — 500 milliseconds.</li>
+        <li><strong>How do you clear a text field?</strong> — <code>element.clear()</code> or <code>Ctrl+A then Delete</code> via <code>sendKeys(Keys.chord(Keys.CONTROL, "a"), Keys.DELETE)</code>.</li>
+        <li><strong>What is driver.manage().timeouts().pageLoadTimeout()?</strong> — Sets max time to wait for a page to load completely. Default is 300 seconds.</li>
+        <li><strong>How do you verify the page title?</strong> — <code>Assert.assertEquals(driver.getTitle(), "Expected Title")</code></li>
+        <li><strong>What does driver.getWindowHandle() return?</strong> — A unique string ID for the current browser window.</li>
+        <li><strong>How do you maximize the browser?</strong> — <code>driver.manage().window().maximize()</code></li>
+        <li><strong>What is the difference between isDisplayed() and isEnabled()?</strong> — <code>isDisplayed()</code> checks visibility; <code>isEnabled()</code> checks if it can be interacted with (not disabled).</li>
+        <li><strong>How do you get the value of an input field?</strong> — <code>element.getAttribute("value")</code> (not <code>getText()</code> — that's for visible text).</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="margin-top:40px; padding:20px; background:#1b5e20; color:#fff; border-radius:8px; text-align:center;">
+    <p style="font-size:14px; font-weight:700; color:#fff;">Selenium Java Interview Prep — Fundamentals</p>
+    <p style="font-size:12px; opacity:0.85; color:#fff;">10 Sections | 50+ Detailed Q&amp;A | Locators | Waits | POM | TestNG | Exceptions | Scenarios</p>
+    <p style="font-size:11px; opacity:0.65; margin-top:8px; color:#fff;">Prepared April 2026 &nbsp;|&nbsp; For Fresher to Mid-Level (0–3 years)</p>
+  </div>
+</div>
+
+</body>
+</html>

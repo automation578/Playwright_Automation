@@ -1,13 +1,8 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'NodeJS'
-    }
-
-    // Nightly schedule — runs every day at 11 PM
-    // GitHub push trigger is configured in the Jenkins job UI
     triggers {
+        pollSCM('* * * * *')
         cron('0 23 * * *')
     }
 
@@ -77,25 +72,8 @@ pipeline {
 
     post {
         always {
-            // Playwright HTML report
-            publishHTML(target: [
-                allowMissing         : true,
-                alwaysLinkToLastBuild: true,
-                keepAll              : true,
-                reportDir            : 'playwright-report',
-                reportFiles          : 'index.html',
-                reportName           : 'Playwright Report'
-            ])
-
-            // 4. ALLURE REPORT — publish in Jenkins sidebar
-            allure([
-                reportBuildPolicy: 'ALWAYS',
-                results: [[path: 'allure-results']]
-            ])
-
-            // Archive screenshots, videos, traces on failure
             archiveArtifacts(
-                artifacts: 'test-results/**,allure-results/**',
+                artifacts: 'playwright-report/**,test-results/**,allure-results/**,allure-report/**',
                 allowEmptyArchive: true
             )
         }
