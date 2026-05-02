@@ -90,7 +90,7 @@ pipeline {
         failure {
             echo "Tests FAILED on ${params.BROWSER}"
             emailext(
-                to:          'tharani.ramaswamy@cox.com',
+                to:          'kr.tharani@gmail.com',
                 subject:     "FAILED: Playwright Tests — ${params.BROWSER} — Build #${env.BUILD_NUMBER}",
                 body:        """
                     <h2>Playwright Test Run Failed</h2>
@@ -111,7 +111,7 @@ pipeline {
         success {
             echo "All tests PASSED on ${params.BROWSER}"
             emailext(
-                to:      'tharani.ramaswamy@cox.com',
+                to:      'kr.tharani@gmail.com',
                 subject: "PASSED: Playwright Tests — ${params.BROWSER} — Build #${env.BUILD_NUMBER}",
                 body:    """
                     <h2>Playwright Test Run Passed</h2>
