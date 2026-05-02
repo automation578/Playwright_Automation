@@ -66,6 +66,14 @@ pipeline {
         stage('Generate Allure Report') {
             steps {
                 bat 'npx allure generate -o allure-report allure-results'
+                publishHTML([
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'allure-report',
+                    reportFiles: 'index.html',
+                    reportName: 'Allure Report'
+                ])
             }
         }
     }
