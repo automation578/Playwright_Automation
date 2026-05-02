@@ -54,9 +54,9 @@ pipeline {
             steps {
                 script {
                     if (params.BROWSER == 'all') {
-                        bat 'npx playwright test --reporter=line'
+                        bat 'npx playwright test'
                     } else {
-                        bat "npx playwright test --project=${params.BROWSER} --reporter=line"
+                        bat "npx playwright test --project=${params.BROWSER}"
                     }
                 }
             }
