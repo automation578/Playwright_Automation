@@ -5,11 +5,11 @@ test('Locators', async ({ page }) => {
 
   // click on login button - xpath
   await page.click("//span[normalize-space()='Login']")
-  await page.waitForTimeout(2000)
+  await page.waitForTimeout(3000)
 
   // provide username - css selector
   await page.fill('#userName', 'thara')
-  await page.waitForTimeout(2000)
+  await page.waitForTimeout(3000)
 
   // provide password - ID
   await page.fill('id=password', 'Thara@123')
