@@ -62,17 +62,13 @@ pipeline {
             }
         }
 
-        // 4. ALLURE REPORT — generate after tests
+        // 4. ALLURE REPORT — auto-published via Allure Jenkins Plugin
         stage('Generate Allure Report') {
             steps {
-                bat 'npx allure generate -o allure-report allure-results'
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'allure-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Allure Report'
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results']]
                 ])
             }
         }
@@ -84,6 +80,16 @@ pipeline {
                 artifacts: 'playwright-report/**,test-results/**,allure-results/**,allure-report/**',
                 allowEmptyArchive: true
             )
+
+            publishHTML([
+                allowMissing:          true,
+                alwaysLinkToLastBuild: true,
+                keepAll:               true,
+                reportDir:             'playwright-report',
+                reportFiles:           'index.html',
+                reportName:            'Playwright_Report',
+                reportTitles:          'Playwright Test Report'
+            ])
         }
 
         // 1. EMAIL NOTIFICATION — on failure
