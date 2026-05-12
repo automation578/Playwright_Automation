@@ -61,25 +61,6 @@ pipeline {
                 }
             }
         }
-
-        // 4. ALLURE REPORT — generate static HTML so it can be zipped/emailed.
-        // Wrapped in warnError so an Allure issue does not skip the email step.
-        stage('Generate Allure Report') {
-            steps {
-                warnError('Allure report generation failed') {
-                    bat 'if exist allure-report rmdir /s /q allure-report'
-                    bat 'npx allure generate -o allure-report allure-results'
-                    publishHTML([
-                        allowMissing:          true,
-                        alwaysLinkToLastBuild: true,
-                        keepAll:               true,
-                        reportDir:             'allure-report',
-                        reportFiles:           'index.html',
-                        reportName:            'Allure Report'
-                    ])
-                }
-            }
-        }
     }
 
     post {
@@ -90,21 +71,18 @@ pipeline {
                 if (fileExists('playwright-report/index.html')) {
                     bat 'powershell -NoProfile -Command "Compress-Archive -Path playwright-report/* -DestinationPath playwright-report.zip -Force"'
                 }
-                if (fileExists('allure-report/index.html')) {
-                    bat 'powershell -NoProfile -Command "Compress-Archive -Path allure-report/* -DestinationPath allure-report.zip -Force"'
-                }
                 if (fileExists('test-results/results.json') && fileExists('scripts/build-email-summary.js')) {
                     bat 'node scripts/build-email-summary.js'
                 }
             }
 
             archiveArtifacts(
-                artifacts: 'playwright-report/**,test-results/**,allure-results/**,allure-report/**,playwright-report.zip,allure-report.zip,email-summary.html',
+                artifacts: 'playwright-report/**,test-results/**,playwright-report.zip,email-summary.html',
                 allowEmptyArchive: true
             )
         }
 
-        // 1. EMAIL NOTIFICATION — on failure, with full reports attached
+        // 1. EMAIL NOTIFICATION — on failure, with Playwright report attached
         failure {
             echo "Tests FAILED on ${params.BROWSER}"
             script {
@@ -121,14 +99,9 @@ pipeline {
                           <tr><th align="left">Environment</th><td>${params.ENVIRONMENT}</td></tr>
                         </table>
                         ${summary}
-                        <p>Full reports are attached:</p>
-                        <ul>
-                          <li><b>playwright-report.zip</b> — unzip and open index.html in a browser</li>
-                          <li><b>allure-report.zip</b> — unzip and open index.html in a browser</li>
-                        </ul>
                     """,
                     mimeType:           'text/html',
-                    attachmentsPattern: 'playwright-report.zip,allure-report.zip',
+                    attachmentsPattern: 'playwright-report.zip',
                     attachLog:          true
                 )
             }
@@ -150,14 +123,9 @@ pipeline {
                           <tr><th align="left">Environment</th><td>${params.ENVIRONMENT}</td></tr>
                         </table>
                         ${summary}
-                        <p>Full reports are attached:</p>
-                        <ul>
-                          <li><b>playwright-report.zip</b> — unzip and open index.html in a browser</li>
-                          <li><b>allure-report.zip</b> — unzip and open index.html in a browser</li>
-                        </ul>
                     """,
                     mimeType:           'text/html',
-                    attachmentsPattern: 'playwright-report.zip,allure-report.zip'
+                    attachmentsPattern: 'playwright-report.zip'
                 )
             }
         }
