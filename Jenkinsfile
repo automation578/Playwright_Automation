@@ -62,18 +62,32 @@ pipeline {
             }
         }
 
-        // 4. ALLURE REPORT — generate after tests
+        // 4. ALLURE REPORT — generate static HTML so it can be zipped/emailed
         stage('Generate Allure Report') {
             steps {
-                bat 'npx allure generate -o allure-report allure-results'
+                bat 'npx allure generate -o allure-report allure-results --clean'
                 publishHTML([
-                    allowMissing: false,
+                    allowMissing:          true,
                     alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'allure-report',
-                    reportFiles: 'index.html',
-                    reportName: 'Allure Report'
+                    keepAll:               true,
+                    reportDir:             'allure-report',
+                    reportFiles:           'index.html',
+                    reportName:            'Allure Report'
                 ])
+            }
+        }
+
+        // 5. PACKAGE REPORTS — zip both reports so they can be emailed as attachments
+        stage('Package Reports') {
+            steps {
+                script {
+                    if (fileExists('playwright-report/index.html')) {
+                        zip zipFile: 'playwright-report.zip', dir: 'playwright-report', overwrite: true
+                    }
+                    if (fileExists('allure-report/index.html')) {
+                        zip zipFile: 'allure-report.zip', dir: 'allure-report', overwrite: true
+                    }
+                }
             }
         }
     }
@@ -81,51 +95,77 @@ pipeline {
     post {
         always {
             archiveArtifacts(
-                artifacts: 'playwright-report/**,test-results/**,allure-results/**,allure-report/**',
+                artifacts: 'playwright-report/**,test-results/**,allure-results/**,allure-report/**,playwright-report.zip,allure-report.zip',
                 allowEmptyArchive: true
             )
         }
 
-        // 1. EMAIL NOTIFICATION — on failure
+        // 1. EMAIL NOTIFICATION — on failure, with full reports attached
         failure {
             echo "Tests FAILED on ${params.BROWSER}"
-            emailext(
-                to:          'kr.tharani@gmail.com',
-                subject:     "FAILED: Playwright Tests — ${params.BROWSER} — Build #${env.BUILD_NUMBER}",
-                body:        """
-                    <h2>Playwright Test Run Failed</h2>
-                    <table>
-                      <tr><td><b>Job</b></td><td>${env.JOB_NAME}</td></tr>
-                      <tr><td><b>Build</b></td><td>#${env.BUILD_NUMBER}</td></tr>
-                      <tr><td><b>Browser</b></td><td>${params.BROWSER}</td></tr>
-                      <tr><td><b>Environment</b></td><td>${params.ENVIRONMENT}</td></tr>
-                      <tr><td><b>Report</b></td><td><a href="${env.BUILD_URL}Playwright_Report">View Playwright Report</a></td></tr>
-                      <tr><td><b>Allure</b></td><td><a href="${env.BUILD_URL}allure">View Allure Report</a></td></tr>
-                      <tr><td><b>Console</b></td><td><a href="${env.BUILD_URL}console">View Console Log</a></td></tr>
-                    </table>
-                """,
-                mimeType: 'text/html'
-            )
+            script {
+                def summary = buildSummaryHtml()
+                emailext(
+                    to:                 'kr.tharani@gmail.com',
+                    subject:            "FAILED: Playwright Tests — ${params.BROWSER} — Build #${env.BUILD_NUMBER}",
+                    body:               """
+                        <h2>Playwright Test Run Failed</h2>
+                        ${summary}
+                        <p>Full reports are attached:</p>
+                        <ul>
+                          <li><b>playwright-report.zip</b> — unzip and open index.html in a browser</li>
+                          <li><b>allure-report.zip</b> — unzip and open index.html in a browser</li>
+                        </ul>
+                    """,
+                    mimeType:           'text/html',
+                    attachmentsPattern: 'playwright-report.zip,allure-report.zip',
+                    attachLog:          true
+                )
+            }
         }
 
         success {
             echo "All tests PASSED on ${params.BROWSER}"
-            emailext(
-                to:      'kr.tharani@gmail.com',
-                subject: "PASSED: Playwright Tests — ${params.BROWSER} — Build #${env.BUILD_NUMBER}",
-                body:    """
-                    <h2>Playwright Test Run Passed</h2>
-                    <table>
-                      <tr><td><b>Job</b></td><td>${env.JOB_NAME}</td></tr>
-                      <tr><td><b>Build</b></td><td>#${env.BUILD_NUMBER}</td></tr>
-                      <tr><td><b>Browser</b></td><td>${params.BROWSER}</td></tr>
-                      <tr><td><b>Environment</b></td><td>${params.ENVIRONMENT}</td></tr>
-                      <tr><td><b>Report</b></td><td><a href="${env.BUILD_URL}Playwright_Report">View Playwright Report</a></td></tr>
-                      <tr><td><b>Allure</b></td><td><a href="${env.BUILD_URL}allure">View Allure Report</a></td></tr>
-                    </table>
-                """,
-                mimeType: 'text/html'
-            )
+            script {
+                def summary = buildSummaryHtml()
+                emailext(
+                    to:                 'kr.tharani@gmail.com',
+                    subject:            "PASSED: Playwright Tests — ${params.BROWSER} — Build #${env.BUILD_NUMBER}",
+                    body:               """
+                        <h2>Playwright Test Run Passed</h2>
+                        ${summary}
+                        <p>Full reports are attached:</p>
+                        <ul>
+                          <li><b>playwright-report.zip</b> — unzip and open index.html in a browser</li>
+                          <li><b>allure-report.zip</b> — unzip and open index.html in a browser</li>
+                        </ul>
+                    """,
+                    mimeType:           'text/html',
+                    attachmentsPattern: 'playwright-report.zip,allure-report.zip'
+                )
+            }
         }
     }
+}
+
+def buildSummaryHtml() {
+    if (!fileExists('test-results/results.json')) {
+        return '<p><i>Results JSON not found — no summary available.</i></p>'
+    }
+    def results = readJSON file: 'test-results/results.json'
+    def s = results.stats ?: [:]
+    def durationSec = ((s.duration ?: 0) / 1000).intValue()
+    return """
+        <table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+          <tr><th align="left">Job</th><td>${env.JOB_NAME}</td></tr>
+          <tr><th align="left">Build</th><td>#${env.BUILD_NUMBER}</td></tr>
+          <tr><th align="left">Browser</th><td>${params.BROWSER}</td></tr>
+          <tr><th align="left">Environment</th><td>${params.ENVIRONMENT}</td></tr>
+          <tr><th align="left">Passed</th><td>${s.expected ?: 0}</td></tr>
+          <tr><th align="left">Failed</th><td style="color:#c00;"><b>${s.unexpected ?: 0}</b></td></tr>
+          <tr><th align="left">Skipped</th><td>${s.skipped ?: 0}</td></tr>
+          <tr><th align="left">Flaky</th><td>${s.flaky ?: 0}</td></tr>
+          <tr><th align="left">Duration</th><td>${durationSec} s</td></tr>
+        </table>
+    """
 }

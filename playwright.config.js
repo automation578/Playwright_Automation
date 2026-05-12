@@ -9,10 +9,11 @@ module.exports = defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
 
-  // Dual reporter — HTML for quick view, Allure for rich reports
+  // Dual reporter — HTML for quick view, Allure for rich reports, JSON for email summary
   reporter: [
     ['html',             { outputFolder: 'playwright-report', open: 'never' }],
     ['allure-playwright', { resultsDir: 'allure-results' }],
+    ['json',             { outputFile: 'test-results/results.json' }],
     ['line'],
   ],
 
